@@ -10,9 +10,9 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
-class StakeholderInvestor extends Model implements HasMedia
+class InvsetorDealsReceipt extends Model implements HasMedia
 {
-    use HasFactory, SoftDeletes, InteractsWithMedia, LogsActivity;
+    use HasFactory, SoftDeletes, LogsActivity, InteractsWithMedia;
 
     public function getActivitylogOptions(): LogOptions
     {
@@ -21,8 +21,9 @@ class StakeholderInvestor extends Model implements HasMedia
 
     protected $fillable = [
         'site_id',
-        'investor_id',
         'user_id',
+        'investor_deal_id',
+        'investor_id',
         'serial_number',
         'doc_no',
         'total_received_amount',
@@ -30,17 +31,35 @@ class StakeholderInvestor extends Model implements HasMedia
         'created_date',
         'checked_by',
         'checked_date',
-        'approved_by',
-        'approved_date',
-        'dis_approved_by',
-        'dis_approved_date',
+        'active_by',
+        'active_date',
+        'bounced_by',
+        'bounced_by_date',
         'reverted_by',
         'reverted_date',
         'jve_number',
         'status',
-        'deal_status',
         'remarks',
-        'paid_status',
+        'name',
+        'cnic',
+        'phone_no',
+        'mode_of_payment',
+        'other_value',
+        'cheque_no',
+        'online_instrument_no',
+        'transaction_date',
+        'discounted_amount',
+        'other_purpose',
+        'bank_details',
+        'investor_ar_account',
+        'customer_ap_amount',
+        'customer_ap_account',
+        'dealer_ap_amount',
+        'dealer_ap_account',
+        'vendor_ap_amount',
+        'vendor_ap_account',
+        'investor_ap_amount',
+        'investor_ap_account',
     ];
 
     public function site()
@@ -53,8 +72,18 @@ class StakeholderInvestor extends Model implements HasMedia
         return $this->belongsTo(User::class);
     }
 
+    public function investorDeal()
+    {
+        return $this->belongsTo(StakeholderInvestor::class,'investor_deal_id','id');
+    }
+
     public function investor()
     {
         return $this->belongsTo(Stakeholder::class,'investor_id','id');
+    }
+
+    public function bank()
+    {
+        return $this->belongsTo(Bank::class);
     }
 }

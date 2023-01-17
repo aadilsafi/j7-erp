@@ -44,6 +44,8 @@ use App\Services\PaymentVoucher\paymentService;
 use App\Services\PaymentVoucher\paymentInterface;
 use App\Services\BlackListStackholder\BlacklistStackholderInterface;
 use App\Services\BlackListStackholder\BlackListStackholderService;
+use App\Services\InvestorDealsReceipt\DealReceiptInterface;
+use App\Services\InvestorDealsReceipt\DealReceiptService;
 use App\Services\StakeholderInvestorDeals\investor_deals_interface;
 use App\Services\StakeholderInvestorDeals\investor_deals_service;
 use Illuminate\Support\ServiceProvider;
@@ -95,6 +97,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(TransferFileReceiptInterface::class, TransferFileReceiptService::class);
         $this->app->bind(BlacklistStackholderInterface::class,  BlackListStackholderService::class);
         $this->app->bind(investor_deals_interface::class,  investor_deals_service::class);
+        $this->app->bind(DealReceiptInterface::class,  DealReceiptService::class);
         Telescope::ignoreMigrations();
 
         // if ($this->app->environment('local')) {

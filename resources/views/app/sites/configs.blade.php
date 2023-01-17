@@ -277,7 +277,7 @@
                                                     <input type="text"
                                                         class="form-control form-control-lg @error('arr_salesplan.' . $key) is-invalid @enderror"
                                                         id="{{ $key }}"
-                                                        {{ $key == 'salesplan_master_code' ? 'maxlength=8' : '' }}
+                                                        {{ $key == 'salesplan_master_code' ? 'maxlength=6 minlength=6' : '' }}
                                                         name="arr_salesplan[{{ $key }}]"
                                                         value="{{ $value }}"
                                                         placeholder="{{ Str::of($key)->remove('salesplan_')->title()->replace('_', ' ') }}" />

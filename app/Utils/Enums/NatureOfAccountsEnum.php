@@ -26,4 +26,5 @@ enum NatureOfAccountsEnum: string
     case MANUAL_ENTRY = 'ME';
     case REVERTED_MANUAL_ENTRY = 'RME';
     case INVESTOR_DEAL = 'ID';
+    case INVESTOR_DEAL_RECEIPT = 'IDR';
 }

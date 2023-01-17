@@ -14,7 +14,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 
 class Receipt extends Model implements HasMedia
 {
-    use HasFactory, InteractsWithMedia, LogsActivity ,SoftDeletes;
+    use HasFactory, InteractsWithMedia, LogsActivity, SoftDeletes;
 
     protected $fillable = [
         'site_id',
@@ -52,6 +52,8 @@ class Receipt extends Model implements HasMedia
         'dealer_ap_account',
         'vendor_ap_amount',
         'vendor_ap_account',
+        'investor_ap_amount',
+        'investor_ap_account',
         'user_id',
         'checked_date',
         'checked_by',

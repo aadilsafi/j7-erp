@@ -194,9 +194,10 @@ class investor_deals_service implements investor_deals_interface
                 'doc_no' => $inputs['doc_number'],
                 'total_received_amount' => $total_received_amount,
                 'total_payable_amount' => 0.0,
-                'created_date' => $inputs['created_date'],
+                'created_date' => $inputs['created_date']. date(' H:i:s'),
                 'status' => 'pending',
                 'deal_status' => 'open',
+                'paid_status' => 0,
             ];
 
             $stakeholder_investor = $this->model()->create($investor_data);
@@ -218,7 +219,7 @@ class investor_deals_service implements investor_deals_interface
                 $investor_deal->received_amount = $unit_deal_data['received_amount'];
                 $investor_deal->remarks = $unit_deal_data['remarks'];
                 $investor_deal->status = 'active';
-                $investor_deal->created_date = $inputs['created_date'];
+                $investor_deal->created_date = $inputs['created_date']. date(' H:i:s');
                 $investor_deal->save();
             }
 

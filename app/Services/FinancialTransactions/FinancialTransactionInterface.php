@@ -63,5 +63,9 @@ interface FinancialTransactionInterface
 
     public function makeInvestorDealReceivableTransaction($id);
 
+    public function makeInvestorDealReceivableReceiptTransaction($id);
+
+    public function makeInvestorReceiptActive($id);
+
 
 }

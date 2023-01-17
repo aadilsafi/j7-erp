@@ -689,6 +689,15 @@ class ReceiptService implements ReceiptInterface
                         changeImageDirectoryPermission();
                     }
                 }
+
+                        $newfile = File::copy(public_path('app-assets/images/Import/' . $url), $tempPath . $url);
+                        if ($newfile) {
+                            $newFile = $tempPath . $url;
+                            $receipt->addMedia($newFile)->toMediaCollection('receipt_attachments');
+                            changeImageDirectoryPermission();
+                        }
+                    }
+                }
                 $url = null;
                 $update_installments =  $this->updateInstallments($receipt);
             }

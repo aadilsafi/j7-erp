@@ -68,13 +68,9 @@ class ImportFilesContactsDataTable extends DataTable
     protected function getColumns(): array
     {
         return [
-            Column::computed('unit_short_label')->title('Unit')->addClass('text-nowrap')->searchable(true),
-            Column::computed('stakeholder_cnic')->title('CNIC')->searchable(true),
-            Column::computed('total_price')->title('Price')->searchable(true),
-            Column::computed('down_payment_total')->title('DP Price')->addClass('text-nowrap'),
-            Column::computed('sales_plan_approval_date')->title('Sales Plan Approval Date')->addClass('text-nowrap'),
-            Column::computed('contact_cnic')->title('Contact Cnic')->addClass('text-nowrap'),
-            Column::computed('kin_cnic')->addClass('text-nowrap'),
+            Column::make('file_doc_no')->addClass('text-nowrap'),
+            Column::make('contact_cnic')->title('Contact Cnic')->addClass('text-nowrap'),
+            Column::make('kin_cnic')->addClass('text-nowrap'),
         ];
     }
 }

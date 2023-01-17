@@ -762,11 +762,13 @@ Breadcrumbs::for('sites.bin.index', function (BreadcrumbTrail $trail, $site_id) 
 // Investors Deals
 Breadcrumbs::for('sites.investors-deals.index', function (BreadcrumbTrail $trail, $site_id) {
     $trail->parent('dashboard');
-    $trail->push('Investors Deals', route('sites.investors-deals.index', ['site_id' => $site_id]));
+    $trail->push('File Management');
+    $trail->push('Step 4');
+    $trail->push('Investors Deals', route('sites.investors-deals.index', ['site_id' => decryptParams($site_id)]));
 });
 Breadcrumbs::for('sites.investors-deals.create', function (BreadcrumbTrail $trail, $site_id) {
     $trail->parent('sites.investors-deals.index', encryptParams($site_id));
-    $trail->push('Create Investors Deals');
+    $trail->push('Create Investor Deals');
 });
 
 // Import Files
@@ -789,4 +791,17 @@ Breadcrumbs::for('sites.stakeholders.import.contacts', function (BreadcrumbTrail
     $trail->push('Import');
 
  $trail->push('Import Stakeholders Contacts', route('sites.index'));
+});
+
+// Investor Deals Receipts
+Breadcrumbs::for('sites.investor-deals-receipts.index', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('dashboard');
+    $trail->push('File Management');
+    $trail->push('Step 1');
+    $trail->push('Investors Deals', route('sites.investor-deals-receipts.index', ['site_id' => encryptParams($site_id)]));
+});
+
+Breadcrumbs::for('sites.investor-deals-receipts.create', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('sites.investor-deals-receipts.index', $site_id);
+    $trail->push('Create Investor Deal Receipt');
 });

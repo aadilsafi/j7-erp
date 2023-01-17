@@ -35,6 +35,7 @@ return new class extends Migration
             $table->string('status')->nullable();
             $table->string('deal_status')->nullable();
             $table->text('remarks')->nullable();
+            $table->boolean('paid_status')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });

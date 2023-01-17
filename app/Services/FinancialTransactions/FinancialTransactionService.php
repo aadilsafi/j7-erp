@@ -3,7 +3,7 @@
 namespace App\Services\FinancialTransactions;
 
 use App\Exceptions\GeneralException;
-use App\Models\{AccountAction, AccountHead, AccountingStartingCode, AccountLedger, Bank, DealerIncentiveModel, FileBuyBack, FileCancellation, FileManagement, FileRefund, FileResale, FileTitleTransfer, PaymentVocuher, RebateIncentiveModel, Receipt, SalesPlan, SalesPlanInstallments, Stakeholder, StakeholderInvestor, StakeholderType, TransferReceipt};
+use App\Models\{AccountAction, AccountHead, AccountingStartingCode, AccountLedger, Bank, DealerIncentiveModel, FileBuyBack, FileCancellation, FileManagement, FileRefund, FileResale, FileTitleTransfer, InvsetorDealsReceipt, PaymentVocuher, RebateIncentiveModel, Receipt, SalesPlan, SalesPlanInstallments, Stakeholder, StakeholderInvestor, StakeholderType, TransferReceipt};
 use App\Services\FinancialTransactions\FinancialTransactionInterface;
 use App\Utils\Enums\NatureOfAccountsEnum;
 use Auth;
@@ -368,6 +368,11 @@ class FinancialTransactionService implements FinancialTransactionInterface
         if ($account_action == 38) {
             $data['investor_deal_id'] = $action_id;
         }
+
+        if ($account_action == 39) {
+            $data['investor_deal_receipt_id'] = $action_id;
+        }
+
         return (new AccountLedger())->create($data);
     }
 
@@ -503,10 +508,10 @@ class FinancialTransactionService implements FinancialTransactionInterface
                 $amount_in_numbers = $receipt->amount_in_numbers;
             }
             $bankAccount = $receipt->bank->account_head_code;
-            $origin_number = AccountLedger::where('account_action_id', 9)->get();
+            $origin_number = AccountLedger::get();
             if (isset($origin_number)) {
                 $origin_number = collect($origin_number)->last();
-                $origin_number = (int)$origin_number->origin_number + 1;
+                $origin_number = $origin_number->origin_number + 1;
                 $origin_number =  sprintf('%03d', $origin_number);
             } else {
                 $origin_number = '001';
@@ -1827,4 +1832,87 @@ class FinancialTransactionService implements FinancialTransactionInterface
 
         return (string)$investor_payable_account_code;
     }
+
+    public function makeInvestorDealReceivableReceiptTransaction($id)
+    {
+        try {
+            DB::beginTransaction();
+
+            $deal_receipt = InvsetorDealsReceipt::find($id);
+
+            $origin_number = AccountLedger::get();
+            if (isset($origin_number)) {
+                $origin_number = collect($origin_number)->last();
+                $origin_number = $origin_number->origin_number + 1;
+                $origin_number =  sprintf('%03d', $origin_number);
+            } else {
+                $origin_number = '001';
+            }
+            // Investor AR Transaction
+            $investorAccount = StakeholderType::where('stakeholder_id',$deal_receipt->investor_id)->where('type','I')->first()->receivable_account;
+
+            $investorAccount = collect($investorAccount)->where('deal_id', $deal_receipt->investor_deal_id)->first();
+            // ;
+            $this->makeFinancialTransaction($deal_receipt->site_id, $origin_number, $investorAccount['account_code'], 39, null, 'credit', $deal_receipt->total_received_amount, NatureOfAccountsEnum::INVESTOR_DEAL_RECEIPT, $deal_receipt->id);
+
+            $cashAccount = (new AccountingStartingCode())->where('site_id', $deal_receipt->site_id)
+                ->where('model', 'App\Models\Cash')->where('level', 5)->first();
+
+            if (is_null($cashAccount)) {
+                throw new GeneralException('Cash Account is not defined. Please define cash account first.');
+            }
+
+            $cashAccount = $cashAccount->level_code . $cashAccount->starting_code;
+            if($deal_receipt->mode_of_payment == 'Cash'){
+                $this->makeFinancialTransaction($deal_receipt->site_id, $origin_number, $cashAccount, 39, null, 'debit', $deal_receipt->total_received_amount, NatureOfAccountsEnum::INVESTOR_DEAL_RECEIPT, $deal_receipt->id);
+
+            }
+
+            if ($deal_receipt->payment_mode == "Online") {
+                //Bank account credit
+                // Bank Transaction
+                $bank = Bank::find($deal_receipt->bank_id);
+                $bankAccount = $bank->account_head_code;
+                $this->makeFinancialTransaction($deal_receipt->site_id, $origin_number, $bankAccount, 39, null, 'debit', $deal_receipt->total_received_amount, NatureOfAccountsEnum::INVESTOR_DEAL_RECEIPT, $deal_receipt->id);
+            }
+
+            if ($deal_receipt->payment_mode == "Cheque") {
+                // Cheuqe Clearance Transaction
+                $clearanceAccout = AccountHead::where('name', 'Cheques Clearing Account')->first()->code;
+                $this->makeFinancialTransaction($deal_receipt->site_id, $origin_number, $clearanceAccout, 39, null, 'debit', $deal_receipt->total_received_amount, NatureOfAccountsEnum::INVESTOR_DEAL_RECEIPT, $deal_receipt->id);
+            }
+
+            DB::commit();
+            return 'transaction_completed';
+        } catch (GeneralException | Exception $ex) {
+            DB::rollBack();
+            return $ex;
+        }
+    }
+
+    public function makeInvestorReceiptActive($id)
+    {
+        $deal_receipt = InvsetorDealsReceipt::find($id);
+
+            $origin_number = AccountLedger::get();
+            if (isset($origin_number)) {
+                $origin_number = collect($origin_number)->last();
+                $origin_number = (int)$origin_number->origin_number + 1;
+                $origin_number =  sprintf('%03d', $origin_number);
+            } else {
+                $origin_number = '001';
+            }
+
+            if($deal_receipt->status == 'inactive'){
+
+                $bankAccount = $deal_receipt->bank->account_head_code;
+                $this->makeFinancialTransaction($deal_receipt->site_id, $origin_number, $bankAccount, 39, null, 'debit', $deal_receipt->total_received_amount, NatureOfAccountsEnum::INVESTOR_DEAL_RECEIPT, $deal_receipt->id);
+
+                $clearanceAccout = AccountHead::where('name', 'Cheques Clearing Account')->first()->code;
+                $this->makeFinancialTransaction($deal_receipt->site_id, $origin_number, $clearanceAccout, 39, null, 'credit', $deal_receipt->total_received_amount, NatureOfAccountsEnum::INVESTOR_DEAL_RECEIPT, $deal_receipt->id);
+
+            }
+    }
+
+
 }

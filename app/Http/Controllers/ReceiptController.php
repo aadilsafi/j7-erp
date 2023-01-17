@@ -125,16 +125,21 @@ class ReceiptController extends Controller
         $receipt = (new Receipt())->find(decryptParams($id));
         $images = $receipt->getMedia('receipt_attachments');
         $installmentNumbersArray = json_decode($receipt->installment_number);
-        dd(count($installmentNumbersArray));
 
-        $lastInstallment = array_pop($installmentNumbersArray);
-        $unit_data =  $receipt->unit;
-
-        $last_paid_installment_id = SalesPlanInstallments::where('sales_plan_id', $receipt->sales_plan_id)
+        $unpaid_installments = [];
+        $unpaid_installments = [];
+        
+        if(count($installmentNumbersArray) > 1){
+            $lastInstallment = array_pop($installmentNumbersArray);
+            $last_paid_installment_id = SalesPlanInstallments::where('sales_plan_id', $receipt->sales_plan_id)
             ->whereRaw('LOWER(details) = (?)', [strtolower($lastInstallment)])->first()->id;
 
-        $unpaid_installments = SalesPlanInstallments::where('id', '>', $last_paid_installment_id)->where('sales_plan_id', $receipt->sales_plan_id)->orderBy('installment_order', 'asc')->get();
-        $paid_installments = SalesPlanInstallments::where('id', '<=', $last_paid_installment_id)->where('sales_plan_id', $receipt->sales_plan_id)->orderBy('installment_order', 'asc')->get();
+            $unpaid_installments = SalesPlanInstallments::where('id', '>', $last_paid_installment_id)->where('sales_plan_id', $receipt->sales_plan_id)->orderBy('installment_order', 'asc')->get();
+            $paid_installments = SalesPlanInstallments::where('id', '<=', $last_paid_installment_id)->where('sales_plan_id', $receipt->sales_plan_id)->orderBy('installment_order', 'asc')->get();
+        }
+        $unit_data =  $receipt->unit;
+
+      
         $stakeholder_data = Stakeholder::where('cnic', $receipt->cnic)->first();
         // if($lastIntsalmentStatus == 'paid'){
         //     $paid_installments = SalesPlanInstallments::all();

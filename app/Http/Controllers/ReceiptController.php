@@ -45,6 +45,7 @@ class ReceiptController extends Controller
      */
     public function index(ReceiptsDatatable $dataTable, $site_id)
     {
+        dd(Receipt::count());
         //
         $data = [
             'site_id' => $site_id,
@@ -128,7 +129,7 @@ class ReceiptController extends Controller
 
         $unpaid_installments = [];
         $unpaid_installments = [];
-        
+
         if(count($installmentNumbersArray) > 1){
             $lastInstallment = array_pop($installmentNumbersArray);
             $last_paid_installment_id = SalesPlanInstallments::where('sales_plan_id', $receipt->sales_plan_id)

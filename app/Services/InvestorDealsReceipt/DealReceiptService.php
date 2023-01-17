@@ -29,7 +29,7 @@ class DealReceiptService implements DealReceiptInterface
     // Store
     public function store($site_id, $inputs)
     {
-        // DB::transaction(function () use ($site_id, $inputs) {
+        DB::transaction(function () use ($site_id, $inputs) {
             $data = $inputs;
 
             if (!isset($data['bank_name'])) {
@@ -123,9 +123,9 @@ class DealReceiptService implements DealReceiptInterface
             }
 
             $transaction = $this->financialTransactionInterface->makeInvestorDealReceivableReceiptTransaction($receipt->id);
-            // $deal->paid_status = 1;
-            // $deal->update();
-        // });
+            $deal->paid_status = 1;
+            $deal->update();
+        });
         return true;
     }
 }

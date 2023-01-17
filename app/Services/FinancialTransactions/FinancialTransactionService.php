@@ -1711,8 +1711,8 @@ class FinancialTransactionService implements FinancialTransactionInterface
 
     public function makeInvestorDealReceivableTransaction($id)
     {
-        // try {
-        //     DB::beginTransaction();
+        try {
+            DB::beginTransaction();
 
             $investor_deal = StakeholderInvestor::find($id);
             $investor_type = StakeholderType::where(['stakeholder_id' => $investor_deal->investor_id, 'type' => 'I'])->first();
@@ -1758,12 +1758,12 @@ class FinancialTransactionService implements FinancialTransactionInterface
             $investor_deal->approved_by = Auth::user()->id;
             $investor_deal->approved_date = now();
             $investor_deal->update();
-        //     DB::commit();
-        //     return 'transaction_completed';
-        // } catch (GeneralException | Exception $ex) {
-        //     DB::rollBack();
-        //     return $ex;
-        // }
+            DB::commit();
+            return 'transaction_completed';
+        } catch (GeneralException | Exception $ex) {
+            DB::rollBack();
+            return $ex;
+        }
     }
 
     public function makeInvsetorReceivableAccounts($investor_deal)
@@ -1837,8 +1837,8 @@ class FinancialTransactionService implements FinancialTransactionInterface
 
     public function makeInvestorDealReceivableReceiptTransaction($id)
     {
-        // try {
-        //     DB::beginTransaction();
+        try {
+            DB::beginTransaction();
 
             $deal_receipt = InvsetorDealsReceipt::find($id);
 
@@ -1870,28 +1870,28 @@ class FinancialTransactionService implements FinancialTransactionInterface
 
             }
 
-            if ($deal_receipt->payment_mode == "Online") {
+            if ($deal_receipt->mode_of_payment == "Online") {
                 //Bank account credit
                 // Bank Transaction
                 $bank = Bank::find($deal_receipt->bank_id);
                 $bankAccount = $bank->account_head_code;
-                dd($bank);
+
                 $this->makeFinancialTransaction($deal_receipt->site_id, $origin_number, $bankAccount, 39, null, 'debit', $deal_receipt->total_received_amount, NatureOfAccountsEnum::INVESTOR_DEAL_RECEIPT, $deal_receipt->id);
             }
 
-            if ($deal_receipt->payment_mode == "Cheque") {
+            if ($deal_receipt->mode_of_payment == "Cheque") {
                 // Cheuqe Clearance Transaction
                 $clearanceAccout = AccountHead::where('name', 'Cheques Clearing Account')->first()->code;
-                dd($clearanceAccout);
+
                 $this->makeFinancialTransaction($deal_receipt->site_id, $origin_number, $clearanceAccout, 39, null, 'debit', $deal_receipt->total_received_amount, NatureOfAccountsEnum::INVESTOR_DEAL_RECEIPT, $deal_receipt->id);
             }
 
-        //     DB::commit();
-        //     return 'transaction_completed';
-        // } catch (GeneralException | Exception $ex) {
-        //     DB::rollBack();
-        //     return $ex;
-        // }
+            DB::commit();
+            return 'transaction_completed';
+        } catch (GeneralException | Exception $ex) {
+            DB::rollBack();
+            return $ex;
+        }
     }
 
     public function makeInvestorReceiptActive($id)

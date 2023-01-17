@@ -48,7 +48,7 @@ class AccountRecevoryService implements AccountRecevoryInterface
             }
 
             if (isset($filters['filter_generated_from']) && isset($filters['filter_generated_to']) ) {
-                $salesPlans = $salesPlans->whereBetween('sales_plans.created_at', [$filters['filter_generated_from'], $filters['filter_generated_to']]);
+                $salesPlans = $salesPlans->whereBetween('sales_plans.created_date', [$filters['filter_generated_from'], $filters['filter_generated_to']]);
             }
 
             if (isset($filters['filter_approveed_from']) && isset($filters['filter_approveed_to']) ) {

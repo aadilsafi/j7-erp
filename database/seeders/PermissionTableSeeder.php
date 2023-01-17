@@ -2339,6 +2339,36 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
+            // Import Journal voucher 
+            [
+                'name' => 'sites.settings.journal-vouchers.importJournalVoucher',
+                'show_name' => 'Can Import Journal Vouchers',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.settings.journal-vouchers.importJournalVoucherPreview',
+                'show_name' => 'Can Preview Journal Vouchers',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.settings.journal-vouchers.saveImport',
+                'show_name' => 'Can Save Journal Vouchers',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.settings.journal-vouchers.storePreview',
+                'show_name' => 'Can Store Journal Vouchers',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
             // import images
             [
                 'name' => 'sites.settings.import',

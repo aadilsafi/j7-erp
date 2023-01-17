@@ -5,7 +5,7 @@
     {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.blacklisted-stakeholders.edit', $site_id) }}
 @endsection
 
-@section('page-title', 'Edit BlackList Stack Holder')
+@section('page-title', 'Edit Create BlackList StackHolder')
 
 @section('page-vendor')
 @endsection
@@ -18,10 +18,10 @@
 @endsection
 
 @section('breadcrumbs')
-    <div class="content-header-left col-md-9 col-12 mb-2">
+    <div class="content-header-left col-md-12 col-12 mb-2">
         <div class="row breadcrumbs-top">
             <div class="col-12">
-                <h2 class="content-header-title float-start mb-0">Edit BlackList StackHolder</h2>
+                <h2 class="content-header-title float-start mb-0">Edit Create BlackList StackHolder</h2>
                 <div class="breadcrumb-wrapper">
                     {{ Breadcrumbs::render('sites.blacklisted-stakeholders.edit', $site_id) }}
                 </div>

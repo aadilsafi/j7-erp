@@ -281,11 +281,19 @@ Route::group([
 
                         Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {
                         });
+
+                        // Import 
+                        Route::group(['prefix' => 'import'], function () {
+                            Route::view('/', 'app.sites.journal-vouchers.import.importjv')->name('importJournalVoucher');
+                            Route::post('preview', [JournalVoucherController::class, 'ImportPreview'])->name('importJournalVoucherPreview');
+                            Route::get('storePreview', [JournalVoucherController::class, 'storePreview'])->name('storePreview');
+                            Route::post('saveImport', [JournalVoucherController::class, 'saveImport'])->name('saveImport');
+                        });
                     });
 
 
 
-                    // Import Routes
+                    // Import Images Routes
                     Route::group(['prefix' => 'import', 'as' => 'import.'], function () {
                         Route::group(['prefix' => 'images', 'as' => 'images.'], function () {
 

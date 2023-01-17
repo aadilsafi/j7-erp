@@ -4,7 +4,7 @@
     {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.index') }}
 @endsection
 
-@section('page-title', 'Project Site Configuration')
+@section('page-title', 'Project Site Configurations')
 
 @section('page-vendor')
 @endsection
@@ -19,7 +19,7 @@
     <div class="content-header-left col-md-9 col-12 mb-2">
         <div class="row breadcrumbs-top">
             <div class="col-12">
-                <h2 class="content-header-title float-start mb-0">Project Site Configuration</h2>
+                <h2 class="content-header-title float-start mb-0">Project Site Configurations</h2>
                 <div class="breadcrumb-wrapper">
                      {{ Breadcrumbs::render('sites.index') }}
                 </div>
@@ -277,7 +277,7 @@
                                                     <input type="text"
                                                         class="form-control form-control-lg @error('arr_salesplan.' . $key) is-invalid @enderror"
                                                         id="{{ $key }}"
-                                                        {{ $key == 'salesplan_master_code' ? 'maxlength=8' : '' }}
+                                                        {{ $key == 'salesplan_master_code' ? 'maxlength=6 minlength=6' : '' }}
                                                         name="arr_salesplan[{{ $key }}]"
                                                         value="{{ $value }}"
                                                         placeholder="{{ Str::of($key)->remove('salesplan_')->title()->replace('_', ' ') }}" />

@@ -59,8 +59,8 @@
         input: 'text',
         inputAttributes: {
             autocapitalize: 'off',
-            maxlength: 8,
-            minlength: 8,
+            maxlength: 6,
+            minlength: 6,
             required: true,
             placeholder: 'Enter your Pin Code'
         },

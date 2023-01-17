@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('payment_vocuhers', function (Blueprint $table) {
             $table->id();
+            $table->string('doc_no')->nullable();
             $table->bigInteger('site_id')->nullable();
             $table->bigInteger('user_id')->nullable();
             $table->bigInteger('customer_id')->nullable();
@@ -53,6 +54,13 @@ return new class extends Migration
             $table->boolean('status')->default(0);
             $table->boolean('cheque_status')->default(0);
             $table->string('serial_no')->nullable()->default('PV-');
+            $table->timestamp('checked_date')->nullable();
+            $table->bigInteger('checked_by')->nullable();
+            $table->bigInteger('reverted_by')->nullable();
+            $table->timestamp('reverted_date')->nullable();
+            $table->bigInteger('cheque_active_by')->nullable();
+            $table->timestamp('cheque_active_date')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

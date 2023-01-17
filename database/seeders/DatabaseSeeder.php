@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use DB;
+use File;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
@@ -59,5 +61,54 @@ class DatabaseSeeder extends Seeder
 
 
         ]);
+
+        // foreach (File::glob(public_path('app-assets/pdf/sales-plans/investment-plan/*')) as $key => $path) {
+        //     $test = File::delete($path);
+        //     if($test) {
+        //         $this->command->info('Deleted: ' . $path);
+        //     }
+        // }
+        // foreach (File::glob(public_path('app-assets/pdf/sales-plans/payment-plan/*')) as $key => $path) {
+        //     $test = File::delete($path);
+        //     if($test) {
+        //         $this->command->info('Deleted: ' . $path);
+        //     }
+        // }
+        // foreach (File::glob(public_path('app-assets/pdf/sales-plans/qrcodes/*')) as $key => $path) {
+        //     $test = File::delete($path);
+        //     if($test) {
+        //         $this->command->info('Deleted: ' . $path);
+        //     }
+        // }
+        // foreach (File::glob(public_path('app-assets/server-uploads/attachments/*')) as $key => $path) {
+        //     $test = File::deleteDirectory($path);
+        //     if($test) {
+        //         $this->command->info('Deleted: ' . $path);
+        //     }
+        // }
+        File::cleanDirectory(public_path('app-assets/pdf/sales-plans/investment-plan/'));
+        File::cleanDirectory(public_path('app-assets/pdf/sales-plans/payment-plan/'));
+        File::cleanDirectory(public_path('app-assets/pdf/sales-plans/qrcodes/'));
+        File::cleanDirectory(public_path('app-assets/server-uploads/attachments/'));
+
+
+        if (DB::connection()->getName() == 'pgsql') {
+            $tablesToCheck = array('countries', 'states', 'cities', 'roles', 'permissions', 'users', 'banks');
+            foreach ($tablesToCheck as $tableToCheck) {
+                $this->command->info('Checking the next id sequence for ' . $tableToCheck);
+                $highestId = DB::table($tableToCheck)->select(DB::raw('MAX(id)'))->first();
+                $nextId = DB::table($tableToCheck)->select(DB::raw('nextval(\'' . $tableToCheck . '_id_seq\')'))->first();
+                if ($nextId->nextval < $highestId->max) {
+                    DB::select('SELECT setval(\'' . $tableToCheck . '_id_seq\', ' . $highestId->max . ')');
+                    $highestId = DB::table($tableToCheck)->select(DB::raw('MAX(id)'))->first();
+                    $nextId = DB::table($tableToCheck)->select(DB::raw('nextval(\'' . $tableToCheck . '_id_seq\')'))->first();
+                    if ($nextId->nextval > $highestId->max) {
+                        $this->command->info($tableToCheck . ' autoincrement corrected');
+                    } else {
+                        $this->command->info('Arff! The nextval sequence is still all screwed up on ' . $tableToCheck);
+                    }
+                }
+            }
+        }
     }
 }

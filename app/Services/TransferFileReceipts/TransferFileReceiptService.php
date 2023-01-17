@@ -97,6 +97,7 @@ class TransferFileReceiptService implements TransferFileReceiptInterface
             $max = TransferReceipt::max('id') + 1;
 
             $receiptData = [
+                'user_id' => Auth::user()->id,
                 'site_id' => decryptParams($site_id),
                 'unit_id'  => $transferFile->unit_id,
                 'sales_plan_id'  => $transferFile->sales_plan_id,
@@ -115,6 +116,7 @@ class TransferFileReceiptService implements TransferFileReceiptInterface
                 'status' => ($data['mode_of_payment'] != 'Cheque') ? 1 : 0,
                 'bank_details' => $data['bank_name'],
                 'bank_id' => $data['bank_id'],
+                'doc_no' => $requested_data['doc_number'],
                 'created_date' => $requested_data['created_date'] . date(' H:i:s'),
                 'customer_ap_amount' => $data['customer_ap_amount'],
                 'dealer_ap_amount' => $data['dealer_ap_amount'],
@@ -173,6 +175,8 @@ class TransferFileReceiptService implements TransferFileReceiptInterface
 
         $data = [
             'status' => 1,
+            'cheque_active_by' => Auth::user()->id,
+            'cheque_active_date' => now(),
         ];
 
         for ($i = 0; $i < count($id); $i++) {

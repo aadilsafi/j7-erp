@@ -7,10 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class JournalVoucher extends Model
+class JournalVoucher extends Model implements HasMedia
 {
-    use HasFactory, SoftDeletes, LogsActivity;
+    use HasFactory, SoftDeletes, LogsActivity ,InteractsWithMedia;
 
     public function getActivitylogOptions(): LogOptions
     {
@@ -19,6 +21,7 @@ class JournalVoucher extends Model
 
     protected $fillable = [
         'site_id',
+        'doc_no',
         'user_id',
         'name',
         'account_head_code',

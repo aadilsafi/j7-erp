@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('file_title_transfers', function (Blueprint $table) {
             $table->id();
+            $table->string('doc_no')->nullable();
             $table->bigInteger('site_id')->nullable();
             $table->bigInteger('file_id')->nullable();
             $table->bigInteger('unit_id')->nullable();
@@ -34,6 +35,15 @@ return new class extends Migration
             $table->boolean('status')->default(0);
             $table->longText('comments')->nullable();
             $table->string('serial_no')->nullable()->default('FTT-');
+            $table->bigInteger('user_id')->nullable();
+            $table->timestamp('checked_date')->nullable();
+            $table->bigInteger('checked_by')->nullable();
+            $table->bigInteger('approved_by')->nullable();
+            $table->timestamp('approved_date')->nullable();
+            $table->bigInteger('reverted_by')->nullable();
+            $table->timestamp('reverted_date')->nullable();
+            $table->bigInteger('cheque_active_by')->nullable();
+            $table->timestamp('cheque_active_date')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

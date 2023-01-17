@@ -4,7 +4,7 @@
     {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.receipts.show', encryptParams($site->id)) }}
 @endsection
 
-@section('page-title', 'Receipt Details')
+@section('page-title', 'Receipt Preview')
 
 @section('page-vendor')
 @endsection
@@ -12,6 +12,7 @@
 @section('page-css')
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/vendors/filepond/filepond.min.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.preview.min.css">
+    <link href="https://unpkg.com/filepond-plugin-pdf-preview/dist/filepond-plugin-pdf-preview.min.css" rel="stylesheet">
 @endsection
 
 
@@ -28,10 +29,9 @@
         .filepond--panel-root {
             background-color: #e3e0fd;
         }
-
-        /* .filepond--item {
-                                                width: calc(20% - 0.5em);
-                                            } */
+        .filepond--item {
+            width: calc(50% - 0.5em);
+        }
     </style>
 @endsection
 
@@ -39,7 +39,7 @@
     <div class="content-header-left col-md-9 col-12 mb-2">
         <div class="row breadcrumbs-top">
             <div class="col-12">
-                <h2 class="content-header-title float-start mb-0">Receipt Details</h2>
+                <h2 class="content-header-title float-start mb-0">Receipt Preview</h2>
                 <div class="breadcrumb-wrapper">
                     {{ Breadcrumbs::render('sites.receipts.show', encryptParams($site->id)) }}
                 </div>
@@ -60,97 +60,9 @@
                 </div>
 
                 <div class="card-body">
-
-                    <div class="row mb-1">
-                        <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
-                            <label class="form-label fs-5" for="stackholder_full_name">Full Name</label>
-                            <input type="text" readonly value="{{ $stakeholder_data->full_name }}"
-                                class="form-control form-control-lg" id="stackholder_full_name" placeholder="Full Name" />
-                        </div>
-
-                        <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
-                            <label class="form-label fs-5" for="stackholder_father_name">Father / Husband Name</label>
-                            <input type="text" readonly value="{{ $stakeholder_data->father_name }}"
-                                class="form-control form-control-lg" id="stackholder_father_name"
-                                placeholder="Father / Husband Name" />
-                        </div>
-
-                        <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
-                            <label class="form-label fs-5" for="stackholder_occupation">Occupation</label>
-                            <input type="text" readonly value="{{ $stakeholder_data->occupation }}"
-                                class="form-control form-control-lg" id="stackholder_occupation" placeholder="Occupation" />
-                        </div>
-
-                        <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
-                            <label class="form-label fs-5" for="stackholder_designation">Designation</label>
-                            <input type="text" readonly value="{{ $stakeholder_data->designation }}"
-                                class="form-control form-control-lg" id="stackholder_designation"
-                                placeholder="Designation" />
-                        </div>
-                    </div>
-
-                    <div class="row mb-1">
-                        <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                            <label class="form-label fs-5" for="stackholder_ntn">NTN</label>
-                            <input type="text" readonly value="{{ $stakeholder_data->ntn }}"
-                                class="form-control form-control-lg" id="stackholder_ntn" placeholder="NTN" />
-                        </div>
-
-                        <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                            <label class="form-label fs-5" for="stackholder_cnic">CNIC</label>
-                            <input type="text" readonly value="{{ cnicFormat($stakeholder_data->cnic) }}"
-                                class="form-control form-control-lg" id="stackholder_cnic" placeholder="CNIC" />
-                        </div>
-
-                        <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                            <label class="form-label fs-5" for="stackholder_contact">Contact</label>
-                            <input type="text" readonly value="{{ $stakeholder_data->contact }}"
-                                class="form-control form-control-lg" id="stackholder_contact" placeholder="Contact" />
-                        </div>
-                    </div>
-
-                    {{-- <div class="row mb-1">
-                        <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                            <label class="form-label fs-5" for="country">Country</label>
-                            <input type="text" readonly value="{{ $stakeholder_data->country ? $stakeholder_data->country->name : '-' }}"
-                                class="form-control form-control-lg" id="country" placeholder="Country" />
-                        </div>
-
-                        <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                            <label class="form-label fs-5" for="state">State</label>
-                            <input type="text" readonly value="{{ $stakeholder_data->state ? $stakeholder_data->state->name : '-' }}"
-                                class="form-control form-control-lg" id="state" placeholder="State" />
-                        </div>
-
-                        <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                            <label class="form-label fs-5" for="city">City</label>
-                            <input type="text" readonly value="{{ $stakeholder_data->city ? $stakeholder_data->city->name : '-' }}"
-                                class="form-control form-control-lg" id="city" placeholder="City" />
-                        </div>
-                    </div> --}}
-
-                    {{-- <div class="row mb-1">
-                        <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
-                            <label class="form-label fs-5" for="stackholder_address">Address</label>
-                            <textarea class="form-control  form-control-lg" readonly id="stackholder_address" name="stackholder[address]"
-                                placeholder="Address" rows="5">{{ $stakeholder_data->address }}</textarea>
-                        </div>
-
-                        <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
-                            <label class="form-label fs-5" for="mailing_address">Mailing Address</label>
-                            <textarea class="form-control form-control-lg" readonly id="mailing_address" name="stackholder[mailing_address]"
-                                placeholder="Mailing Address" rows="5">{{ $stakeholder_data->mailing_address }}</textarea>
-                        </div>
-                    </div> --}}
-
-                    <div class="row mb-1">
-                        <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
-                            <label class="form-label fs-5" for="stackholder_comments">Comments</label>
-                            <textarea class="form-control form-control-lg" readonly id="stackholder_comments" name="stackholder[comments]"
-                                placeholder="Comments" rows="5">{{ $stakeholder_data->comments }}</textarea>
-                        </div>
-                    </div>
+                    {{ view('app.sites.stakeholders.partials.stakeholder-preview-fields', ['stakeholder' => $stakeholder_data, 'hideBorders' => true]) }}
                 </div>
+
             </div>
 
             <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
@@ -168,9 +80,8 @@
 
                         <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                             <label class="form-label fs-5" for="floor_no">Floor No</label>
-                            <input type="text" class="form-control form-control-lg" id="floor_no"
-                                name="unit[floor_no]" placeholder="Floor No" value="{{ $unit_data->floor_unit_number }}"
-                                readonly />
+                            <input type="text" class="form-control form-control-lg" id="floor_no" name="unit[floor_no]"
+                                placeholder="Floor No" value="{{ $unit_data->floor_unit_number }}" readonly />
                         </div>
 
                         <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
@@ -185,20 +96,20 @@
                         <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                             <label class="form-label fs-5" for="unit_no">Unit Area(sq.ft)</label>
                             <input type="text" class="form-control form-control-lg" id="unit_no" name="unit[no]"
-                                placeholder="Unit No" value="{{ number_format($unit_data->gross_area) }}" readonly />
+                                placeholder="Unit No" value="{{ number_format($unit_data->gross_area,2) }}" readonly />
                         </div>
 
                         <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                             <label class="form-label fs-5" for="floor_no">Unit Price</label>
                             <input type="text" class="form-control form-control-lg" id="floor_no"
                                 name="unit[floor_no]" placeholder="Floor No"
-                                value="{{ number_format($sales_plan->unit_price) }}" readonly />
+                                value="{{ number_format($sales_plan->unit_price,2) }}" readonly />
                         </div>
 
                         <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                             <label class="form-label fs-5" for="unit_type">Total Price</label>
                             <input type="text" class="form-control form-control-lg" id="unit_type" name="unit[type]"
-                                placeholder="Unit Type" value="{{ number_format($sales_plan->total_price) }}" readonly />
+                                placeholder="Unit Type" value="{{ number_format($sales_plan->total_price,2) }}" readonly />
                         </div>
 
                     </div>
@@ -219,13 +130,13 @@
                                 <div class="col-lg-6 col-md-6 col-sm-12 mb-2 position-relative">
                                     <label class="form-label fs-5" for="unit_no">Total Amount Received</label>
                                     <input type="text" class="form-control form-control-lg" id="unit_no"
-                                        placeholder="" value="{{ number_format($receipt->amount_received) }}" readonly />
+                                        placeholder="" value="{{ number_format($receipt->amount_received,2) }}" readonly />
                                 </div>
 
                                 <div class="col-lg-6 col-md-6 col-sm-12 mb-2 position-relative">
                                     <label class="form-label fs-5" for="unit_no">Discounted Amount</label>
                                     <input type="text" class="form-control form-control-lg" id="unit_no"
-                                        placeholder="" value="{{ $receipt->discounted_amount > 0 ? number_format($receipt->discounted_amount) : 0}}"
+                                        placeholder="" value="{{ $receipt->discounted_amount > 0 ? number_format($receipt->discounted_amount,2) : 0}}"
                                         readonly />
                                 </div>
 
@@ -233,14 +144,14 @@
                                     <label class="form-label fs-5" for="unit_no">Total Paid Amount</label>
                                     <input type="text" class="form-control form-control-lg" id="unit_no"
                                         name="unit[no]" placeholder=""
-                                        value="{{ number_format($receipt->amount_in_numbers) }}" readonly />
+                                        value="{{ number_format($receipt->amount_in_numbers,2) }}" readonly />
                                 </div>
 
                                 <div class="col-lg-6 col-md-6 col-sm-12 mb-2 position-relative">
                                     <label class="form-label fs-5" for="floor_no">Amount In Words</label>
                                     <input type="text" class="form-control form-control-lg" id="floor_no"
                                         name="unit[floor_no]" placeholder=""
-                                        value="{{ \Str::title(numberToWords($receipt->amount_in_numbers)) }} Only."
+                                        value="{{ \Str::title(numberToWords($receipt->amount_in_numbers,2)) }} Only."
                                         readonly />
                                 </div>
 
@@ -262,7 +173,7 @@
                                     <div class="col-lg-6 col-md-6 col-sm-12 mb-2 position-relative">
                                         <label class="form-label fs-5" for="unit_type">Cheque Number</label>
                                         <input type="text" class="form-control form-control-lg" id="unit_type"
-                                            name="unit[type]" placeholder="Check Number"
+                                            name="unit[type]" placeholder="Cheque Number"
                                             value="{{ $receipt->cheque_no }}" readonly />
                                     </div>
 
@@ -301,8 +212,8 @@
 
                                 <div class="col-lg-12 col-md-12 col-sm-12 position-relative mt-1">
                                     <label class="form-label fs-5" for="installments">Installments</label>
-                                    <input type="text" class="form-control form-control-lg text-wrap" id="installments"
-                                        name="installments" placeholder="installments"
+                                    <input type="text" class="form-control form-control-lg text-wrap"
+                                        id="installments" name="installments" placeholder="installments"
                                         value="@foreach (json_decode($receipt->installment_number) as $values){{ trim($values) }}{{ !$loop->last ? ' , ' : null }} @endforeach"
                                         readonly />
                                 </div>
@@ -319,8 +230,8 @@
                         <div class="col-lg-3 col-md-3 col-ms-12">
                             <label class="form-label fs-5" for="type_name">Attachment</label>
                             <input disabled id="attachment" type="file"
-                                class="filepond @error('attachment') is-invalid @enderror" name="attachment"
-                                accept="image/png, image/jpeg, image/gif" />
+                                class="filepond @error('attachment') is-invalid @enderror" name="attachment[]"
+                                accept="image/png, image/jpeg, image/gif,application/pdf" />
                             @error('attachment')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -364,9 +275,9 @@
                                                         <td>{{ $paidIntsallment->details }}</td>
                                                         <td>{{ \Carbon\Carbon::parse($paidIntsallment->date)->format('F j, Y') }}
                                                         </td>
-                                                        <td>{{ number_format($paidIntsallment->amount) }}</td>
-                                                        <td>{{ number_format($paidIntsallment->paid_amount) }}</td>
-                                                        <td>{{ number_format($paidIntsallment->remaining_amount) }}</td>
+                                                        <td>{{ number_format($paidIntsallment->amount,2) }}</td>
+                                                        <td>{{ number_format($paidIntsallment->paid_amount,2) }}</td>
+                                                        <td>{{ number_format($paidIntsallment->remaining_amount,2) }}</td>
                                                         <td>{{ Str::of($paidIntsallment->status)->replace('_', ' ')->title() }}
                                                         </td>
                                                     </tr>
@@ -417,7 +328,7 @@
                                                             <td>{{ $unPaidIntsallment->details }}</td>
                                                             <td>{{ \Carbon\Carbon::parse($unPaidIntsallment->date)->format('F j, Y') }}
                                                             </td>
-                                                            <td>{{ number_format($unPaidIntsallment->amount) }}</td>
+                                                            <td>{{ number_format($unPaidIntsallment->amount,2) }}</td>
                                                             <td>-</td>
                                                             <td>-</td>
                                                             <td>Unpaid</td>
@@ -446,6 +357,7 @@
     <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.imagecrop.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.imagesizevalidation.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.filesizevalidation.min.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-pdf-preview/dist/filepond-plugin-pdf-preview.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/filepond/filepond.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/js/forms/repeater/jquery.repeater.min.js"></script>
     <script src="{{ asset('app-assets') }}/js/scripts/forms/form-repeater.min.js"></script>
@@ -462,31 +374,46 @@
             FilePondPluginFileValidateSize,
             FilePondPluginImageValidateSize,
             FilePondPluginImageCrop,
+            FilePondPluginPdfPreview,
         );
 
         var files = [];
-        @if ($image != '')
+
+        @forelse($images as $image)
             files.push({
-                source: '{{ $image }}',
+                source: '{{ $image->getUrl() }}',
             });
-        @endif
+        @empty
+        @endforelse
 
         FilePond.create(document.getElementById('attachment'), {
             files: files,
             styleButtonRemoveItemPosition: 'right',
             imageCropAspectRatio: '1:1',
-            acceptedFileTypes: ['image/png', 'image/jpeg'],
+            acceptedFileTypes: ['image/png', 'image/jpeg', 'application/pdf'],
             maxFileSize: '1536KB',
             ignoredFiles: ['.ds_store', 'thumbs.db', 'desktop.ini'],
             storeAsFile: true,
             allowMultiple: true,
-            maxFiles: 2,
-            minFiles: 2,
+            // maxFiles: 2,
+            // minFiles: 2,
             checkValidity: true,
+            allowPdfPreview: true,
+            markupItem : true,
+            imagePreviewMarkupShow:true,
+            imageResizeMode:true,
+            imageResizeUpscale:true,
             credits: {
                 label: '',
                 url: ''
             }
+        });
+
+        FilePond.setOptions({
+            allowPdfPreview: true,
+            // imagePreviewHeight: 440,
+            // pdfPreviewHeight: 540,
+            pdfComponentExtraParams: 'toolbar=0&view=fit&page=1'
         });
     </script>
 @endsection

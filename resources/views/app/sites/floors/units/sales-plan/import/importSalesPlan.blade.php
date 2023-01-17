@@ -1,7 +1,7 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.floors.units.import', $site_id) }}
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.floors.units.import.importSalesPlan', $site_id) }}
 @endsection
 
 @section('page-title', 'Import Sale Plan')
@@ -30,9 +30,9 @@
     <div class="content-header-left col-md-9 col-12 mb-2">
         <div class="row breadcrumbs-top">
             <div class="col-12">
-                <h2 class="content-header-title float-start mb-0">Import Sales Plan</h2>
+                <h2 class="content-header-title float-start mb-0">Import Sales Plans</h2>
                 <div class="breadcrumb-wrapper">
-                    {{ Breadcrumbs::render('sites.floors.units.import', $site_id) }}
+                    {{ Breadcrumbs::render('sites.floors.units.import.importSalesPlan', $site_id) }}
                 </div>
             </div>
         </div>
@@ -111,7 +111,7 @@
                                     {{ __('lang.commons.cancel') }}
                                 </a>
 
-                                <a href="{{ route('sites.import.sample-download', ['site_id' => $site_id, 'order' => 7]) }}"
+                                <a href="{{ route('sites.import.sample-download', ['site_id' => $site_id, 'order' => 8]) }}"
                                     class="mt-1 btn w-100 btn-relief-outline-info waves-effect waves-float waves-light">
                                     <i data-feather='download'></i>
                                     Download Sample

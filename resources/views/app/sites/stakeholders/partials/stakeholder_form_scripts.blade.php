@@ -7,18 +7,32 @@
         @endphp
 
         @if (!is_null(old('stakeholder_type')))
-            $('#stakeholderType').trigger('change');
-        @endif
-
-        @if (!is_null(old('residential.country')))
-            $('#residential_country').val({{ old('residential.country') }});
+            $('#stakeholder_type').trigger('change');
+            $("#stakeholder_as").trigger('change');
+            $('#residential_country').val({{ old('residential.country') }}).trigger('change');
             $('#residential_country').trigger('change')
-        @endif
-
-        @if (!is_null(old('mailing.country')))
-            $('#mailing_country').val({{ old('mailing.country') }});
+            $('#mailing_country').val({{ old('mailing.country') }}).trigger('change');
             $('#mailing_country').trigger('change')
         @endif
+
+        var stakeholder_type = $("#stakeholder_type");
+        stakeholder_type.wrap('<div class="position-relative"></div>');
+        stakeholder_type.select2({
+            dropdownAutoWidth: !0,
+            dropdownParent: stakeholder_type.parent(),
+            width: "100%",
+            containerCssClass: "select-lg",
+        }).change(function() {
+            showBlockUI('#stakeholder_as');
+
+            if ($(this).val() == 'L') {
+                $('.showRequired').hide();
+            } else {
+                $('.showRequired').show();
+
+            }
+            hideBlockUI('#stakeholder_as');
+        });
 
         var stakeholder_as = $("#stakeholder_as");
         stakeholder_as.wrap('<div class="position-relative"></div>');
@@ -130,9 +144,10 @@
 
 
         @if (!is_null(old('mobileContactCountryDetails')))
-            var mbCountry = {!! old('mobileContactCountryDetails') !!}
-            $('#mobileContactCountryDetails').val({!! old('mobileContactCountryDetails') !!})
-            intlMobileContact.setCountry(mbCountry['iso2']);
+        intlMobileContact.setCountry('pk');
+            // var mbCountry = {!! old('mobileContactCountryDetails') !!}
+            // $('#mobileContactCountryDetails').val({!! old('mobileContactCountryDetails') !!})
+            // intlMobileContact.setCountry(mbCountry['iso2']);
         @endif
         @if (!is_null(old('OfficeContactCountryDetails')))
             // var officeCountry = {!! old('OfficeContactCountryDetails') !!}
@@ -195,7 +210,8 @@
 
 
                             @if (!is_null(old('residential.state')))
-                                $('#residential_state').val({{ old('residential.state') }});
+                                $('#residential_state').val({{ old('residential.state') }})
+                                    .trigger('change');
                                 $('#residential_state').trigger('change')
                             @endif
                         } else {
@@ -478,11 +494,11 @@
 
         var validator = $("#stakeholderForm").validate({
             rules: {
-                'stakeholder_as': {
-                    required: function() {
-                        return $("#stakeholder_as").val() == 0;
-                    }
-                },
+                // 'stakeholder_as': {
+                //     required: function() {
+                //         return $("#stakeholder_as").val() == 0;
+                //     }
+                // },
                 'stakeholder_type': {
                     required: function() {
                         return $("#stakeholder_type").val() == 0;

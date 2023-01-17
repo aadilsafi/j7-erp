@@ -29,7 +29,7 @@ use Redirect;
 class ReceiptController extends Controller
 {
 
-    private $receiptInterface;
+    private $receiptInterface,$customFieldInterface;
 
     public function __construct(
         ReceiptInterface $receiptInterface,
@@ -123,18 +123,22 @@ class ReceiptController extends Controller
     {
         $site = (new Site())->find(decryptParams($site_id));
         $receipt = (new Receipt())->find(decryptParams($id));
-        $image = $receipt->getFirstMediaUrl('receipt_attachments');
-
+        $images = $receipt->getMedia('receipt_attachments');
         $installmentNumbersArray = json_decode($receipt->installment_number);
 
-        $lastInstallment = array_pop($installmentNumbersArray);
-        $unit_data =  $receipt->unit;
-
-        $last_paid_installment_id = SalesPlanInstallments::where('sales_plan_id', $receipt->sales_plan_id)
+        $unpaid_installments = [];
+        $paid_installments = [];
+        if(count($installmentNumbersArray) > 1){
+            $lastInstallment = array_pop($installmentNumbersArray);
+            $last_paid_installment_id = SalesPlanInstallments::where('sales_plan_id', $receipt->sales_plan_id)
             ->whereRaw('LOWER(details) = (?)', [strtolower($lastInstallment)])->first()->id;
 
-        $unpaid_installments = SalesPlanInstallments::where('id', '>', $last_paid_installment_id)->where('sales_plan_id', $receipt->sales_plan_id)->orderBy('installment_order', 'asc')->get();
-        $paid_installments = SalesPlanInstallments::where('id', '<=', $last_paid_installment_id)->where('sales_plan_id', $receipt->sales_plan_id)->orderBy('installment_order', 'asc')->get();
+            $unpaid_installments = SalesPlanInstallments::where('id', '>', $last_paid_installment_id)->where('sales_plan_id', $receipt->sales_plan_id)->orderBy('installment_order', 'asc')->get();
+            $paid_installments = SalesPlanInstallments::where('id', '<=', $last_paid_installment_id)->where('sales_plan_id', $receipt->sales_plan_id)->orderBy('installment_order', 'asc')->get();
+        }
+        $unit_data =  $receipt->unit;
+
+      
         $stakeholder_data = Stakeholder::where('cnic', $receipt->cnic)->first();
         // if($lastIntsalmentStatus == 'paid'){
         //     $paid_installments = SalesPlanInstallments::all();
@@ -146,7 +150,7 @@ class ReceiptController extends Controller
         return view('app.sites.receipts.preview', [
             'site' => $site,
             'receipt' => $receipt,
-            'image' => $image,
+            'images' => $images,
             'unit_data' => $unit_data,
             'paid_installments' => $paid_installments,
             'unpaid_installments' => $unpaid_installments,
@@ -360,6 +364,7 @@ class ReceiptController extends Controller
             'dealerPayableAmount' => $dealerPayableAmount,
             'vendorPayableAmount' => $vendorPayableAmount,
             'total_payable_amount' => $total_payable_amount,
+            'salesPlan'=> $sales_plan,
         ], 200);
     }
 
@@ -368,7 +373,7 @@ class ReceiptController extends Controller
         $sales_plan = SalesPlan::where('unit_id', $request->unit_id)->where('status', 1)->with('PaidorPartiallyPaidInstallments', 'unPaidInstallments', 'stakeholder')->first();
         $stakeholders = $sales_plan->stakeholder;
         // dd($stakeholders->country->name);
-        $stakeholders->cnic = cnicFormat($stakeholders->cnic);
+        $stakeholders->cnic = $stakeholders->cnic;
         $installmentFullyPaidUnderAmount = [];
         $installmentPartialyPaidUnderAmount = [];
         $calculate_amount = 0;
@@ -470,9 +475,9 @@ class ReceiptController extends Controller
             'amount_to_be_paid' => $request->amount,
             'already_paid'  => $sales_plan->PaidorPartiallyPaidInstallments,
             'stakeholders'  => $stakeholders,
-            'country'       => $stakeholders->country_id ? $stakeholders->country->name : '',
-            'state'         => $stakeholders->state_id ? $stakeholders->state->name : '',
-            'city'          => $stakeholders->city_id ? $stakeholders->city->name : '',
+            'country'       => $stakeholders->residentialCountry->name?? '' ,
+            'state'         =>  $stakeholders->residentialState->name ?? '' ,
+            'city'          => $stakeholders->residentialCity->name ?? '' ,
         ], 200);
     }
 
@@ -564,19 +569,9 @@ class ReceiptController extends Controller
     public function saveImport(Request $request, $site_id)
     {
 
-        $validator = \Validator::make($request->all(), [
-            'fields.*' => 'required',
-        ], [
-            'fields.*.required' => 'Must Select all Fields',
-            'fields.*.distinct' => 'Field can not be duplicated',
-
-        ]);
-
-        $validator->validate();
-
         $this->receiptInterface->ImportReceipts($site_id);
 
-        TempReceipt::query()->truncate();
+        // TempReceipt::query()->truncate();
 
         return redirect()->route('sites.receipts.index', ['site_id' => $site_id])->withSuccess(__('lang.commons.data_saved'));
     }

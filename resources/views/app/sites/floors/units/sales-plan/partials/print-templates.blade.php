@@ -9,12 +9,16 @@
                 <div class="mb-1">
                     <input type="hidden" name="sales_plan_id" id="sales_plan_id" value="0">
                     @foreach ($salesPlanTemplates as $template)
-                        <a href="javascript:void(0);" onclick="printSalesPlanTemplate('{{ encryptparams($template->id) }}')">
+                        @continue($showTemplateType == 'investment_plan' && !is_null($template->salesplan_default_payment_plan_template))
+                        @continue($showTemplateType == 'payment_plan' && !is_null($template->salesplan_default_investment_plan_template))
+
+                        <a href="javascript:void(0);"
+                            onclick="printSalesPlanTemplate('{{ encryptparams($template->id) }}')">
                             <div class="card mb-4 border border-hover-primary">
                                 <div class="card-body text-center">
                                     <img class="card-img-top" src="{{ asset('app-assets') }}{{ $template->image }}"
                                         alt="Card image cap">
-                                        <hr>
+                                    <hr>
                                     <h5 class="card-title m-0">{{ $template->name }}</h5>
                                 </div>
                             </div>

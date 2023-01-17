@@ -1,7 +1,7 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.file-managements.file-resale.create', encryptParams($site_id)) }}
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.file-managements.files.file-resale.create', encryptParams($site_id)) }}
 @endsection
 
 @section('page-title', 'Create File Resale ')
@@ -29,8 +29,8 @@
         }
 
         /* .filepond--item {
-                                                                        width: calc(20% - 0.5em);
-                                                                    } */
+                                                                            width: calc(20% - 0.5em);
+                                                                        } */
     </style>
 @endsection
 
@@ -40,7 +40,7 @@
             <div class="col-12">
                 <h2 class="content-header-title float-start mb-0">Create File Resale</h2>
                 <div class="breadcrumb-wrapper">
-                    {{ Breadcrumbs::render('sites.file-managements.file-resale.create', encryptParams($site_id)) }}
+                    {{ Breadcrumbs::render('sites.file-managements.files.file-resale.create', encryptParams($site_id)) }}
                 </div>
             </div>
         </div>
@@ -77,7 +77,18 @@
                     style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0; z-index:10;">
                     <div class="card-body g-1">
                         <input type="hidden" name="file_id" value="{{ $file->id }}">
-
+                        <div class="d-block mb-1">
+                            <label class="form-label" style="font-size: 15px" for="doc_number">
+                                Document Number
+                                <span class="text-danger">*</span>
+                            </label>
+                            <input name="doc_number" type="text"
+                                class="form-control  @error('doc_number') is-invalid @enderror" id="doc_number"
+                                placeholder="Document Number" />
+                            @error('doc_number')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
                         <div class="d-block mb-1">
                             <label class="form-label fs-5" for="created_date">Resale Request Date</label>
                             <input id="created_date" type="date" required placeholder="YYYY-MM-DD" name="created_date"
@@ -136,6 +147,7 @@
             var created_date = $("#created_date").flatpickr({
                 defaultDate: "today",
                 minDate: '{{ $salesPlan->created_date }}',
+                maxDate: 'today',
                 altInput: !0,
                 altFormat: "F j, Y",
                 dateFormat: "Y-m-d",

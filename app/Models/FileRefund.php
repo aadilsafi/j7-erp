@@ -10,11 +10,12 @@ use Spatie\Activitylog\Traits\LogsActivity;
 
 class FileRefund extends Model
 {
-    use HasFactory, LogsActivity ,SoftDeletes;
+    use HasFactory, LogsActivity, SoftDeletes;
 
 
     protected $fillable = [
         'site_id',
+        'doc_no',
         'file_id',
         'sales_plan_id',
         'unit_id',
@@ -29,6 +30,15 @@ class FileRefund extends Model
         'status',
         'comments',
         'serial_no',
+        'user_id',
+        'checked_date',
+        'checked_by',
+        'approved_by',
+        'approved_date',
+        'reverted_by',
+        'reverted_date',
+        'cheque_active_by',
+        'cheque_active_date',
     ];
 
     public function getActivitylogOptions(): LogOptions

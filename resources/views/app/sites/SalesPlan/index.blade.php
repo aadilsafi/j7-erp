@@ -29,7 +29,7 @@
     <div class="content-header-left col-md-9 col-12 mb-2">
         <div class="row breadcrumbs-top">
             <div class="col-12">
-                <h2 class="content-header-title float-start mb-0">Sales Plan</h2>
+                <h2 class="content-header-title float-start mb-0">Sales Plans</h2>
                 <div class="breadcrumb-wrapper">
                     {{ Breadcrumbs::render('sites.sales_plan.show', encryptParams($site)) }}
                 </div>
@@ -49,9 +49,10 @@
             </form>
 
             {{-- Printing Modal --}}
-            @include('app.sites.floors.units.sales-plan.partials.print-templates', [
+            {{-- @include('app.sites.floors.units.sales-plan.partials.print-templates', [
                 'salesPlanTemplates' => $salesPlanTemplates,
-            ])
+                'showTemplateType' => 'investment_plan'
+            ]) --}}
 
         </div>
     </div>
@@ -92,8 +93,8 @@
             $('#modal-sales-plan-template').modal('show');
         }
 
-        function printSalesPlanTemplate(template_id) {
-            let sales_plan_id = $('#sales_plan_id').val();
+        function printSalesPlanTemplate(template_id, sales_plan_id) {
+
             let url =
                 "{{ route('sites.floors.units.sales-plans.templates.print', ['site_id' => encryptParams($site), 'floor_id' => encryptParams(1), 'unit_id' => encryptParams(1), 'sales_plan_id' => ':sales_plan_id', 'id' => ':id']) }}"
                 .replace(':sales_plan_id', sales_plan_id)
@@ -148,6 +149,8 @@
                                 }
                             }).then((result) => {
                                 if (result.isConfirmed) {
+                                    showBlockUI('#salesPlan');
+
                                     $('#teams-table-form').submit();
 
                                     var _token = '{{ csrf_token() }}';
@@ -207,8 +210,7 @@
                                 showBlockUI('#salesPlan');
                                 if (result.isConfirmed) {
                                     window.location.href = response.url;
-                                }
-                                else{
+                                } else {
                                     hideBlockUI('#salesPlan');
                                 }
                             });
@@ -267,6 +269,53 @@
                     hideBlockUI('#salesPlan');
                 }
             });
+        }
+        const inputOptions = {
+            'investment_plan': 'Investment Plan',
+            'payment_plan': 'Payment Plan',
+        }
+
+        function selectPreview(id, initialLink, updatedLink) {
+            Swal.fire({
+                title: 'Select Sales Plan Preview',
+                input: 'radio',
+                inputOptions: inputOptions,
+                inputValidator: (value) => {
+                    if (!value) {
+                        return 'You need to choose something!'
+                    } else {
+                        console.log(value);
+                        if (value == "investment_plan") {
+                            window.location.href = initialLink;
+                        } else {
+                            window.location.href = updatedLink;
+                        }
+                    }
+                }
+            })
+            $('.swal2-radio').empty();
+            var radioInput = '<div class="row custom-options-checkable g-1" width="100%">\
+                                                    <div class="col">\
+                                                        <input class="custom-option-item-check" type="radio" name="customOptionsCheckableRadios" id="customOptionsCheckableRadios1" value="investment_plan"/>\
+                                                            <label class="custom-option-item p-1" for="customOptionsCheckableRadios1">\
+                                                                        <span class="d-flex justify-content-between flex-wrap mb-50">\
+                                                                            <i class="bi bi-file-earmark-bar-graph"></i>\
+                                                                            <span class="fw-bolder">Investment Plan</span>\
+                                                                        </span>\
+                                                                    </label>\
+                                                                </div>\
+                                                                <div class="col">\
+                                                                    <input class="custom-option-item-check" type="radio" name="customOptionsCheckableRadios" id="customOptionsCheckableRadios2" value="payment_plan" />\
+                                                                    <label class="custom-option-item p-1" for="customOptionsCheckableRadios2">\
+                                                                        <span class="d-flex justify-content-between flex-wrap mb-50">\
+                                                                            <i class="bi bi-credit-card-2-front"></i>\
+                                                                            <span class="fw-bolder">Payment Plan</span>\
+                                                                        </span>\
+                                                                    </label>\
+                                                                </div>\
+                                                            </div>'
+            $('.swal2-radio').append(radioInput)
+
         }
     </script>
 @endsection

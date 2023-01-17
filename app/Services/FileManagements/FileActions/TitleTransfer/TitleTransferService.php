@@ -56,74 +56,6 @@ class TitleTransferService implements TitleTransferInterface
     {
         DB::transaction(function () use ($site_id, $inputs) {
 
-            // if ($inputs['stackholder']['stackholder_id'] == 0) {
-            //     $transfer_owner_data = [
-            //         'site_id' => decryptParams($site_id),
-            //         'full_name' => $inputs['stackholder']['full_name'],
-            //         'father_name' => $inputs['stackholder']['father_name'],
-            //         'occupation' => $inputs['stackholder']['occupation'],
-            //         'designation' => $inputs['stackholder']['designation'],
-            //         'cnic' => $inputs['stackholder']['cnic'],
-            //         'ntn' => $inputs['stackholder']['ntn'],
-            //         'contact' => $inputs['stackholder']['contact'],
-            //         'address' => $inputs['stackholder']['address'],
-            //         'comments' => $inputs['stackholder']['comments'],
-            //         'countryDetails' => $inputs['stackholder']['countryDetails'],
-            //         'optional_contact' => $inputs['stackholder']['optional_contact'],
-            //         'OptionalCountryDetails' => $inputs['stackholder']['OptionalCountryDetails'],
-            //         'mailing_address' => $inputs['stackholder']['mailing_address'],
-            //         'email' => $inputs['stackholder']['email'],
-            //         'optional_email' => $inputs['stackholder']['optional_email'],
-            //         'country_id' => $inputs['stackholder']['country_id'],
-            //         'state_id' => $inputs['stackholder']['state_id'],
-            //         'city_id' => $inputs['stackholder']['city_id'],
-            //         'stakeholder_as' => "i"
-            //     ];
-
-
-
-            //     $transfer_person = Stakeholder::create($transfer_owner_data);
-            //     $transfer_person_id = $transfer_person->id;
-
-            //     $stakeholdertype = [
-            //         [
-            //             'stakeholder_id' => $transfer_person_id,
-            //             'type' => 'C',
-            //             'stakeholder_code' => 'C-00' . $transfer_person_id,
-            //             'status' => 1,
-            //         ],
-            //         [
-            //             'stakeholder_id' => $transfer_person_id,
-            //             'type' => 'V',
-            //             'stakeholder_code' => 'V-00' . $transfer_person_id,
-            //             'status' => 0,
-            //         ],
-            //         [
-            //             'stakeholder_id' => $transfer_person_id,
-            //             'type' => 'D',
-            //             'stakeholder_code' => 'D-00' . $transfer_person_id,
-            //             'status' => 0,
-            //         ],
-            //         [
-            //             'stakeholder_id' => $transfer_person_id,
-            //             'type' => 'K',
-            //             'stakeholder_code' => 'K-00' . $transfer_person_id,
-            //             'status' => 0,
-            //         ],
-            //         [
-            //             'stakeholder_id' => $transfer_person_id,
-            //             'type' => 'L',
-            //             'stakeholder_code' => 'L-00' . $transfer_person_id,
-            //             'status' => 1,
-            //         ]
-            //     ];
-
-            //     $stakeholder_type = StakeholderType::insert($stakeholdertype);
-            // } else {
-            //     $transfer_person_id = $inputs['stackholder']['stackholder_id'];
-            // }
-
-
             $stakeholderInput = $inputs['stackholder'];
             $individual = $inputs['individual'];
 
@@ -252,6 +184,14 @@ class TitleTransferService implements TitleTransferInterface
                         'created_at' => now(),
                         'updated_at' => now(),
                     ],
+                    [
+                        'stakeholder_id' => $stakeholder->id,
+                        'type' => StakeholderTypeEnum::INVESTOR->value,
+                        'stakeholder_code' => StakeholderTypeEnum::INVESTOR->value . '-' . $stakeholderTypeCode,
+                        'status' => 0,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ],
                 ];
                 $stakeholderType = (new StakeholderType())->insert($stakeholderTypeData);
             }
@@ -261,9 +201,11 @@ class TitleTransferService implements TitleTransferInterface
             $serail_no = $this->model()::max('id') + 1;
             $serail_no =  sprintf('%03d', $serail_no);
             $data = [
+                'user_id' => Auth::user()->id,
                 'site_id' => decryptParams($site_id),
                 'file_id' => $inputs['file_id'],
                 'unit_id' => $inputs['unit_id'],
+                'doc_no' => $inputs['doc_number'],
                 'stakeholder_id' => $inputs['customer_id'],
                 'transfer_person_id' => $stakeholder->id,
                 'sales_plan_id' => $file->sales_plan_id,

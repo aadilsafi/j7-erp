@@ -15,7 +15,7 @@
                         <input type="text" required name="new_resale_rate"
                             class="form-control form-control-lg amountFormat" {{ isset($resale) ? 'disabled' : '' }}
                             id="new_resale_rate" placeholder=" Price per sq ft"
-                            value="{{ isset($resale) ? number_format($resale->new_resale_rate) : '' }}" />
+                            value="{{ isset($resale) ? number_format($resale->new_resale_rate,2) : '' }}" />
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                         <label class="form-label fs-5" for="premium_demand">Premium Demand <span
@@ -23,7 +23,7 @@
                         <input type="text" required name="premium_demand"
                             class="form-control form-control-lg amountFormat" {{ isset($resale) ? 'disabled' : '' }}
                             id="premium_demand" placeholder=" Premium Demand Rate"
-                            value="{{ isset($resale) ? number_format($resale->premium_demand) : '' }}" />
+                            value="{{ isset($resale) ? number_format($resale->premium_demand,2) : '' }}" />
                     </div>
                 </div>
 
@@ -34,7 +34,7 @@
                         <input type="text" name="marketing_service_charges"
                             class="form-control form-control-lg amountFormat" {{ isset($resale) ? 'disabled' : '' }}
                             id="marketing_service_charges" placeholder=" Marketing Service Charges "
-                            value="{{ isset($resale) ? number_format($resale->marketing_service_charges) : '' }}" />
+                            value="{{ isset($resale) ? number_format($resale->marketing_service_charges,2) : '' }}" />
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                         <label class="form-label fs-5" for="stackholder_father_name">Remarks <span
@@ -55,76 +55,10 @@
             <div class="card-header justify-content-between">
                 <h3> Owner Information </h3>
             </div>
-
             <div class="card-body">
-
-                <div class="row mb-1">
-                    <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
-                        <label class="form-label fs-5" for="stackholder_full_name">Full Name</label>
-                        <input type="text" readonly value="{{ $customer->full_name }}"
-                            class="form-control form-control-lg" id="" placeholder="Full Name" />
-                    </div>
-
-                    <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
-                        <label class="form-label fs-5" for="stackholder_father_name">Father / Husband Name</label>
-                        <input type="text" readonly value="{{ $customer->father_name }}"
-                            class="form-control form-control-lg" id="" placeholder="Father / Husband Name" />
-                    </div>
-
-                    <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
-                        <label class="form-label fs-5" for="stackholder_occupation">Occupation</label>
-                        <input type="text" readonly value="{{ $customer->occupation }}"
-                            class="form-control form-control-lg" id="" placeholder="Occupation" />
-                    </div>
-
-                    <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
-                        <label class="form-label fs-5" for="stackholder_designation">Designation</label>
-                        <input type="text" readonly value="{{ $customer->designation }}"
-                            class="form-control form-control-lg" id="" placeholder="Designation" />
-                    </div>
-                </div>
-
-                <div class="row mb-1">
-
-                    <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
-                        <label class="form-label fs-5" for="stackholder_ntn">NTN</label>
-                        <input type="text" readonly value="{{ $customer->ntn }}"
-                            class="form-control form-control-lg" id="" placeholder="NTN" />
-                    </div>
-
-                    <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
-                        <label class="form-label fs-5" for="stackholder_cnic">CNIC</label>
-                        <input type="text" readonly value="{{ cnicFormat($customer->cnic) }}"
-                            class="form-control form-control-lg" id="" placeholder="CNIC" />
-                    </div>
-
-                    <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
-                        <label class="form-label fs-5" for="stackholder_contact">Contact</label>
-                        <input type="text" readonly value="{{ $customer->contact }}"
-                            class="form-control form-control-lg" id="" placeholder="Contact" />
-                    </div>
-
-                    <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
-                        <label class="form-label fs-5" for="stackholder_contact">Optional Contact</label>
-                        <input type="number" readonly value="{{ $customer->optional_contact }}"
-                            class="form-control form-control-lg" id="" placeholder="Optional Contact" />
-                    </div>
-                </div>
-
-                <div class="row mb-1">
-                    <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
-                        <label class="form-label fs-5" for="stackholder_address">Address</label>
-                        <textarea class="form-control  form-control-lg" readonly id="" name="" placeholder="Address"
-                            rows="5">{{ $customer->address }}</textarea>
-                    </div>
-
-                    <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
-                        <label class="form-label fs-5" for="stackholder_comments">Comments</label>
-                        <textarea class="form-control form-control-lg" readonly id="" name="" placeholder="Address"
-                            rows="5">{{ $customer->comments }}</textarea>
-                    </div>
-                </div>
+                {{ view('app.sites.stakeholders.partials.stakeholder-preview-fields', ['stakeholder' => $customer, 'hideBorders' => true]) }}
             </div>
+
         </div>
     </div>
 
@@ -148,16 +82,14 @@
 
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                         <label class="form-label fs-5" for="stackholder_full_name">Unit Name</label>
-                        <input type="text" readonly value="{{ $unit->name }}"
-                            class="form-control form-control-lg" id="stackholder_full_name"
-                            placeholder="Unit Name" />
+                        <input type="text" readonly value="{{ $unit->name }}" class="form-control form-control-lg"
+                            id="stackholder_full_name" placeholder="Unit Name" />
                     </div>
 
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                         <label class="form-label fs-5" for="stackholder_father_name">Unit Type</label>
                         <input type="text" readonly value="{{ $unit->type->name }}"
-                            class="form-control form-control-lg" id="stackholder_father_name"
-                            placeholder="Unit Type" />
+                            class="form-control form-control-lg" id="stackholder_father_name" placeholder="Unit Type" />
                     </div>
 
                 </div>
@@ -166,20 +98,20 @@
 
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                         <label class="form-label fs-5" for="stackholder_occupation">Gross Area</label>
-                        <input type="text" readonly value="{{ number_format($unit->gross_area) }}"
+                        <input type="text" readonly value="{{ number_format($unit->gross_area,2) }}"
                             class="form-control form-control-lg" id="stackholder_occupation" placeholder="Unit No" />
                     </div>
 
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                         <label class="form-label fs-5" for="stackholder_full_name">Price Per Sqft</label>
-                        <input type="text" readonly value="{{ number_format($unit->price_sqft) }}"
+                        <input type="text" readonly value="{{ number_format($unit->price_sqft,2) }}"
                             class="form-control form-control-lg" id="stackholder_full_name"
                             placeholder="Unit Name" />
                     </div>
 
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                         <label class="form-label fs-5" for="stackholder_father_name">Total Price</label>
-                        <input type="text" readonly value="{{ number_format($unit->total_price) }}"
+                        <input type="text" readonly value="{{ number_format($unit->total_price,2) }}"
                             class="form-control form-control-lg" id="stackholder_father_name"
                             placeholder="Unit Type" />
                     </div>
@@ -204,14 +136,14 @@
 
                     <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
                         <label class="form-label fs-5" for="stackholder_full_name">Price Per Sqft</label>
-                        <input type="text" readonly value="{{ number_format($salesPlan->unit_price) }}"
+                        <input type="text" readonly value="{{ number_format($salesPlan->unit_price,2) }}"
                             class="form-control form-control-lg" id="stackholder_full_name"
                             placeholder="Unit Name" />
                     </div>
 
                     <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
                         <label class="form-label fs-5" for="stackholder_father_name">Total Price</label>
-                        <input type="text" readonly value="{{ number_format($salesPlan->total_price) }}"
+                        <input type="text" readonly value="{{ number_format($salesPlan->total_price,2) }}"
                             class="form-control form-control-lg" id="stackholder_father_name"
                             placeholder="Unit Type" />
                     </div>
@@ -219,18 +151,18 @@
                     <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
                         <label class="form-label fs-5" for="stackholder_occupation">Downpayment %</label>
                         <input type="text" readonly
-                            @if (isset($unit->salesPlan[0])) value="{{ number_format($unit->salesPlan[0]['down_payment_percentage']) }}"
+                            @if (isset($unit->salesPlan[0])) value="{{ number_format($unit->salesPlan[0]['down_payment_percentage'],2) }}"
                             @else
-                            value="{{ number_format($unit->CancelsalesPlan[0]['down_payment_percentage']) }}" @endif
+                            value="{{ number_format($unit->CancelsalesPlan[0]['down_payment_percentage'],2) }}" @endif
                             class="form-control form-control-lg" id="stackholder_occupation" placeholder="Unit No" />
                     </div>
 
                     <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
                         <label class="form-label fs-5" for="stackholder_full_name">Downpayment Total</label>
                         <input type="text" readonly
-                            @if (isset($unit->salesPlan[0])) value="{{ number_format($unit->salesPlan[0]['down_payment_total']) }}"
+                            @if (isset($unit->salesPlan[0])) value="{{ number_format($unit->salesPlan[0]['down_payment_total'],2) }}"
                             @else
-                            value="{{ number_format($unit->CancelsalesPlan[0]['down_payment_total']) }}" @endif
+                            value="{{ number_format($unit->CancelsalesPlan[0]['down_payment_total'],2) }}" @endif
                             class="form-control form-control-lg" id="stackholder_full_name"
                             placeholder="Unit Name" />
                     </div>
@@ -242,7 +174,7 @@
                         <label class="form-label fs-5" for="amount_to_be_refunded">Paid Amount</label>
                         <input type="text" disabled required name="paid_amount"
                             class="form-control form-control-lg" id="paid_amount" placeholder=" Paid Amount"
-                            value="{{ isset($total_paid_amount) ? number_format($total_paid_amount) : '' }}" />
+                            value="{{ isset($total_paid_amount) ? number_format($total_paid_amount,2) : '' }}" />
                     </div>
                     <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
                         <label class="form-label fs-5 text-nowrap" for="stackholder_father_name">Installments
@@ -312,9 +244,9 @@
                                                     <td>{{ $intsallment->details }}</td>
                                                     <td>{{ \Carbon\Carbon::parse($intsallment->date)->format('F j, Y') }}
                                                     </td>
-                                                    <td>{{ number_format($intsallment->amount) }}</td>
-                                                    <td>{{ number_format($intsallment->paid_amount) }}</td>
-                                                    <td>{{ number_format($intsallment->remaining_amount) }}</td>
+                                                    <td>{{ number_format($intsallment->amount,2) }}</td>
+                                                    <td>{{ number_format($intsallment->paid_amount,2) }}</td>
+                                                    <td>{{ number_format($intsallment->remaining_amount,2) }}</td>
                                                     <td>{{ Str::of($intsallment->status)->replace('_', ' ')->title() }}
                                                     </td>
                                                 </tr>

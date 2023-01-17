@@ -1,7 +1,7 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.file-managements.file-refund.preview', encryptParams($site_id)) }}
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.file-managements.files.file-refund.create.preview', encryptParams($site_id)) }}
 @endsection
 
 @section('page-title', 'Preview File Refund ')
@@ -40,7 +40,7 @@
             <div class="col-12">
                 <h2 class="content-header-title float-start mb-0">Preview File Refund</h2>
                 <div class="breadcrumb-wrapper">
-                    {{ Breadcrumbs::render('sites.file-managements.file-refund.preview', encryptParams($site_id)) }}
+                    {{ Breadcrumbs::render('sites.file-managements.files.file-refund.create.preview', encryptParams($site_id)) }}
                 </div>
             </div>
         </div>
@@ -83,6 +83,7 @@
 
     <script src="{{ asset('app-assets') }}/vendors/js/extensions/moment.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/js/extensions/moment-range.min.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-pdf-preview/dist/filepond-plugin-pdf-preview.min.js"></script>
 @endsection
 
 @section('page-js')
@@ -99,6 +100,7 @@
                 FilePondPluginFileValidateSize,
                 FilePondPluginImageValidateSize,
                 FilePondPluginImageCrop,
+                FilePondPluginPdfPreview,
             );
         $(".expenses-list").repeater({
             initEmpty: true,
@@ -136,7 +138,7 @@
                     files: [files[key]],
                     styleButtonRemoveItemPosition: 'right',
                     imageCropAspectRatio: '1:1',
-                    acceptedFileTypes: ['image/png', 'image/jpeg'],
+                    acceptedFileTypes: ['image/png', 'image/jpeg','application/pdf'],
                     maxFileSize: '1536KB',
                     ignoredFiles: ['.ds_store', 'thumbs.db', 'desktop.ini'],
                     storeAsFile: true,

@@ -8,11 +8,11 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=0,minimal-ui">
-    <meta name="description"
+    {{-- <meta name="description"
         content="Vuexy admin is super flexible, powerful, clean &amp; modern responsive bootstrap 4 admin template with unlimited possibilities.">
     <meta name="keywords"
         content="admin template, Vuexy admin template, dashboard template, flat admin template, responsive admin template, web app">
-    <meta name="author" content="PIXINVENT">
+    <meta name="author" content="PIXINVENT"> --}}
     <meta name="csrf-token" content="{{ csrf_token() }}" />
 
     @yield('seo-breadcrumb')
@@ -35,6 +35,8 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/vendors/css/extensions/sweetalert2.min.css">
     <link rel="stylesheet" type="text/css"
         href="{{ asset('app-assets') }}/vendors/css/pickers/flatpickr/flatpickr.min.css">
+    <link rel="stylesheet" type="text/css"
+        href="{{ asset('app-assets') }}/css/custom.css">
 
 
     @yield('page-vendor')
@@ -109,13 +111,13 @@
             {{ view('app.layout.alerts') }}
 
 
-            @if (!request()->routeIs('dashboard'))
-                <div class="content-header row">
-                    @yield('breadcrumbs')
 
-                    <div class="content-header-right text-md-end col-md-3 col-12 d-md-block d-none">
-                        <div class="mb-1 breadcrumb-right">
-                            {{-- <div class="dropdown">
+            <div class="content-header row">
+                @yield('breadcrumbs')
+
+                <div class="content-header-right text-md-end col-md-3 col-12 d-md-block d-none">
+                    <div class="mb-1 breadcrumb-right">
+                        {{-- <div class="dropdown">
                                 <button class="btn-icon btn btn-primary btn-round btn-sm dropdown-toggle" type="button"
                                     data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <i data-feather="grid"></i>
@@ -139,10 +141,10 @@
                                     </a>
                                 </div>
                             </div> --}}
-                        </div>
                     </div>
                 </div>
-            @endif
+            </div>
+
 
             <div class="content-header row">
             </div>
@@ -189,17 +191,17 @@
     {{-- @vite('resources/js/app.js') --}}
 
     <script>
-        if ({{ App::environment('production') ? 'true' : 'false' }}) {
-            let offlineErrorMessage = 'You are offline. Please check your internet connection.';
-            window.addEventListener('online', () => hideBlockUI());
-            window.addEventListener('offline', () => showBlockUI(null, offlineErrorMessage));
+        // if ({{ App::environment('production') ? 'true' : 'false' }}) {
+        //     let offlineErrorMessage = 'You are offline. Please check your internet connection.';
+        //     window.addEventListener('online', () => hideBlockUI());
+        //     window.addEventListener('offline', () => showBlockUI(null, offlineErrorMessage));
 
-            if (navigator.onLine) {
-                hideBlockUI()
-            } else {
-                showBlockUI(null, offlineErrorMessage);
-            }
-        }
+        //     if (navigator.onLine) {
+        //         hideBlockUI()
+        //     } else {
+        //         showBlockUI(null, offlineErrorMessage);
+        //     }
+        // }
         $('.amountFormat').on('focusout', function() {
             var val = $(this).val().replace(/,/g, "")
             if ($.isNumeric(val) && val > 0) {
@@ -280,7 +282,7 @@
 
         function showBlockUI(element = null, message = '') {
             blockUIOptions = {
-                message: '<div class="spinner-grow text-primary" role="status"></div><br><div class="text-primary">' +
+                message: '<div class=" text-primary" role="status"><img src="{{ asset('app-assets') }}/images/comming-soon/Loader-current.gif"></div><br><div class="text-primary">' +
                     message + '</div>',
                 css: {
                     backgroundColor: 'transparent',
@@ -328,11 +330,14 @@
         // });
 
         $('form').on('submit', function() {
+
             showBlockUI();
 
-            setTimeout(function() {
-                hideBlockUI();
-            }, 3000);
+            if (this.id != 'importPreviewForm' || this.id != 'importSaveForm') {
+                setTimeout(function() {
+                    hideBlockUI();
+                }, 3000);
+            }
         });
 
         function numberFormat(number) {

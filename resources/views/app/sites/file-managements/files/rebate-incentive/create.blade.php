@@ -81,6 +81,18 @@
                 <div class="card sticky-md-top top-lg-100px top-md-100px top-sm-0px"
                     style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0; z-index:10;">
                     <div class="card-body g-1">
+                        <div class="d-block mb-1">
+                            <label class="form-label" style="font-size: 15px" for="doc_number">
+                                Document Number
+                                <span class="text-danger">*</span>
+                            </label>
+                            <input name="doc_number" type="text"
+                                class="form-control  @error('doc_number') is-invalid @enderror" id="doc_number"
+                                placeholder="Document Number" />
+                            @error('doc_number')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
                         @can('sites.file-managements.rebate-incentive.store')
                             <a id="saveButton" href="#"
                                 class="btn text-nowrap w-100 btn-relief-outline-success waves-effect waves-float waves-light me-1 mb-1">
@@ -135,6 +147,7 @@
         $("#transaction_date").flatpickr({
             defaultDate: "today",
             // minDate: 'today',
+            maxDate: 'today',
             altInput: !0,
             altFormat: "F j, Y",
             dateFormat: "Y-m-d",
@@ -148,7 +161,7 @@
         var selected_city_id = 0;
 
         function getData(unit_id) {
-            showBlockUI('#rebate');
+            showBlockUI('#rebateForm');
             if (unit_id > 0) {
                 var _token = '{{ csrf_token() }}';
                 let url =
@@ -202,9 +215,9 @@
                             $('#customer_cnic').val(response.cnic);
                             $('#customer_ntn').val(response.stakeholder.ntn);
                             $('#customer_comments').val(response.stakeholder.comments);
-                            $('#customer_address').val(response.stakeholder.address);
+                            $('#customer_address').val(response.stakeholder.residential_address);
                             $('#customer_mailing_address').val(response.stakeholder.mailing_address);
-                            $('#customer_phone').val(response.stakeholder.contact);
+                            $('#customer_phone').val(response.stakeholder.mobile_contact);
                             $('#optional_customer_phone').val(response.stakeholder.optional_contact);
                             $('#customer_occupation').val(response.stakeholder.occupation);
                             $('#customer_designation').val(response.stakeholder.designation);
@@ -262,12 +275,14 @@
                                 .toLocaleString());
                             $('#td_unit_total_value').html(parseFloat(response.salesPlan.total_price)
                                 .toLocaleString());
+                            $('#sales_plan_total').val(response.salesPlan.total_price)
+
                             $('#td_unit_downpayment_value').html(parseFloat(response.salesPlan
                                     .down_payment_total)
                                 .toLocaleString());
-                            hideBlockUI('#rebate');
+                            hideBlockUI('#rebateForm');
                         } else {
-                            hideBlockUI('#rebate');
+                            hideBlockUI('#rebateForm');
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Error',
@@ -276,13 +291,13 @@
                         }
                     },
                     error: function(error) {
-                        hideBlockUI('#rebate');
+                        hideBlockUI('#rebateForm');
                         console.log(error);
                     }
                 });
             } else {
                 $('.hideDiv').hide();
-                hideBlockUI('#rebate');
+                hideBlockUI('#rebateForm');
 
             }
 
@@ -290,7 +305,7 @@
 
         $(document).on('blur', '#rebate_percentage', function() {
 
-            showBlockUI('#rebate');
+            showBlockUI('#rebateForm');
             let rebate_percentage_value = $('#rebate_percentage').val();
 
             if ($.isNumeric(rebate_percentage_value) && rebate_percentage_value > 0 && rebate_percentage_value <=
@@ -301,10 +316,12 @@
 
                 rebate_percentage = (rebate_percentage < 0) ? 0 : rebate_percentage;
 
-                let unit_total = parseFloat($('#unit_total').val());
+                let unit_total = parseFloat($('#sales_plan_total').val());
+                    console.log('total price : ' +unit_total)
+                    console.log('rebate percentage : ' +rebate_percentage)
 
                 let rebate_value = parseFloat((rebate_percentage * unit_total) / 100);
-
+                    console.log('rebate value : ' +rebate_value)
                 $('#td_rebate').html(rebate_percentage + '%');
 
                 $('#td_rebate_value').html(rebate_value.toLocaleString());
@@ -326,7 +343,7 @@
 
             window.setTimeout(function() {
                 // do whatever you want to do
-                hideBlockUI('#rebate');
+                hideBlockUI('#rebateForm');
             }, 700);
         });
 
@@ -339,7 +356,7 @@
             containerCssClass: "select-lg",
         }).on("change", function(e) {
 
-            showBlockUI('#stakeholders_card');
+            showBlockUI('#rebateForm');
 
             let stakeholder_id = $(this).val();
 
@@ -606,11 +623,11 @@
 
 
                     }
-                    hideBlockUI('#stakeholders_card');
+                    hideBlockUI('#rebateForm');
                 },
                 error: function(errors) {
                     console.error(errors);
-                    hideBlockUI('#stakeholders_card');
+                    hideBlockUI('#rebateForm');
                 }
             });
         });
@@ -626,11 +643,11 @@
                 'dealer[father_name]': {
                     required: true
                 },
-                'stakeholder_as': {
-                    required: function() {
-                        return $("#stakeholder_as").val() == 0;
-                    }
-                },
+                // 'stakeholder_as': {
+                //     required: function() {
+                //         return $("#stakeholder_as").val() == 0;
+                //     }
+                // },
                 'stakeholder_type': {
                     required: function() {
                         return $("#stakeholder_type").val() == 0;
@@ -931,7 +948,7 @@
             containerCssClass: "select-lg",
         }).on("change", function(e) {
             let bank = parseInt($(this).val());
-            showBlockUI('.bankDiv');
+            showBlockUI('#rebateForm');
             let bankData = {
                 id: 0,
                 name: '',
@@ -963,7 +980,7 @@
                         $('.comments').val(response.bank.comments).attr('readOnly', true);
                         $('.address').val(response.bank.address).attr('readOnly', (response.bank.address
                             .length > 0));
-                        hideBlockUI('.bankDiv');
+                        hideBlockUI('#rebateForm');
                     } else {
 
                         $('#name').val('').removeAttr('readOnly');
@@ -974,11 +991,11 @@
                         $('#comments').val('').removeAttr('readOnly');
                         $('#address').val('').removeAttr('readOnly');
                     }
-                    hideBlockUI('.bankDiv');
+                    hideBlockUI('#rebateForm');
                 },
                 error: function(errors) {
                     console.error(errors);
-                    hideBlockUI('.bankDiv');
+                    hideBlockUI('#rebateForm');
                 }
             });
         });

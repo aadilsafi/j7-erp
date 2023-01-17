@@ -1,7 +1,9 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.settings.import') }}
+    {{-- {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.settings.import.images.create') }} --}}
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.settings.import.images.create', encryptParams($site_id)) }}
+
 @endsection
 
 @section('page-title', 'Import Images')
@@ -19,13 +21,40 @@
 @section('custom-css')
 @endsection
 
+{{-- @section('breadcrumbs')
+    <div class="content-header-left col-md-9 col-12 mb-2">
+        <div class="row breadcrumbs-top">
+            <div class="col-12">
+                <h2 class="content-header-title float-start mb-0">Import Images</h2>
+                <div class="breadcrumb-wrapper">
+                    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.settings.import.images.create') }}
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection --}}
+
+{{-- @section('breadcrumbs')
+    <div class="content-header-left col-md-9 col-12 mb-2">
+        <div class="row breadcrumbs-top">
+            <div class="col-12">
+                <h2 class="content-header-title float-start mb-0">Import Images</h2>
+                <div class="breadcrumb-wrapper">
+                    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.settings.import.images.create') }}
+
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection --}}
+
 @section('breadcrumbs')
     <div class="content-header-left col-md-9 col-12 mb-2">
         <div class="row breadcrumbs-top">
             <div class="col-12">
                 <h2 class="content-header-title float-start mb-0">Import Images</h2>
                 <div class="breadcrumb-wrapper">
-                    {{ Breadcrumbs::render('sites.settings.import') }}
+                    {{ Breadcrumbs::render('sites.settings.import.images.create', encryptParams($site_id)) }}
                 </div>
             </div>
         </div>

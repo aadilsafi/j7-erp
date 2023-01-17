@@ -61,6 +61,19 @@
                     style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0; z-index:10;">
                     <div class="card-body g-1">
 
+                        <div class="d-block mb-1">
+                            <label class="form-label" style="font-size: 15px" for="floor">
+                                 Document Number
+                                <span class="text-danger">*</span>
+                            </label>
+                            <input name="doc_number" type="text"
+                                class="form-control  @error('doc_number') is-invalid @enderror" id="doc_number"
+                                placeholder=" Document Number " />
+                            @error('doc_number')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
                         <a id="saveButton" href="#"
                             class="btn text-nowrap w-100 btn-relief-outline-success waves-effect waves-float waves-light me-1 mb-1">
                             <i data-feather='save'></i>
@@ -114,21 +127,7 @@
                         showBlockUI('#loader');
                         if (response.success) {
                             $('.hideDiv').css("display", "block");
-                            // $.each(response.units, function(i, item) {
-                            //     // $('.unit_id').append($('<option>', {
-                            //     //     value: item.id + '_' + item.gross_area,
-                            //     //     text: item.name,
-                            //     // }));
 
-                            //     $('#dynamic_unit_rows').append('<tr>',
-                            //         '<td class="checkedInput"><input type="checkbox" ></td>',
-                            //         '<td>'+item.name+'</td>',
-                            //         '<td>'+item.floor_unit_number+'</td>',
-                            //         '<td>'+item.gross_area.toLocaleString()+'</td>',
-                            //         '<td>'+item.price_sqft.toLocaleString()+'</td></tr>',
-                            //     );
-
-                            // });
                             $('#dynamic_unit_rows').empty();
                             for (var i = 0; i <= response.units.length; i++) {
                                 if (response.units[i] != null) {
@@ -180,14 +179,10 @@
         function CalculateTotalArea(e) {
             $('.hideDiv').css("display", "block");
             showBlockUI('#loader');
-            // var selectedValues = $('#unit_id').val();
             let element = [];
             let ids = [];
             let total_area = 0.0;
-            // for (let index = 0; index < selectedValues.length; index++) {
-            //     element = selectedValues[index].split("_");
-            //     total_area = parseFloat(total_area) + parseFloat(element[1]);
-            // }
+
 
             $("input:checkbox[name='unit_ids\\[\\]']:checked").each(function() {
                 element.push($(this).attr('area'));
@@ -232,6 +227,9 @@
                 'total_dealer_incentive': {
                     required: true
                 },
+                'doc_number':{
+                    required: true
+                }
             },
             errorClass: 'is-invalid text-danger',
             errorElement: "span",

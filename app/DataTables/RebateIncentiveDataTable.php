@@ -55,13 +55,13 @@ class RebateIncentiveDataTable extends DataTable
                 return $rebateIncentive->stakeholder->contact;
             })
             ->editColumn('commision_percentage', function ($rebateIncentive) {
-                return $rebateIncentive->commision_percentage . '%';
+                return number_format($rebateIncentive->commision_percentage,2) . '%';
             })
             ->editColumn('dealer_id', function ($rebateIncentive) {
                 return $rebateIncentive->dealer->full_name;
             })
             ->editColumn('commision_total', function ($rebateIncentive) {
-                return number_format($rebateIncentive->commision_total);
+                return number_format($rebateIncentive->commision_total,2);
             })
             ->editColumn('created_at', function ($rebateIncentive) {
                 return editDateColumn($rebateIncentive->created_at);

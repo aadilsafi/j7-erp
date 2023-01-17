@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('journal_vouchers', function (Blueprint $table) {
             $table->id();
+            $table->string('doc_no')->nullable();
             $table->bigInteger('site_id')->nullable();
             $table->bigInteger('user_id')->nullable();
             $table->bigInteger('account_head_code')->nullable();

@@ -35,7 +35,7 @@
     <div class="content-header-left col-md-9 col-12 mb-2">
         <div class="row breadcrumbs-top">
             <div class="col-12">
-                <h2 class="content-header-title float-start mb-0">Sales Plan</h2>
+                <h2 class="content-header-title float-start mb-0">Sales Plans</h2>
                 <div class="breadcrumb-wrapper">
                     {{ Breadcrumbs::render('sites.accounts.recovery.salesPlan', encryptParams($site_id)) }}
                 </div>
@@ -540,9 +540,9 @@
                 processing: true,
 
                 select: true,
-                serverSide: true,
+                // serverSide: true,
                 scrollX: true,
-                debug: true,
+
                 dom: 'lrtipC',
                 // dom: '<"card-header pt-0"<"head-label"><"dt-action-buttons text-end"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>> C<"clear">',
                 ajax: {
@@ -551,9 +551,7 @@
 
                 },
                 "language": {
-                    "processing": '<div class="spinner-grow text-primary" role="status">' +
-                        '<span class="visually-hidden">Loading...</span>' +
-                        '</div>'
+                    "processing": '<div class=" text-primary" role="status"><img src="{{ asset('app-assets') }}/images/comming-soon/Loader-current.gif"></div><br><div class="text-primary"></div>'
                 },
                 columns: dataTableColumns,
                 buttons: buttons,

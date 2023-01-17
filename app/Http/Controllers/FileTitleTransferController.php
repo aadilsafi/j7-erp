@@ -31,6 +31,7 @@ use App\Services\FileManagements\FileActions\TitleTransfer\TitleTransferInterfac
 use Maatwebsite\Excel\Imports\ModelManager;
 use App\Services\CustomFields\CustomFieldInterface;
 use App\Services\FinancialTransactions\FinancialTransactionInterface;
+use Auth;
 use DB;
 
 class FileTitleTransferController extends Controller
@@ -43,7 +44,7 @@ class FileTitleTransferController extends Controller
 
     private $stakeholderInterface;
     private $titleTransferInterface;
-    private $financialTransactionInterface;
+    private $financialTransactionInterface, $customFieldInterface;
 
     public function __construct(StakeholderInterface $stakeholderInterface, TitleTransferInterface $titleTransferInterface, CustomFieldInterface $customFieldInterface, FinancialTransactionInterface $financialTransactionInterface,)
     {
@@ -76,7 +77,7 @@ class FileTitleTransferController extends Controller
         if (!request()->ajax()) {
             $unit = Unit::find(decryptParams($unit_id));
             $file = FileManagement::where('id', decryptParams($file_id))->first();
-            $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->where('status', 1)->get();
+            $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->get();
             $total_paid_amount = $receipts->sum('amount_in_numbers');
             $salesPlan = SalesPlan::find($file->sales_plan_id);
             $rebate_incentive = RebateIncentiveModel::where('unit_id', $unit->id)->where('stakeholder_id', decryptParams($customer_id))->first();
@@ -97,7 +98,7 @@ class FileTitleTransferController extends Controller
                 'customer' => Stakeholder::find(decryptParams($customer_id)),
                 'file' => FileManagement::where('id', decryptParams($file_id))->first(),
                 'total_paid_amount' => $total_paid_amount,
-                'stakeholders' => Stakeholder::where('id','!=',decryptParams($customer_id))->get(),
+                'stakeholders' => Stakeholder::where('id', '!=', decryptParams($customer_id))->get(),
                 'stakeholderTypes' => StakeholderTypeEnum::array(),
                 'emptyRecord' => [$this->stakeholderInterface->getEmptyInstance()],
                 'rebate_incentive' => $rebate_incentive,
@@ -105,7 +106,7 @@ class FileTitleTransferController extends Controller
                 'salesPlan' => $salesPlan,
                 'customFields' => $customFields,
                 'country' => Country::all(),
-                'leadSources' => LeadSource::where('site_id',decryptParams($site_id))->get(),
+                'leadSources' => LeadSource::where('site_id', decryptParams($site_id))->get(),
             ];
             unset($data['emptyRecord'][0]['stakeholder_types']);
             return view('app.sites.file-managements.files.files-actions.file-title-transfer.create', $data);
@@ -149,16 +150,10 @@ class FileTitleTransferController extends Controller
         $unit = Unit::find(decryptParams($unit_id));
         $file_title_transfer = FileTitleTransfer::find(decryptParams($id));
         $file = FileManagement::where('id', $file_title_transfer->file_id)->first();
-        $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->where('status', 1)->get();
+        $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->get();
         $salesPlan = SalesPlan::find($file->sales_plan_id);
 
         $total_paid_amount = $receipts->sum('amount_in_numbers');
-        $transfer_file = (new FileTitleTransfer())->find(decryptParams($id));
-        if (isset($rebate_incentive)) {
-            $rebate_total = $rebate_incentive->commision_total;
-        } else {
-            $rebate_total = 0;
-        }
 
         foreach ($files_labels as $key => $file) {
             $image = $file->getFirstMedia('file_title_transfer_attachments');
@@ -169,11 +164,12 @@ class FileTitleTransferController extends Controller
             'site_id' => decryptParams($site_id),
             'unit' => Unit::find(decryptParams($unit_id)),
             'customer' => Stakeholder::find(decryptParams($customer_id)),
-            'transfer_file' => $transfer_file,
+            'transfer_customer' => $file_title_transfer->transferStakeholder,
+            'transfer_file' => $file_title_transfer,
             'images' => $images,
             'labels' => $files_labels,
             'total_paid_amount' => $total_paid_amount,
-            'titleTransferPerson' => Stakeholder::find($transfer_file->transfer_person_id),
+            'titleTransferPerson' => Stakeholder::find($file_title_transfer->transfer_person_id),
             'salesPlan' => $salesPlan,
             'country' => Country::all(),
         ];
@@ -223,6 +219,8 @@ class FileTitleTransferController extends Controller
             // dd($transaction);
             $file_title_transfer = FileTitleTransfer::where('id', decryptParams($file_id))->first();
             $file_title_transfer->status = 1;
+            $file_title_transfer->approved_by = Auth::user()->id;
+            $file_title_transfer->approved_date = now();
             $file_title_transfer->update();
 
             $stakeholder = Stakeholder::find($file_title_transfer->transfer_person_id);
@@ -238,23 +236,23 @@ class FileTitleTransferController extends Controller
             $salesPlan->save();
 
 
-            $file_buy_back = FileBuyBack::where(['file_id'=>$file->id , 'stakeholder_id' => $file_title_transfer->stakeholder_id , 'status' => 0])->first();
-            if(isset($file_buy_back)){
+            $file_buy_back = FileBuyBack::where(['file_id' => $file->id, 'stakeholder_id' => $file_title_transfer->stakeholder_id, 'status' => 0])->first();
+            if (isset($file_buy_back)) {
                 $file_buy_back->delete();
             }
 
-            $file_refund = FileRefund::where(['file_id'=>$file->id , 'stakeholder_id' => $file_title_transfer->stakeholder_id , 'status' => 0])->first();
-            if(isset($file_refund)){
+            $file_refund = FileRefund::where(['file_id' => $file->id, 'stakeholder_id' => $file_title_transfer->stakeholder_id, 'status' => 0])->first();
+            if (isset($file_refund)) {
                 $file_refund->delete();
             }
 
-            $FileCancellation = FileCancellation::where(['file_id'=>$file->id , 'stakeholder_id' => $file_title_transfer->stakeholder_id , 'status' => 0])->first();
-            if(isset($FileCancellation)){
+            $FileCancellation = FileCancellation::where(['file_id' => $file->id, 'stakeholder_id' => $file_title_transfer->stakeholder_id, 'status' => 0])->first();
+            if (isset($FileCancellation)) {
                 $FileCancellation->delete();
             }
 
-            $FileResale = FileResale::where(['file_id'=>$file->id , 'stakeholder_id' => $file_title_transfer->stakeholder_id , 'status' => 0])->first();
-            if(isset($FileResale)){
+            $FileResale = FileResale::where(['file_id' => $file->id, 'stakeholder_id' => $file_title_transfer->stakeholder_id, 'status' => 0])->first();
+            if (isset($FileResale)) {
                 $FileResale->delete();
             }
 
@@ -278,7 +276,7 @@ class FileTitleTransferController extends Controller
 
 
         $file = FileManagement::where('id', $transfer_file->file_id)->first();
-        $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->where('status', 1)->get();
+        $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->get();
         $salesPlan = SalesPlan::find($file->sales_plan_id);
         $total_paid_amount = $receipts->sum('amount_in_numbers');
         $unit_data = json_decode($transfer_file->unit_data);

@@ -100,6 +100,7 @@
                     'user' => $user,
                     'country' => $country,
                     'customFields' => $customFields,
+                    'crm_lead' => isset($crm_lead) ? $crm_lead : null,
                 ]) }}
 
             </div>
@@ -144,6 +145,18 @@
                     <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
                         <div class="card-body">
                             <div class="row g-1">
+                                <div class="d-block mb-1">
+                                    <label class="form-label" style="font-size: 15px" for="doc_number">
+                                        Document Number
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <input name="doc_number" type="text"
+                                        class="form-control  @error('doc_number') is-invalid @enderror" id="doc_number"
+                                        placeholder="Document Number" />
+                                    @error('doc_number')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
                                 <div class="col-md-12">
                                     <div class="d-block mb-1">
                                         <label class="form-label fs-5" for="created_date">Creation Date<span
@@ -378,17 +391,9 @@
                                     isDisable && stakeholderData.office_email != null ?
                                     true :
                                     false);
-                                $('#mobile_contact').val(stakeholderData.mobile_contact).attr(
-                                    'readonly',
-                                    isDisable && stakeholderData.mobile_contact != null ?
-                                    true :
-                                    false);
+                                $('#mobile_contact').val(stakeholderData.mobile_contact);
 
-                                $('#office_contact').val(stakeholderData.office_contact).attr(
-                                    'readonly',
-                                    isDisable && stakeholderData.office_contact != null ?
-                                    true :
-                                    false);
+                                $('#office_contact').val(stakeholderData.office_contact);
                                 if (stakeholderData.office_contact != null) {
                                     intlOfficeContact.setNumber(stakeholderData.office_contact)
                                 }
@@ -407,8 +412,8 @@
                                     true :
                                     false);
                                 $('#source').val(stakeholderData.source).trigger('change');
-                                
-                                $('#is_local').prop( "checked", stakeholderData.is_local );
+
+                                $('#is_local').prop("checked", stakeholderData.is_local);
                                 $('#nationality').val(stakeholderData.nationality).trigger(
                                     'change');
                             }
@@ -429,11 +434,7 @@
                                     true :
                                     false);
                                 $('#company_office_contact').val(stakeholderData
-                                    .office_contact).attr(
-                                    'readonly',
-                                    isDisable && stakeholderData.office_contact != null ?
-                                    true :
-                                    false);
+                                    .office_contact);
                                 if (stakeholderData.office_contact != null) {
 
                                     intlCompanyMobileContact.setNumber(stakeholderData
@@ -589,13 +590,12 @@
                 stackholders.prop('disabled', true);
 
                 $('#stakeholder_id').val('{{ $crm_lead->id ?? 0 }}')
-
             @endif
 
 
             @if (Auth::user()->hasRole('CRM'))
-            stackholders.prop('disabled', true);
-
+                stackholders.prop('disabled', true);
+                $('#stakeholder_id').val('{{ isset($crm_lead) ? $crm_lead->id : 0 }}')
             @endif
 
             var e = $("#sales_source_lead_source");
@@ -657,6 +657,7 @@
             $("#created_date").flatpickr({
                 defaultDate: "today",
                 // minDate: "today",
+                maxDate: 'today',
                 altInput: !0,
                 altFormat: "F j, Y",
                 dateFormat: "Y-m-d",
@@ -978,7 +979,6 @@
                 },
                 'unit[price][unit]': {
                     required: true,
-                    digits: true
                 },
                 'unit[price][total]': {
                     required: true,
@@ -1016,11 +1016,11 @@
                 },
 
                 // 3. STAKEHOLDER DATA (LEAD'S DATA)
-                'stakeholder_as': {
-                    required: function() {
-                        return $("#stakeholder_as").val() == 0;
-                    }
-                },
+                // 'stakeholder_as': {
+                //     required: function() {
+                //         return $("#stakeholder_as").val() == 0;
+                //     }
+                // },
                 'company[company_name]': {
                     required: function() {
                         return $("#stakeholder_as").val() == 'c';

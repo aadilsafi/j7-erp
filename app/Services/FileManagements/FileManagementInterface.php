@@ -14,4 +14,8 @@ interface FileManagementInterface
     public function update($site_id, $id, $inputs);
 
     public function destroy($site_id, $inputs);
+
+    public function saveImport($site_id);
+    public function saveFileContactsImport($site_id);
+
 }

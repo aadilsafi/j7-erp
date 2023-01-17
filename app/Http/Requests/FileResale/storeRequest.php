@@ -29,6 +29,7 @@ class storeRequest extends FormRequest
             'premium_demand' => 'required',
             'amount_remarks' => 'required',
             'marketing_service_charges' => 'required',
+            'doc_number' => 'required|unique:file_resales,doc_no',
         ];
         return $rules;
     }
@@ -44,6 +45,8 @@ class storeRequest extends FormRequest
             'attachments' => 'Attachments Required if you check Attachments Attached.',
             'attachments.*.attachment_label' => "Attachments Label Required if you check Attachments Attached.",
             'attachments.*.image' => "Attachments Image Required if you check Attachments Attached.",
+            "doc_number.required" => "Document number is  Required.",
+            "doc_number.unique" => "Document number is already taken.",
         ];
     }
 }

@@ -15,30 +15,29 @@ class SalesPlanTemplatesSeeder extends Seeder
      */
     public function run()
     {
-        //
+        SalesPlanTemplate::truncate();
         (new SalesPlanTemplate())->insert([
             [
-                'name' => 'Signature Sales Plan',
-                'slug' => 'signature-sales-plan',
-                'image' => '/images/SalesTemplate/signature.png',
+                'name' => 'Template 01',
+                'slug' => 'template-01',
+                'image' => '/images/SalesTemplate/template01.png',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-            // [
-            //     'name' => 'J7-Global Sales Plan',
-            //     'slug' => 'j7-global-sales-plan',
-            //     'image' => '/images/SalesTemplate/j7global.png',
-            //     'created_at' => now(),
-            //     'updated_at' => now(),
-            // ],
             [
-                'name' => 'J7-Global Payment Plan',
-                'slug' => 'j7-global-payment-plan',
-                'image' => '/images/SalesTemplate/j7globalpaymentPlan.png',
+                'name' => 'Template 02',
+                'slug' => 'template-02',
+                'image' => '/images/SalesTemplate/template02.png',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-
+            [
+                'name' => 'Template 03',
+                'slug' => 'template-03',
+                'image' => '/images/SalesTemplate/template01.png',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ]);
 
     }

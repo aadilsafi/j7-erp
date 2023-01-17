@@ -20,6 +20,9 @@ return new class extends Migration
             $table->string('cnic')->nullable();
             $table->string('province')->nullable();
             $table->string('district')->nullable();
+            $table->bigInteger('country_id')->default('0');
+            $table->bigInteger('city_id')->default('0');
+             $table->bigInteger('state_id')->default('0');
             $table->timestamps();
         });
     }

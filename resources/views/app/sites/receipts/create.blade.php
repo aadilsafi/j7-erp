@@ -4,7 +4,7 @@
     {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.receipts.create', encryptParams($site_id)) }}
 @endsection
 
-@section('page-title', 'Create Receipts')
+@section('page-title', 'Create  Receipt')
 
 @section('page-vendor')
 @endsection
@@ -69,8 +69,9 @@
         }
 
         /* .filepond--item {
-                                                                                                                                width: calc(20% - 0.5em);
-                                                                                                                            } */
+                    width: calc(50% - 0.5em);
+                }                                                                                                         } */
+        */
     </style>
 @endsection
 
@@ -78,7 +79,7 @@
     <div class="content-header-left col-md-9 col-12 mb-2">
         <div class="row breadcrumbs-top">
             <div class="col-12">
-                <h2 class="content-header-title float-start mb-0">Create Receipts</h2>
+                <h2 class="content-header-title float-start mb-0">Create  Receipt</h2>
                 <div class="breadcrumb-wrapper">
                     {{ Breadcrumbs::render('sites.receipts.create', encryptParams($site_id)) }}
                 </div>
@@ -102,25 +103,44 @@
                     'chequebanks' => $banks,
                 ]) }}
             </div>
-            @isset($draft_receipts)
+            @php
+                $amount_paid = 0;
+                $amount_received = 0;
+            @endphp
+            @isset($draft_receipts[0])
                 @php
-                    $amount_received = 0;
-                    $amount_paid = 0;
+                    $amount_received = $draft_receipts[0]['amount_received'];
                 @endphp
 
                 @foreach ($draft_receipts as $draft_receipt)
                     @php
-                        $amount_received = $draft_receipt->amount_received;
+
                         $amount_paid = $amount_paid + $draft_receipt->amount_in_numbers;
+                        if (isset($draft_receipt->discounted_amount) && (float) $draft_receipt->discounted_amount > 0) {
+                            $remaining_amount = $draft_receipt->amount_received - $draft_receipt->amount_in_numbers + (float) $draft_receipt->discounted_amount;
+                        } else {
+                            $remaining_amount = $draft_receipt->amount_received - $draft_receipt->amount_in_numbers;
+                        }
+
                     @endphp
                 @endforeach
-                {{-- @dd($amount_received,$amount_paid); --}}
             @endisset
             <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
                 <div class="card sticky-md-top top-lg-100px top-md-100px top-sm-0px"
                     style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0; z-index:10;">
                     <div class="card-body g-1">
-
+                        <div class="d-block mb-1">
+                            <label class="form-label" style="font-size: 15px" for="doc_number">
+                                Document Number
+                                <span class="text-danger">*</span>
+                            </label>
+                            <input name="doc_number" type="text"
+                                class="form-control  @error('doc_number') is-invalid @enderror" id="doc_number"
+                                placeholder="Document Number" />
+                            @error('doc_number')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
                         <div class="d-block mb-1">
                             <label class="form-label" style="font-size: 15px" for="floor">
                                 Amount Received <span class="text-danger">*</span>
@@ -129,7 +149,7 @@
                                 class="form-control amountFormat @error('amount_in_numbers') is-invalid @enderror"
                                 @if ($amount_received == 0) name="amount_received" @endif
                                 placeholder="Amount Received" @if ($amount_received > 0) readonly @endif
-                                value="{{ isset($amount_received) ? $amount_received : null }}" />
+                                value="{{ isset($amount_received) ? number_format($amount_received, 2) : null }}" />
                             @error('amount_in_numbers')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -171,10 +191,10 @@
                                 <label class="form-label" style="font-size: 15px" for="floor">
                                     <h6 style="font-size: 15px"> Amount Remaining</h6>
                                 </label>
-                                <input min="0" type="number"
-                                    class="form-control  @error('amount_in_numbers') is-invalid @enderror"
+                                <input type="text" class="form-control  @error('amount_in_numbers') is-invalid @enderror"
                                     @if ($amount_received > 0) name="amount_received" @endif
-                                    placeholder="Amount Received" readonly value="{{ $amount_received - $amount_paid }}" />
+                                    placeholder="Amount Received" readonly
+                                    value="{{ number_format($remaining_amount, 2) }}" />
                                 @error('amount_in_numbers')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -184,7 +204,7 @@
                         <div class="d-block mb-1">
                             <label class="form-label fs-5" for="type_name">Attachment</label>
                             <input id="attachment" type="file" class="filepond @error('attachment') is-invalid @enderror"
-                                name="attachment" accept="image/png, image/jpeg, image/gif" />
+                                name="attachment[]" multiple accept="image/png, image/jpeg, image/gif, application/pdf" />
                             @error('attachment')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -246,6 +266,7 @@
     <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.imagecrop.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.imagesizevalidation.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.filesizevalidation.min.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-pdf-preview/dist/filepond-plugin-pdf-preview.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/filepond/filepond.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/js/forms/repeater/jquery.repeater.min.js"></script>
     <script src="{{ asset('app-assets') }}/js/scripts/forms/form-repeater.min.js"></script>
@@ -264,22 +285,29 @@
             FilePondPluginFileValidateSize,
             FilePondPluginImageValidateSize,
             FilePondPluginImageCrop,
+            FilePondPluginPdfPreview,
         );
 
         FilePond.create(document.getElementById('attachment'), {
             styleButtonRemoveItemPosition: 'right',
             imageCropAspectRatio: '1:1',
-            acceptedFileTypes: ['image/png', 'image/jpeg'],
+            acceptedFileTypes: ['image/png', 'image/jpeg', 'application/pdf'],
             maxFileSize: '1536KB',
             ignoredFiles: ['.ds_store', 'thumbs.db', 'desktop.ini'],
             storeAsFile: true,
             allowMultiple: true,
-            maxFiles: 1,
+            // maxFiles: 2,
             checkValidity: true,
+            allowPdfPreview: true,
             credits: {
                 label: '',
                 url: ''
             }
+        });
+        FilePond.setOptions({
+            allowPdfPreview: true,
+            pdfPreviewHeight: 320,
+            pdfComponentExtraParams: 'toolbar=0&view=fit&page=1'
         });
     </script>
 
@@ -289,7 +317,7 @@
             $(".online-mode-of-payment").trigger('change');
             $("#transaction_date").flatpickr({
                 defaultDate: 'today',
-                // minDate: '',
+                maxDate: 'today',
                 // altInput: !0,
                 dateFormat: "Y-m-d",
             });
@@ -382,7 +410,7 @@
 
         var created_date = $("#created_date").flatpickr({
             defaultDate: "today",
-            minDate: '',
+            maxDate: 'today',
             altInput: !0,
             altFormat: "F j, Y",
             dateFormat: "Y-m-d",
@@ -399,7 +427,7 @@
             if ($.isNumeric(amount) && amount > 0) {
 
                 var unit_id = $(this).attr('unit_id');
-                var discounted_amount = $('#discounted_amount').val();
+                var discounted_amount = $('#discounted_amount').val().replace(/,/g, "");
                 if (discounted_amount > 0) {
                     amount = parseFloat(amount) + parseFloat(discounted_amount);
                 }
@@ -454,16 +482,22 @@
                                 $('#stackholder_designation').val(response.stakeholders['designation']);
                                 $('#stackholder_ntn').val(response.stakeholders['ntn']);
                                 $('#stackholder_cnic').val(response.stakeholders['cnic']);
-                                $('#stackholder_contact').val(response.stakeholders['contact']);
-                                $('#stackholder_address').val(response.stakeholders['address']);
+                                $('#stackholder_contact').val(response.stakeholders['mobile_contact']);
+                                $('#stackholder_address').val(response.stakeholders[
+                                    'residential_address']);
                                 $('#stackholder_mailing_address').val(response.stakeholders[
                                     'mailing_address']);
                                 $('#stackholder_country').val(response.country);
                                 $('#stackholder_state').val(response.state);
                                 $('#stackholder_city').val(response.city);
+                                if (response.stakeholders['stakeholder_as'] == 'c') {
 
-                                created_date.set('minDate', new Date(response.sales_plan[
-                                    'created_date']));
+                                    $('#stackholder_contact').val(response.stakeholders[
+                                        'office_contact']);
+
+                                }
+                                // created_date.set('minDate', new Date(response.sales_plan[
+                                //     'created_date']));
 
                                 var total_installments = 1;
                                 var order = null;
@@ -604,6 +638,16 @@
                             $('#vendor_ap_amount_paid').attr('readonly', true);
                         }
 
+                        $("#created_date").flatpickr({
+                            defaultDate: "today",
+                            maxDate: 'today',
+                            minDate: response.salesPlan.approved_date,
+                            altInput: !0,
+                            altFormat: "F j, Y",
+                            dateFormat: "Y-m-d",
+                        });
+
+
                         hideBlockUI('#loader');
                     } else {
                         hideBlockUI('#loader');
@@ -672,7 +716,7 @@
                     $('#customer_ap_amount_paid').addClass('is-invalid');
                     invalid_amount_stauts = 1;
                     $('#customer_ap_amount_paid').after(
-                        '<span class="is-invalid text-danger errorClass">Entered Amount shold not be greater than existing Customer payable amount!</span>'
+                        '<span class="is-invalid text-danger errorClass">Entered Amount should not be greater than existing Customer payable amount!</span>'
                     );
                 }
 
@@ -681,7 +725,7 @@
                     $('#vendor_ap_amount_paid').addClass('is-invalid');
                     invalid_amount_stauts = 1;
                     $('#vendor_ap_amount_paid').after(
-                        '<span class="is-invalid text-danger errorClass">Entered Amount shold not be greater than existing Vendor payable amount!</span>'
+                        '<span class="is-invalid text-danger errorClass">Entered Amount should not be greater than existing Vendor payable amount!</span>'
                     );
                 }
 
@@ -690,7 +734,7 @@
                     $('#dealer_ap_amount_paid').addClass('is-invalid');
                     invalid_amount_stauts = 1;
                     $('#dealer_ap_amount_paid').after(
-                        '<span class="is-invalid text-danger errorClass">Entered Amount shold not be greater than existing Dealer payable amount!</span>'
+                        '<span class="is-invalid text-danger errorClass">Entered Amount should not be greater than existing Dealer payable amount!</span>'
                     );
 
                 }
@@ -750,7 +794,7 @@
             containerCssClass: "select-lg",
         }).on("change", function(e) {
             let bank = parseInt($(this).val());
-            showBlockUI('.bankDiv');
+            showBlockUI('#loader');
             let bankData = {
                 id: 0,
                 name: '',
@@ -782,7 +826,7 @@
                         $('.comments').val(response.bank.comments).attr('readOnly', true);
                         $('.address').val(response.bank.address).attr('readOnly', (response.bank.address
                             .length > 0));
-                        hideBlockUI('.bankDiv');
+                        hideBlockUI('#loader');
                     } else {
 
                         $('#name').val('').removeAttr('readOnly');
@@ -793,11 +837,11 @@
                         $('#comments').val('').removeAttr('readOnly');
                         $('#address').val('').removeAttr('readOnly');
                     }
-                    hideBlockUI('.bankDiv');
+                    hideBlockUI('#loader');
                 },
                 error: function(errors) {
                     console.error(errors);
-                    hideBlockUI('.bankDiv');
+                    hideBlockUI('#loader');
                 }
             });
         });

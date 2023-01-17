@@ -1,7 +1,7 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.file-managements.file-title-transfer.preview', encryptParams($site_id)) }}
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.file-managements.files.file-title-transfer.preview', encryptParams($site_id)) }}
 @endsection
 
 @section('page-title', 'Preview File Title Transfer ')
@@ -40,7 +40,7 @@
             <div class="col-12">
                 <h2 class="content-header-title float-start mb-0">Preview File Title Transfer</h2>
                 <div class="breadcrumb-wrapper">
-                    {{ Breadcrumbs::render('sites.file-managements.file-title-transfer.preview', encryptParams($site_id)) }}
+                    {{ Breadcrumbs::render('sites.file-managements.files.file-title-transfer.preview', encryptParams($site_id)) }}
                 </div>
             </div>
         </div>
@@ -62,6 +62,7 @@
                     'titleTransferPerson' => $titleTransferPerson,
                     'salesPlan' => $salesPlan,
                     'country' => $country,
+                    'transfer_customer' => $transfer_customer,
                 ]) }}
             </div>
 
@@ -85,6 +86,7 @@
 
     <script src="{{ asset('app-assets') }}/vendors/js/extensions/moment.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/js/extensions/moment-range.min.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-pdf-preview/dist/filepond-plugin-pdf-preview.min.js"></script>
 @endsection
 
 @section('page-js')
@@ -95,22 +97,15 @@
 
 @section('custom-js')
     <script type="text/javascript">
-        $('#individualForm').hide();
-        $('#companyForm').hide();
 
-        @if (isset($titleTransferPerson) && $titleTransferPerson->stakeholder_as == 'i')
-            $('#individualForm').show();
-        @endif
 
-        @if (isset($titleTransferPerson) && $titleTransferPerson->stakeholder_as == 'c')
-            $('#companyForm').show();
-        @endif
         FilePond.registerPlugin(
             FilePondPluginImagePreview,
             FilePondPluginFileValidateType,
             FilePondPluginFileValidateSize,
             FilePondPluginImageValidateSize,
             FilePondPluginImageCrop,
+            FilePondPluginPdfPreview,
         );
         $(".expenses-list").repeater({
             initEmpty: true,

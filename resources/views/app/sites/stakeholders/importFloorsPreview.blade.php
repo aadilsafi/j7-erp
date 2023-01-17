@@ -43,10 +43,11 @@
 
     <div class="card">
         <div class="card-body">
-            <form action="{{ route('sites.stakeholders.saveImport', ['site_id' => encryptParams($site_id), 'type' => $type]) }}"
-                id="teams-table-form" method="post">
+            <form
+                action="{{ route('sites.stakeholders.saveImport', ['site_id' => encryptParams($site_id), 'type' => $type]) }}"
+                id="importSaveForm" method="post">
                 @csrf
-                {{-- <form action="{{ route('storePreviewtest') }}" id="teams-table-form" method="get"> --}}
+                {{-- <form action="{{ route('storePreviewtest') }}" id="importSaveForm" method="get"> --}}
                 {{ $dataTable->table() }}
 
             </form>
@@ -156,7 +157,7 @@
                 value = $(this).data('value');
                 inputtype = $(this).data('inputtype');
                 el = $(this);
-                $('#teams-table-form').css("pointer-events", "none")
+                $('#importSaveForm').css("pointer-events", "none")
 
                 var url = "{{ route('ajax-import-stakeholders.get.input') }}";
                 $.ajax({
@@ -177,12 +178,12 @@
                             el.append(response['data']);
                             el.addClass('filedrendered');
                         }
-                        $('#teams-table-form').css("pointer-events", "")
+                        $('#importSaveForm').css("pointer-events", "")
                         hideBlockUI('#unit_p_input_div_' + field + id);
                     },
                     error: function(response) {
                         hideBlockUI('#unit_p_input_div_' + field + id);
-                        $('#teams-table-form').css("pointer-events", "")
+                        $('#importSaveForm').css("pointer-events", "")
 
                     },
                 });
@@ -196,7 +197,7 @@
                 value = $(this).data('value');
                 inputtype = $(this).data('inputtype');
                 el = $(this);
-                $('#teams-table-form').css("pointer-events", "none")
+                $('#importSaveForm').css("pointer-events", "none")
 
                 var url = "{{ route('ajax-import-stakeholders.get.input') }}";
                 $.ajax({
@@ -223,11 +224,11 @@
                             // hideBlockUI('#unit_p_input_div_' + field + id);
 
                         }
-                        $('#teams-table-form').css("pointer-events", "")
+                        $('#importSaveForm').css("pointer-events", "")
 
                     },
                     error: function(response) {
-                        $('#teams-table-form').css("pointer-events", "")
+                        $('#importSaveForm').css("pointer-events", "")
 
                         // hideBlockUI('#unit_p_input_div_' + field + id);
                     },
@@ -296,7 +297,7 @@
                 },
             }).then((result) => {
                 if (result.isConfirmed) {
-                    $('#teams-table-form').submit();
+                    $('#importSaveForm').submit();
                 }
             });
         });

@@ -14,6 +14,7 @@ class FileTitleTransfer extends Model
 
     protected $fillable = [
         'site_id',
+        'doc_no',
         'file_id',
         'unit_id',
         'sales_plan_id',
@@ -32,6 +33,15 @@ class FileTitleTransfer extends Model
         'paid_status',
         'payment_date',
         'serial_no',
+        'user_id',
+        'checked_date',
+        'checked_by',
+        'approved_by',
+        'approved_date',
+        'reverted_by',
+        'reverted_date',
+        'cheque_active_by',
+        'cheque_active_date',
     ];
 
     public function getActivitylogOptions(): LogOptions

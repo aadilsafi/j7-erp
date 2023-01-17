@@ -4,8 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\StakeholderType;
-use App\Utils\Enums\StakeholderTypeEnum;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -18,6 +16,7 @@ class TransferReceipt extends Model implements HasMedia
 
     protected $fillable = [
         'site_id',
+        'doc_no',
         'serial_no',
         'unit_id',
         'file_id',
@@ -46,6 +45,15 @@ class TransferReceipt extends Model implements HasMedia
         'dealer_ap_account',
         'vendor_ap_amount',
         'vendor_ap_account',
+        'user_id',
+        'checked_date',
+        'checked_by',
+        'approved_by',
+        'approved_date',
+        'reverted_by',
+        'reverted_date',
+        'cheque_active_by',
+        'cheque_active_date',
     ];
 
     public function getActivitylogOptions(): LogOptions

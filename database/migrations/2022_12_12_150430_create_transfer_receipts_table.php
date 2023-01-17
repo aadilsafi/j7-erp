@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('transfer_receipts', function (Blueprint $table) {
             $table->id();
+            $table->string('doc_no')->nullable();
             $table->bigInteger('site_id')->nullable();
             $table->string('serial_no')->nullable()->default('FT-REC-');
             $table->bigInteger('unit_id')->nullable();
@@ -44,6 +45,15 @@ return new class extends Migration
             $table->string('dealer_ap_account')->nullable();
             $table->string('vendor_ap_amount')->nullable();
             $table->string('vendor_ap_account')->nullable();
+            $table->bigInteger('user_id')->nullable();
+            $table->timestamp('checked_date')->nullable();
+            $table->bigInteger('checked_by')->nullable();
+            $table->bigInteger('approved_by')->nullable();
+            $table->timestamp('approved_date')->nullable();
+            $table->bigInteger('reverted_by')->nullable();
+            $table->timestamp('reverted_date')->nullable();
+            $table->bigInteger('cheque_active_by')->nullable();
+            $table->timestamp('cheque_active_date')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

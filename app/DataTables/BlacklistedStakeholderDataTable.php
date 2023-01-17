@@ -37,7 +37,7 @@ class BlacklistedStakeholderDataTable extends DataTable
         return (new EloquentDataTable($query))
             ->addIndexColumn()
             ->editColumn('cnic', function ($stakeholder) {
-                return cnicFormat($stakeholder->cnic);
+                return $stakeholder->cnic;
             })
             ->editColumn('created_at', function ($stakeholder) {
                 return editDateColumn($stakeholder->created_at);
@@ -46,7 +46,7 @@ class BlacklistedStakeholderDataTable extends DataTable
                 return editDateColumn($stakeholder->updated_at);
             })
             ->editColumn('actions', function ($stakeholder) {
-                return view('app.sites.stakeholders.actions', ['site_id' => decryptParams($this->site_id), 'id' => $stakeholder->id]);
+                return view('app.sites.stakeholders.blacklisted-stakeholders.actions', ['site_id' => decryptParams($this->site_id), 'id' => $stakeholder->id]);
             })
             ->editColumn('check', function ($stakeholder) {
                 return $stakeholder;
@@ -62,7 +62,7 @@ class BlacklistedStakeholderDataTable extends DataTable
      */
     public function query(BacklistedStakeholder $model): QueryBuilder
     {
-        return $model->newQuery()->orderBy('id','asc');
+        return $model->newQuery()->orderBy('id','desc');
     }
 
     public function html(): HtmlBuilder
@@ -92,23 +92,23 @@ class BlacklistedStakeholderDataTable extends DataTable
 
 
 
-        // if ($createPermission) {
-        //     $addbutton = Button::raw('delete-selected')
-        //         ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
-        //         ->text('<i class="bi bi-plus"></i> Add New')->attr([
-        //             'onclick' => 'addNew()',
-        //         ]);
+        if ($createPermission) {
+            $addbutton = Button::raw('delete-selected')
+                ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
+                ->text('<i class="bi bi-plus"></i> Add New')->attr([
+                    'onclick' => 'addNew()',
+                ]);
 
-        //     array_unshift($buttons, $addbutton);
-        // }
+            array_unshift($buttons, $addbutton);
+        }
 
-        if ($selectedDeletePermission) {
+        // if ($selectedDeletePermission) {
             $buttons[] = Button::raw('delete-selected')
                 ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light')
                 ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')->attr([
                     'onclick' => 'deleteSelected()',
                 ]);
-        }
+        // }
 
         return $this->builder()
             ->setTableId('stakeholder-table')
@@ -124,26 +124,28 @@ class BlacklistedStakeholderDataTable extends DataTable
             ->dom('<"card-header pt-0"<"head-label"><"dt-action-buttons text-end"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>> C<"clear">')
             ->buttons($buttons)
             // ->rowGroupDataSrc('parent_id')
-            // ->columnDefs([
-            //     [
-            //         'targets' => 0,
-            //         'className' => 'text-center text-primary',
-            //         'width' => '10%',
-            //         'orderable' => false,
-            //         'searchable' => false,
-            //         'responsivePriority' => 3,
-            //         'render' => "function (data, type, full, setting) {
-            //             var role = JSON.parse(data);
-            //             return '<div class=\"form-check\"> <input class=\"form-check-input dt-checkboxes\" onchange=\"changeTableRowColor(this)\" type=\"checkbox\" value=\"' + role.id + '\" name=\"chkRole[]\" id=\"chkRole_' + role.id + '\" /><label class=\"form-check-label\" for=\"chkRole_' + role.id + '\"></label></div>';
-            //         }",
-            //         'checkboxes' => [
-            //             'selectAllRender' =>  '<div class="form-check"> <input class="form-check-input" onchange="changeAllTableRowColor()" type="checkbox" value="" id="checkboxSelectAll" /><label class="form-check-label" for="checkboxSelectAll"></label></div>',
-            //         ]
-            //     ],
-            // ])
+            ->columnDefs([
+                [
+                    'targets' => 0,
+                    'className' => 'text-center text-primary',
+                    'width' => '10%',
+                    'orderable' => false,
+                    'searchable' => false,
+                    'responsivePriority' => 3,
+                    'render' => "function (data, type, full, setting) {
+                        var role = JSON.parse(data);
+                        // var full = JSON.parse(full);
+                        // console.log('data',data);
+                        // console.log('role',full);
+                        return '<div class=\"form-check\"> <input class=\"form-check-input dt-checkboxes\" onchange=\"changeTableRowColor(this)\" type=\"checkbox\" value=\"' + full.id + '\" name=\"chkRole[]\" id=\"chkRole_' + full.id + '\" /><label class=\"form-check-label\" for=\"chkRole_' + role.id + '\"></label></div>';
+                    }",
+                    'checkboxes' => [
+                        'selectAllRender' =>  '<div class="form-check"> <input class="form-check-input" onchange="changeAllTableRowColor()" type="checkbox" value="" id="checkboxSelectAll" /><label class="form-check-label" for="checkboxSelectAll"></label></div>',
+                    ]
+                ],
+            ])
             ->orders([
-                [2, 'asc'],
-                [4, 'desc'],
+                [6, 'desc'],
             ]);
     }
 
@@ -162,20 +164,20 @@ class BlacklistedStakeholderDataTable extends DataTable
             Column::make('name')->title('Name')->addClass('text-nowrap'),
             Column::make('fatherName')->title('Father / Husband Name')->addClass('text-nowrap'),
             Column::make('cnic')->title('CNIC')->addClass('text-nowrap'),
-            Column::make('province')->title('Province')->addClass('text-nowrap'),
-            Column::make('district')->title('District')->addClass('text-nowrap'),
+            Column::make('province')->title('City')->addClass('text-nowrap'),
+            Column::make('district')->title('State  ')->addClass('text-nowrap'),
             Column::make('created_at')->addClass('text-nowrap'),
             Column::make('updated_at')->addClass('text-nowrap'),
         ];
-
+ $columns[] = Column::computed('actions')->exportable(false)->printable(false)->addClass('text-center p-1');
         // if ($selectedDeletePermission) {
         //     $checkColumn = Column::computed('check')->exportable(false)->printable(false)->width(60)->addClass('text-center');
         //     array_unshift($columns, $checkColumn);
         // }
 
-        // if ($editPermission) {
-        //     $columns[] = Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center');
-        // }
+        if ($selectedDeletePermission) {
+            $columns[] = Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center');
+        }
 
         return $columns;
     }

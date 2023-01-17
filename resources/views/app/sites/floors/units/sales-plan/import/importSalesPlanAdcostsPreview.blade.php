@@ -1,7 +1,7 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.floors.units.import', encryptParams($site_id)) }}
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.floors.units.import.importSalesPlanAdcostsPreview', encryptParams($site_id)) }}
 @endsection
 
 @section('page-title', 'Import Sales Plan Additional Costs')
@@ -32,7 +32,7 @@
             <div class="col-12">
                 <h2 class="content-header-title float-start mb-0">Import Sales Plan Additional Costs</h2>
                 <div class="breadcrumb-wrapper">
-                    {{ Breadcrumbs::render('sites.floors.units.import', encryptParams($site_id)) }}
+                    {{ Breadcrumbs::render('sites.floors.units.import.importSalesPlanAdcostsPreview', encryptParams($site_id)) }}
                 </div>
             </div>
         </div>

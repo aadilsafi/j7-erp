@@ -18,6 +18,7 @@ use App\Models\LeadSource;
 use App\Models\SalesPlan;
 use App\Services\FinancialTransactions\FinancialTransactionInterface;
 use App\Utils\Enums\StakeholderTypeEnum;
+use Auth;
 use Redirect;
 use Validator;
 use DB;
@@ -30,7 +31,7 @@ class RebateIncentiveController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    private $rebateIncentive, $financialTransactionInterface;
+    private $rebateIncentive, $financialTransactionInterface,$customFieldInterface;
 
     public function __construct(
         RebateIncentiveInterface $rebateIncentive,
@@ -190,6 +191,8 @@ class RebateIncentiveController extends Controller
 
             $rebate_incentive = RebateIncentiveModel::find(decryptParams($rebate_incentive_id));
             $rebate_incentive->status = 1;
+            $rebate_incentive->approved_by = Auth::user()->id;
+            $rebate_incentive->approved_date = now();
             $rebate_incentive->update();
 
             // Account ledger transaction
@@ -223,7 +226,7 @@ class RebateIncentiveController extends Controller
             'unit' => $unit,
             'stakeholder' => $stakeholder ?? [],
             'leadSource' => $leadSource ?? [],
-            'cnic' => cnicFormat($stakeholder->cnic) ?? '',
+            'cnic' => $stakeholder->cnic,
             'salesPlan' => $salesPlan ?? [],
             'floor' => $floor ?? '',
             'facing' => $unit->facing ?? '',

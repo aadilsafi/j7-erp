@@ -1,3 +1,4 @@
+
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
@@ -24,7 +25,227 @@
 @endsection
 
 @section('custom-css')
+
+    <style>
+        .custom_bg {
+            margin-top: 0.5rem;
+            /* background: whitesmoke; */
+            margin-top: 0 !important;
+            border: 1px solid #80808026;
+            border-bottom: 0px solid white !important;
+        }
+
+        .main_multi_dop_ul {
+            padding-bottom: 0 !important;
+        }
+
+        .custom_multi_drop_main {
+            width: 100%;
+            position: unset;
+        }
+
+        /* @media(min-width: 768px) { */
+        .custom_multi_drop_main {
+            width: 100% !important;
+            max-width: 100%;
+            display: block;
+        }
+
+        /* } */
+
+        .vertical-overlay-menu .custom_multi_drop_main,
+        .vertical-overlay-menu.menu-hide .custom_multi_drop_main .main-menu.menu-light .navigation>.custom_bg.open:not(.menu-item-closing)>a,
+        .main-menu.menu-light .navigation>.custom_bg .sidebar-group-active>a {
+
+            opacity: 1 !important;
+        }
+
+        .main-menu.menu-light .navigation>.Second_li>ul .Second_li.has-sub>a,
+        .main-menu.menu-light .navigation>.Second_li>ul .Second_li.has-sub>ul>.Second_li,
+        .main-menu.menu-light .navigation>.Second_li>ul .Second_li:not(.has-sub) {
+            margin: 0 15px;
+            margin: 0;
+            border-radius: 0 !important;
+        }
+
+
+        .custom_td {
+            border-radius: 0 !important;
+        }
+
+        .vertical-layout.vertical-menu-modern.menu-expanded .main-menu .navigation li.has-sub>a:before {
+            /* right: 25px !important; */
+        }
+
+        .accordion-flush .accordion-item .accordion-button,
+        .new_according_bg {
+            background: whitesmoke !important;
+        }
+
+        .accordion-button::after {
+            content: '';
+            -webkit-transition: -webkit-transform .2s ease-in-out;
+            transition: -webkit-transform .2s ease-in-out;
+            transition: transform .2s ease-in-out;
+            transition: transform .2s ease-in-out, -webkit-transform .2s ease-in-out;
+            -webkit-transform: rotate(90deg);
+            -ms-transform: rotate(90deg);
+            transform: rotate(90deg);
+        }
+
+        .glyphicon-minus-sign::after {
+            content: "−";
+        }
+
+        .glyphicon-plus-sign::before {
+            content: "\2b";
+            font-style: initial;
+        }
+
+        .custom_folder_icon {
+            color: #ff9f43;
+        }
+
+        tbody,
+        td,
+        tfoot,
+        th,
+        thead,
+        tr {
+            border-color: inherit;
+            border-style: solid;
+            border-width: 0;
+            background: whitesmoke;
+        }
+
+
+        .custom_plus_th {
+            /* position: absolute !important; */
+            right: 0;
+            cursor: pointer;
+            /* padding-right: 1.1rem !important; */
+            text-align: end;
+        }
+
+        .accordion-body,
+        table,
+        thead {
+            position: relative;
+        }
+
+        .accordion-flush .accordion-collapse {
+            border-width: 0;
+            background: whitesmoke;
+        }
+
+        .custom_bg {
+            margin-top: 0.5rem;
+            background: whitesmoke;
+            margin-top: 0 !important;
+        }
+
+        .main_multi_dop_ul {
+            padding-bottom: 0 !important;
+        }
+
+        .custom_multi_drop_main {
+            position: unset;
+        }
+    </style>
+
+    <style>
+        .tree,
+        .tree ul {
+            margin: 0;
+            padding: 0;
+            list-style: none
+        }
+
+        .tree ul {
+            margin-left: 1em;
+            position: relative
+        }
+
+        .tree ul ul {
+            margin-left: .5em
+        }
+
+        .tree ul:before {
+            content: "";
+            display: block;
+            width: 0;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            border-left: 1px solid #978ef4;
+            z-index: 1;
+
+        }
+
+        .tree li {
+            margin: 0;
+            padding: 0 1em;
+            line-height: 3.5em;
+            color: #978ef4;
+            font-weight: 700;
+            position: relative;
+            padding: 6px;
+            padding-left: 0.9rem;
+        }
+
+        .tree ul li:before {
+            content: "";
+            display: block;
+            width: 10px;
+            height: 0;
+            border-top: 1px solid #978ef4;
+            margin-top: -1px;
+            position: absolute;
+            top: 2.21em;
+            left: 0
+        }
+
+        .tree ul li:last-child:before {
+            background: #fff;
+            height: auto;
+            top: 2.21rem;
+            bottom: 0
+        }
+
+        .indicator {
+            margin-right: 5px;
+        }
+
+        .tree li a {
+            text-decoration: none;
+            color: #978ef4;
+        }
+
+        .tree li button,
+        .tree li button:active,
+        .tree li button:focus {
+            text-decoration: none;
+            color: #978ef4;
+            border: none;
+            background: transparent;
+            margin: 0px 0px 0px 0px;
+            padding: 0px 0px 0px 0px;
+            outline: 0;
+        }
+
+        .table:not(.table-dark):not(.table-light) tfoot:not(.table-dark) th,
+        .table:not(.table-dark):not(.table-light) thead:not(.table-dark) th {
+            white-space: nowrap;
+        }
+
+        .table>:not(caption)>*>* {
+            white-space: nowrap;
+        }
+    </style>
 @endsection
+
+
 
 @section('breadcrumbs')
     <div class="content-header-left col-md-9 col-12 mb-2">
@@ -41,637 +262,236 @@
 
 @section('content')
     <section class="app-user-view-connections">
-        <div class="row removeInvalidMessages">
-            <div class="col-xl-12 col-lg-12">
-                {{-- @dd($account_of_heads[67]->accountLedgers) --}}
-                {{-- <ul class="nav nav-pills mb-2">
-                    <li class="nav-item">
-                        <a class="nav-link active" id="salesPlanTab" data-bs-toggle="tab" href="#salesPlanData"
-                            aria-controls="sales-plan" role="tab" aria-selected="true">
-                            <i class="bi bi-receipt font-medium-3 me-50"></i>
-                            <span class="fw-bold">Sales Invoice</span></a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" id="buyBackTab" data-bs-toggle="tab" href="#buybackData"
-                            aria-controls="buy-back" role="tab" aria-selected="true">
-                            <i data-feather="home" class="font-medium-3 me-50"></i>
-                            <span class="fw-bold">Buy Back</span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="refund" data-bs-toggle="tab" href="#refundData"
-                            aria-controls="refund-data" role="tab" aria-selected="false">
-                            <i data-feather="layers" class="font-medium-3 me-50"></i>
-                            <span class="fw-bold">Refund</span></a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" id="resale" data-bs-toggle="tab" href="#resaleData"
-                            aria-controls="resale-data" role="tab" aria-selected="false">
-                            <i class="bi bi-receipt font-medium-3 me-50"></i>
-                            <span class="fw-bold">Resale</span></a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" id="cancellation" data-bs-toggle="tab" href="#cancellationData"
-                            aria-controls="cancellation-data" role="tab" aria-selected="false">
-                            <i class="bi bi-door-open font-medium-3 me-50"></i>
-                            <span class="fw-bold">Cancellation</span></a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" id="title-transfer" data-bs-toggle="tab" href="#titleTransferData"
-                            aria-controls="title-transfer" role="tab" aria-selected="false">
-                            <i class="bi bi-receipt font-medium-3 me-50"></i>
-                            <span class="fw-bold">Title Transfer</span></a>
-                    </li>
-                </ul> --}}
-                <div class="tab-content">
-                    <div class="tab-pane active" id="salesPlanData" aria-labelledby="salesPlanData" role="tabpanel">
-                        <div class="card">
-                            <div class="card-body">
-                                {{-- <section> --}}
-                                <style>
-                                    .custom_bg {
-                                        margin-top: 0.5rem;
-                                        /* background: whitesmoke; */
-                                        margin-top: 0 !important;
-                                        border: 1px solid #80808026;
-                                        border-bottom: 0px solid white !important;
-                                    }
-
-                                    .main_multi_dop_ul {
-                                        padding-bottom: 0 !important;
-                                    }
-
-                                    .custom_multi_drop_main {
-                                        width: 100%;
-                                        position: unset;
-                                    }
-
-                                    /* @media(min-width: 768px) { */
-                                    .custom_multi_drop_main {
-                                        width: 100% !important;
-                                        max-width: 100%;
-                                        display: block;
-                                    }
-
-                                    /* } */
-
-                                    .vertical-overlay-menu .custom_multi_drop_main,
-                                    .vertical-overlay-menu.menu-hide .custom_multi_drop_main .main-menu.menu-light .navigation>.custom_bg.open:not(.menu-item-closing)>a,
-                                    .main-menu.menu-light .navigation>.custom_bg .sidebar-group-active>a {
-
-                                        opacity: 1 !important;
-                                    }
-
-                                    .main-menu.menu-light .navigation>.Second_li>ul .Second_li.has-sub>a,
-                                    .main-menu.menu-light .navigation>.Second_li>ul .Second_li.has-sub>ul>.Second_li,
-                                    .main-menu.menu-light .navigation>.Second_li>ul .Second_li:not(.has-sub) {
-                                        margin: 0 15px;
-                                        margin: 0;
-                                        border-radius: 0 !important;
-                                    }
-
-
-                                    .custom_td {
-                                        border-radius: 0 !important;
-                                    }
-
-                                    .vertical-layout.vertical-menu-modern.menu-expanded .main-menu .navigation li.has-sub>a:before {
-                                        /* right: 25px !important; */
-                                    }
-                                </style>
-                                <div class="main-menu menu-light menu-accordion custom_multi_drop_main">
-                                    <div class="main-menu menu-light menu-accordion custom_multi_drop_main">
-                                        <div class="">
-
-                                            <ul class="navigation navigation-main main_multi_dop_ul"
-                                                id="main-menu-navigation" data-menu="menu-navigation">
-                                                @foreach ($account_of_heads->where('level', 1) as $key_first => $account_of_head)
-                                                    @php
-                                                        $value_44 = 0;
-                                                        $value_55 = 0;
-                                                        $value_frist = [];
-                                                        $value_frist_value = 0;
-                                                    @endphp
-                                                    {{-- @dd($account_of_head->code); --}}
-                                                    <li class="custom_bg nav-item Second_li "><a
-                                                            class="d-flex align-items-center" href="#"><span
-                                                                class="menu-title text-truncate"
-                                                                data-i18n="eCommerce">{{ $account_of_head->name }}</span></a>
-                                                        <ul class="menu-content">
-                                                            <table class="table table-primary table-striped check_hide">
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th scope="col">Name</th>
-                                                                        <th scope="col">ACCOUNT LEVEl</th>
-                                                                        <th scope="col">ACCOUNT CODES</th>
-                                                                        <th scope="col">ACCOUNT NATURE</th>
-                                                                        <th scope="col">Balance</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                    <tr>
-                                                                        <td class="custom_td">{{ $account_of_head->name }}
-                                                                        </td>
-                                                                        <td class="custom_td">{{ $account_of_head->level }}
-                                                                        </td>
-                                                                        <td class="custom_td">
-                                                                            {{ account_number_format($account_of_head->code) }}
-                                                                        </td>
-                                                                        <td class="custom_td">
-                                                                            {{ ucfirst($account_of_head->account_type) }}
-                                                                        </td>
-                                                                        @foreach ($account_of_heads->where('level', 3) as $key_second => $account_of_head_3)
-                                                                            @if (Str::length($account_of_head_3->code) == 6 and
-                                                                                $account_of_head->code == substr($account_of_head_3->code, 0, 2))
-                                                                                @foreach ($account_of_heads->where('level', 4) as $key_forth => $account_of_head_4)
-                                                                                    @if (Str::length($account_of_head_4->code) == 10 and
-                                                                                        $account_of_head_3->code == substr($account_of_head_4->code, 0, 6))
-                                                                                        @foreach ($account_of_heads->where('level', 5) as $key_fiveth => $account_of_head_5)
-                                                                                            @if ($account_of_head_4->code == substr($account_of_head_5->code, 0, 10))
-                                                                                                {{-- @dd($account_of_head_5->code); --}}
-                                                                                                @php
-                                                                                                    $value_frist_value += intval(
-                                                                                                        trim(
-                                                                                                            $accountLedgers_all
-                                                                                                                ->where('account_head_code', $account_of_head_5->code)
-                                                                                                                ->pluck('debit')
-                                                                                                                ->sum() -
-                                                                                                                $accountLedgers_all
-                                                                                                                    ->where('account_head_code', $account_of_head_5->code)
-                                                                                                                    ->pluck('credit')
-                                                                                                                    ->sum(),
-                                                                                                            '-',
-                                                                                                        ),
-                                                                                                    );
-                                                                                                @endphp
-                                                                                            @endif
-                                                                                        @endforeach
-                                                                                    @endif
-                                                                                @endforeach
-                                                                            @endif
-                                                                        @endforeach
-
-                                                                        <td class="custom_td">
-                                                                            {{ number_format($value_frist_value) }}
-                                                                        </td>
-                                                                        {{-- @dd($value_frist) --}}
-
-                                                                        {{-- <td class="custom_td">{{trim((collect($account_balances)->pluck('credit_'.$account_of_head->code)->sum() - collect($account_balances)->pluck('debit_'.$account_of_head->code)->sum()),'-')}}</td> --}}
-                                                                    </tr>
-                                                                </tbody>
-                                                            </table>
-                                                            @foreach ($account_of_heads as $key => $account_of_head_full_array)
-                                                                @if (Str::length($account_of_head_full_array->code) == 4 and
-                                                                    $account_of_heads[$key_first]->code == substr($account_of_head_full_array->code, 0, 2))
-                                                                    <li class="nav-item Second_li ms-3">
-                                                                        <a class="d-flex align-items-center"
-                                                                            href="#"><span
-                                                                                class="menu-title text-truncate"
-                                                                                data-i18n="eCommerce"><i
-                                                                                    class="bi bi-arrow-bar-right"></i>{{ $account_of_head_full_array->name }}</span></a>
-                                                                        <ul class="menu-content">
-
-                                                                            <table
-                                                                                class="table table-primary table-striped">
-                                                                                <thead>
-                                                                                    <tr>
-                                                                                        <th scope="col">Name</th>
-                                                                                        <th scope="col">ACCOUNT LEVEl
-                                                                                        </th>
-                                                                                        <th scope="col">ACCOUNT CODES
-                                                                                        </th>
-                                                                                        <th scope="col">ACCOUNT NATURE</th>
-                                                                                        <th scope="col">Balance</th>
-                                                                                    </tr>
-                                                                                </thead>
-                                                                                <tbody>
-                                                                                    <tr>
-                                                                                        <td class="custom_td">
-                                                                                            {{ $account_of_head_full_array->name }}
-                                                                                        </td>
-                                                                                        <td>{{ $account_of_head_full_array->level }}
-                                                                                        </td>
-                                                                                        <td>{{ account_number_format($account_of_head_full_array->code) }}
-                                                                                        </td>
-                                                                                        <td class="custom_td">
-                                                                                            {{ ucfirst($account_of_head->account_type) }}
-                                                                                        </td>
-                                                                                        @php
-                                                                                            $value_44 = 0;
-                                                                                        @endphp
-                                                                                        @foreach ($account_of_heads->where('level', 3) as $key_second => $account_of_head_3)
-                                                                                            @if (Str::length($account_of_head_3->code) == 6 and
-                                                                                                $account_of_head_full_array->code == substr($account_of_head_3->code, 0, 4))
-                                                                                                @foreach ($account_of_heads->where('level', 4) as $key_forth => $account_of_head_4)
-                                                                                                    @if (Str::length($account_of_head_4->code) == 10 and
-                                                                                                        $account_of_head_3->code == substr($account_of_head_4->code, 0, 6))
-                                                                                                        @foreach ($account_of_heads->where('level', 5) as $key_fiveth => $account_of_head_5)
-                                                                                                            @if ($account_of_head_4->code == substr($account_of_head_5->code, 0, 10))
-                                                                                                                {{-- @dd($account_of_head_5->code); --}}
-                                                                                                                @php
-                                                                                                                    $value_44 += intval(
-                                                                                                                        trim(
-                                                                                                                            $accountLedgers_all
-                                                                                                                                ->where('account_head_code', $account_of_head_5->code)
-                                                                                                                                ->pluck('debit')
-                                                                                                                                ->sum() -
-                                                                                                                                $accountLedgers_all
-                                                                                                                                    ->where('account_head_code', $account_of_head_5->code)
-                                                                                                                                    ->pluck('credit')
-                                                                                                                                    ->sum(),
-                                                                                                                            '-',
-                                                                                                                        ),
-                                                                                                                    );
-                                                                                                                @endphp
-                                                                                                            @endif
-                                                                                                        @endforeach
-                                                                                                    @endif
-                                                                                                @endforeach
-
-                                                                                            @endif
-                                                                                        @endforeach
-                                                                                        <td class="custom_td">
-                                                                                            {{ number_format($value_44) }}
-                                                                                        </td>
-                                                                                        {{-- @if (!$value_44 > 0)
-                                                                                            <td class="custom_td">
-                                                                                                {{ number_format(0) }}
-                                                                                            </td>
-                                                                                        @endif --}}
-                                                                                    </tr>
-                                                                                </tbody>
-                                                                            </table>
-                                                                            @foreach ($account_of_heads->where('level', 3) as $key_second => $account_of_head_3)
-                                                                                @if (Str::length($account_of_head_3->code) == 6 and
-                                                                                    $account_of_head_full_array->code == substr($account_of_head_3->code, 0, 4))
-                                                                                    <li class="nav-item Second_li ms-1">
-                                                                                        <a class="d-flex align-items-center"
-                                                                                            href="#"><span
-                                                                                                class="menu-title text-truncate"
-                                                                                                data-i18n="eCommerce"><i
-                                                                                                    class="bi bi-arrow-bar-right"></i>{{ $account_of_head_3->name }}</span></a>
-                                                                                        <ul class="menu-content ms-3">
-                                                                                            @php
-                                                                                                $value_4 = 0;
-                                                                                                $value_5 = 0;
-                                                                                                $value_33 = 0;
-                                                                                            @endphp
-
-                                                                                            <table
-                                                                                                class="table table-primary table-striped">
-                                                                                                <thead>
-                                                                                                    <tr>
-                                                                                                        <th scope="col">
-                                                                                                            Name</th>
-                                                                                                        <th scope="col">
-                                                                                                            ACCOUNT LEVEl
-                                                                                                        </th>
-                                                                                                        <th scope="col">
-                                                                                                            ACCOUNT CODES
-                                                                                                        </th>
-                                                                                                        <th scope="col">ACCOUNT NATURE</th>
-                                                                                                        <th scope="col">
-                                                                                                            Balance</th>
-                                                                                                    </tr>
-                                                                                                </thead>
-                                                                                                <tbody>
-                                                                                                    <tr>
-                                                                                                        <td
-                                                                                                            class="custom_td">
-                                                                                                            {{ $account_of_head_3->name }}
-                                                                                                        </td>
-                                                                                                        <td
-                                                                                                            class="custom_td">
-                                                                                                            {{ $account_of_head_3->level }}
-                                                                                                        </td>
-                                                                                                        <td
-                                                                                                            class="custom_td">
-                                                                                                            {{ account_number_format($account_of_head_3->code) }}
-                                                                                                        </td>
-                                                                                                        <td class="custom_td">
-                                                                                                            {{ ucfirst($account_of_head->account_type) }}
-                                                                                                        </td>
-
-                                                                                                        @foreach ($account_of_heads->where('level', 4) as $key_forth => $account_of_head_4)
-                                                                                                            @if (Str::length($account_of_head_4->code) == 10 and
-                                                                                                                $account_of_head_3->code == substr($account_of_head_4->code, 0, 6))
-                                                                                                                @foreach ($account_of_heads->where('level', 5) as $key_fiveth => $account_of_head_5)
-                                                                                                                    @if ($account_of_head_4->code == substr($account_of_head_5->code, 0, 10))
-                                                                                                                        {{-- @dd($account_of_head_5->code); --}}
-                                                                                                                        @php
-                                                                                                                            $value_33 += intval(
-                                                                                                                                trim(
-                                                                                                                                    $accountLedgers_all
-                                                                                                                                        ->where('account_head_code', $account_of_head_5->code)
-                                                                                                                                        ->pluck('debit')
-                                                                                                                                        ->sum() -
-                                                                                                                                        $accountLedgers_all
-                                                                                                                                            ->where('account_head_code', $account_of_head_5->code)
-                                                                                                                                            ->pluck('credit')
-                                                                                                                                            ->sum(),
-                                                                                                                                    '-',
-                                                                                                                                ),
-                                                                                                                            );
-                                                                                                                        @endphp
-                                                                                                                    @endif
-                                                                                                                @endforeach
-                                                                                                            @endif
-                                                                                                        @endforeach
-
-                                                                                                        <td
-                                                                                                            class="custom_td">
-                                                                                                            {{ number_format($value_33) }}
-                                                                                                        </td>
-
-                                                                                                    </tr>
-                                                                                                </tbody>
-                                                                                            </table>
-
-                                                                                            @foreach ($account_of_heads->where('level', 4) as $key_forth => $account_of_head_4)
-                                                                                                @php
-                                                                                                    $value_5 = 0;
-                                                                                                @endphp
-                                                                                                @if (Str::length($account_of_head_4->code) == 10 and
-                                                                                                    $account_of_head_3->code == substr($account_of_head_4->code, 0, 6))
-                                                                                                    <li
-                                                                                                        class="nav-item Second_li ">
-                                                                                                        <a class="d-flex align-items-center"
-                                                                                                            href="#"><span
-                                                                                                                class="menu-title text-truncate"
-                                                                                                                data-i18n="eCommerce"><i
-                                                                                                                    class="bi bi-arrow-bar-right"></i>{{ $account_of_head_4->name }}</span></a>
-                                                                                                        <ul
-                                                                                                            class="menu-content ms-3">
-                                                                                                            <table
-                                                                                                                class="table table-primary table-striped">
-                                                                                                                <thead>
-                                                                                                                    <tr>
-                                                                                                                        <th
-                                                                                                                            scope="col">
-                                                                                                                            Name
-                                                                                                                        </th>
-                                                                                                                        <th
-                                                                                                                            scope="col">
-                                                                                                                            ACCOUNT
-                                                                                                                            LEVEl
-                                                                                                                        </th>
-                                                                                                                        <th
-                                                                                                                            scope="col">
-                                                                                                                            ACCOUNT
-                                                                                                                            CODES
-                                                                                                                        </th>
-                                                                                                                        <th scope="col">ACCOUNT NATURE</th>
-                                                                                                                        <th
-                                                                                                                            scope="col">
-                                                                                                                            Balance
-                                                                                                                        </th>
-                                                                                                                    </tr>
-                                                                                                                </thead>
-                                                                                                                <tbody>
-                                                                                                                    <tr>
-                                                                                                                        <td
-                                                                                                                            class="custom_td">
-                                                                                                                            {{ $account_of_head_4->name }}
-                                                                                                                        </td>
-                                                                                                                        <td
-                                                                                                                            class="custom_td">
-                                                                                                                            {{ $account_of_head_4->level }}
-                                                                                                                        </td>
-                                                                                                                        <td
-                                                                                                                            class="custom_td">
-                                                                                                                            {{ account_number_format($account_of_head_4->code) }}
-                                                                                                                        </td>
-                                                                                                                        <td class="custom_td">
-                                                                                                                            {{ ucfirst($account_of_head->account_type) }}
-                                                                                                                        </td>
-                                                                                                                        @foreach ($account_of_heads->where('level', 5) as $key_fiveth => $account_of_head_5)
-                                                                                                                            @if (Str::length($account_of_head_5->code) > 10 and
-                                                                                                                                $account_of_head_4->code == substr($account_of_head_5->code, 0, 10))
-                                                                                                                                @php
-                                                                                                                                    $value_5 += intval(
-                                                                                                                                        trim(
-                                                                                                                                            $accountLedgers_all
-                                                                                                                                                ->where('account_head_code', $account_of_head_5->code)
-                                                                                                                                                ->pluck('debit')
-                                                                                                                                                ->sum() -
-                                                                                                                                                $accountLedgers_all
-                                                                                                                                                    ->where('account_head_code', $account_of_head_5->code)
-                                                                                                                                                    ->pluck('credit')
-                                                                                                                                                    ->sum(),
-                                                                                                                                            '-',
-                                                                                                                                        ),
-                                                                                                                                    );
-                                                                                                                                @endphp
-                                                                                                                            @endif
-                                                                                                                        @endforeach
-                                                                                                                        <td
-                                                                                                                            class="custom_td">
-                                                                                                                            {{ number_format($value_5) }}
-                                                                                                                        </td>
-                                                                                                                    </tr>
-                                                                                                                </tbody>
-                                                                                                            </table>
-
-                                                                                                            <table
-                                                                                                                class="table table-primary table-striped ms-4">
-                                                                                                                <thead>
-                                                                                                                    <tr>
-                                                                                                                        <th
-                                                                                                                            scope="col">
-                                                                                                                            Name
-                                                                                                                        </th>
-                                                                                                                        <th
-                                                                                                                            scope="col">
-                                                                                                                            ACCOUNT
-                                                                                                                            LEVEl
-                                                                                                                        </th>
-                                                                                                                        <th
-                                                                                                                            scope="col">
-                                                                                                                            ACCOUNT
-                                                                                                                            CODES
-                                                                                                                        </th>
-                                                                                                                        <th scope="col">ACCOUNT NATURE</th>
-                                                                                                                        <th
-                                                                                                                            scope="col">
-                                                                                                                            Balance
-                                                                                                                        </th>
-                                                                                                                    </tr>
-                                                                                                                </thead>
-                                                                                                                <tbody>
-                                                                                                                    @foreach ($account_of_heads->where('level', 5) as $key_fiveth => $account_of_head_5)
-                                                                                                                        @if (Str::length($account_of_head_5->code) > 10 and
-                                                                                                                            $account_of_head_4->code == substr($account_of_head_5->code, 0, 10))
-                                                                                                                            {{-- @dd(trim($accountLedgers_all->where('account_head_code',$account_of_head_5->code)->pluck('credit')->sum() - $accountLedgers_all->where('account_head_code',$account_of_head_5->code)->pluck('debit')->sum())); --}}
-                                                                                                                            <tr>
-                                                                                                                                <td
-                                                                                                                                    class="custom_td">
-                                                                                                                                    {{ $account_of_head_5->name }}
-                                                                                                                                </td>
-                                                                                                                                <td
-                                                                                                                                    class="custom_td">
-                                                                                                                                    {{ $account_of_head_5->level }}
-                                                                                                                                </td>
-                                                                                                                                <td
-                                                                                                                                    class="custom_td">
-                                                                                                                                    {{ account_number_format($account_of_head_5->code) }}
-                                                                                                                                </td>
-                                                                                                                                <td class="custom_td">
-                                                                                                                                    {{ ucfirst($account_of_head->account_type) }}
-                                                                                                                                </td>
-                                                                                                                                <td
-                                                                                                                                    class="custom_td">
-                                                                                                                                    @if($account_of_head->account_type == 'debit')
-                                                                                                                                    {{ number_format(trim($accountLedgers_all->where('account_head_code', $account_of_head_5->code)->pluck('debit')->sum() -$accountLedgers_all->where('account_head_code', $account_of_head_5->code)->pluck('credit')->sum(),'-')) }}
-                                                                                                                                    @else
-                                                                                                                                    {{ number_format(trim($accountLedgers_all->where('account_head_code', $account_of_head_5->code)->pluck('credit')->sum() -$accountLedgers_all->where('account_head_code', $account_of_head_5->code)->pluck('debit')->sum(),'-')) }}
-                                                                                                                                    @endif
-                                                                                                                                </td>
-
-                                                                                                                            </tr>
-                                                                                                                        @endif
-                                                                                                                    @endforeach
-                                                                                                                </tbody>
-                                                                                                            </table>
-                                                                                                        </ul>
-                                                                                                    </li>
-                                                                                                @endif
-                                                                                            @endforeach
-
-                                                                                        </ul>
-                                                                                    </li>
-                                                                                @endif
-                                                                            @endforeach
-                                                                        </ul>
-                                                                    </li>
-                                                                @endif
-                                                            @endforeach
-                                                        </ul>
-                                                    </li>
-                                                @endforeach
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
+        <!-- Right Sidebar starts -->
+        <div class="modal modal-slide-in sidebar-todo-modal fade" id="new-task-modal">
+            <div class="modal-dialog sidebar-lg">
+                <div class="modal-content p-0">
+                    <form id="form-modal-todo" class="todo-modal needs-validation" novalidate onsubmit="return false">
+                        <div class="modal-header align-items-center mb-1">
+                            <h5 class="modal-title">Add Task</h5>
+                            <div class="todo-item-action d-flex align-items-center justify-content-between ms-auto">
+                                <span class="todo-item-favorite cursor-pointer me-75"><i data-feather="star"
+                                        class="font-medium-2"></i></span>
+                                <i data-feather="x" class="cursor-pointer" data-bs-dismiss="modal" stroke-width="3"></i>
                             </div>
                         </div>
-                    </div>
+                        <div class="modal-body flex-grow-1 pb-sm-0 pb-3">
+                            <div class="action-tags">
+                                Create Account
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
+        </div>
+        <div class="card pb-2">
+            <ul id="tree1">
+                </p>
+
+                @foreach ($account_of_heads->where('level', 1) as $key_first => $account_of_head)
+                    <li class="ps-3 main_accets_lik">
+                        <i class="fa-regular fa-folder custom_folder_icon"></i><a onclick="getFristLevelBalance({{ $account_of_head->code }})" class="custom_accets_link" href="#">
+                            {{ $account_of_head->name }}</a>
+                        <ul>
+                            <li id="{{ $account_of_head->id }}">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Name</th>
+                                                <th scope="col">ACCOUNT LEVEl</th>
+                                                <th scope="col">ACCOUNT CODES</th>
+                                                <th scope="col">ACCOUNT NATURE</th>
+                                                <th scope="col">Balance</th>
+                                                <th class="custom_plus_th" scope="col">
+                                                    <i data-feather='plus' data-bs-toggle="modal"
+                                                        data-bs-target="#new-task-modal"></i>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td class="custom_td">{{ $account_of_head->name }}
+                                                </td>
+                                                <td class="custom_td">{{ $account_of_head->level }}
+                                                </td>
+                                                <td class="custom_td">
+                                                    {{ account_number_format($account_of_head->code) }}
+                                                </td>
+                                                <td class="custom_td">
+                                                    {{ ucfirst($account_of_head->account_type) }}
+                                                </td>
+                                                <td class="custom_td first_level_balance">
+                                                   0.0
+                                                </td>
+                                                <td class="custom_td ">
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </li>
+                            {{-- second level --}}
+                            @foreach ($account_of_heads as $key => $account_of_head_full_array)
+                                @if (Str::length($account_of_head_full_array->code) == 4 and
+                                    $account_of_heads[$key_first]->code == substr($account_of_head_full_array->code, 0, 2))
+                                    <li class="ps-2"><a href="#" onclick="getSecondLevelBalance({{ $account_of_head_full_array->code }})">{{ $account_of_head_full_array->name }}</a>
+                                        <ul>
+                                            <li id="{{ $account_of_head_full_array->id }}">
+                                                <div class="table-responsive">
+                                                    <table class="table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th scope="col">Name</th>
+                                                                <th scope="col">ACCOUNT LEVEl</th>
+                                                                <th scope="col">ACCOUNT CODES</th>
+                                                                <th scope="col">ACCOUNT NATURE</th>
+                                                                <th scope="col">Balance</th>
+                                                                <th class="custom_plus_th" scope="col">
+                                                                    <i data-feather='plus' data-bs-toggle="modal"
+                                                                        data-bs-target="#new-task-modal"></i>
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td class="custom_td">
+                                                                    {{ $account_of_head_full_array->name }}
+                                                                </td>
+                                                                <td class="custom_td">
+                                                                    {{ $account_of_head_full_array->level }}
+                                                                </td>
+                                                                <td class="custom_td">
+                                                                    {{ account_number_format($account_of_head_full_array->code) }}
+                                                                </td>
+                                                                <td class="custom_td">
+                                                                    {{ ucfirst($account_of_head_full_array->account_type) }}
+                                                                </td>
+                                                                <td class="custom_td second_level_balance">
+                                                                    0
+                                                                </td>
+                                                                <td class="custom_td ">
+                                                                </td>
+
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+
+                                            </li>
+                                            {{-- third level --}}
+                                            @foreach ($account_of_heads->where('level', 3) as $key_second => $account_of_head_3)
+                                                @if (Str::length($account_of_head_3->code) == 6 and
+                                                    $account_of_head_full_array->code == substr($account_of_head_3->code, 0, 4))
+                                                    <li class="ps-2">
+                                                        <a onclick="getFourthLevelAccounts({{ $account_of_head_3->code }}) ,getThirdLevelBalance({{ $account_of_head_3->code }})"
+                                                            href="#">{{ $account_of_head_3->name }}</a>
+                                                        <ul>
+                                                            <li class="fourth_level_account"
+                                                                id="{{ $account_of_head_3->id }}">
+                                                                <div class="table-responsive">
+                                                                    <table class="table">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th scope="col">Name</th>
+                                                                                <th scope="col">ACCOUNT LEVEl</th>
+                                                                                <th scope="col">ACCOUNT CODES</th>
+                                                                                <th scope="col">ACCOUNT NATURE</th>
+                                                                                <th scope="col">Balance</th>
+                                                                                <th class="custom_plus_th" scope="col">
+                                                                                    <i data-feather='plus'
+                                                                                        data-bs-toggle="modal"
+                                                                                        data-bs-target="#new-task-modal"></i>
+                                                                                </th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            <tr>
+                                                                                <td class="custom_td">
+                                                                                    {{ $account_of_head_3->name }}
+                                                                                </td>
+                                                                                <td class="custom_td">
+                                                                                    {{ $account_of_head_3->level }}
+                                                                                </td>
+                                                                                <td class="custom_td">
+                                                                                    {{ account_number_format($account_of_head_3->code) }}
+                                                                                </td>
+                                                                                <td class="custom_td">
+                                                                                    {{ ucfirst($account_of_head_3->account_type) }}
+                                                                                </td>
+                                                                                <td class="custom_td third_level_balance">
+                                                                                    0
+                                                                                </td>
+                                                                                <td class="custom_td">
+                                                                                </td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </li>
+                                                            {{-- <li >
+                                                            <a href="#">4 Level</a>
+                                                            <ul>
+                                                                <li>
+                                                                    <table class="table">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th scope="col">Name</th>
+                                                                                <th scope="col">ACCOUNT LEVEl</th>
+                                                                                <th scope="col">ACCOUNT CODES</th>
+                                                                                <th scope="col">ACCOUNT NATURE</th>
+                                                                                <th scope="col">Balance</th>
+                                                                                <th class="custom_plus_th" scope="col">
+                                                                                    <i data-feather='plus' data-bs-toggle="modal"
+                                                                                        data-bs-target="#new-task-modal"></i>
+                                                                                </th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody >
+
+                                                                        </tbody>
+                                                                    </table>
+
+                                                                </li>
+
+
+
+                                                                <li id="fifth-level-accounts">
+                                                                    <table class="table">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th scope="col">Name</th>
+                                                                                <th scope="col">ACCOUNT LEVEl</th>
+                                                                                <th scope="col">ACCOUNT CODES</th>
+                                                                                <th scope="col">ACCOUNT NATURE</th>
+                                                                                <th scope="col">Balance</th>
+                                                                                <th class="custom_plus_th" scope="col">
+                                                                                    <i data-feather='plus' data-bs-toggle="modal"
+                                                                                        data-bs-target="#new-task-modal"></i>
+                                                                                </th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody id="fifth-level-accounts">
+
+                                                                        </tbody>
+                                                                    </table>
+                                                                </li>
+                                                            </ul>
+                                                        </li> --}}
+                                                        </ul>
+                                                    </li>
+                                                @endif
+                                            @endforeach
+                                        </ul>
+                                    </li>
+                                @endif
+                            @endforeach
+                        </ul>
+                    </li>
+                @endforeach
+            </ul>
+        </div>
     </section>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    @foreach ($account_of_heads->where('level', 3) as $key_second => $account_of_head_3)
-        @if (Str::length($account_of_head_3->code) == 6 and
-            $account_of_head_full_array->code == substr($account_of_head_3->code, 0, 4))
-            @php
-                $value_4 = 0;
-                $value_5 = 0;
-                $value_33 = 0;
-            @endphp
-
-            @foreach ($account_of_heads->where('level', 4) as $key_forth => $account_of_head_4)
-                @if (Str::length($account_of_head_4->code) == 10 and
-                    $account_of_head_3->code == substr($account_of_head_4->code, 0, 6))
-                    @foreach ($account_of_heads->where('level', 5) as $key_fiveth => $account_of_head_5)
-                        @if ($account_of_head_4->code == substr($account_of_head_5->code, 0, 10))
-                            {{-- @dd($account_of_head_5->code); --}}
-                            @php
-                                $value_33 += intval(
-                                    trim(
-                                        $accountLedgers_all
-                                            ->where('account_head_code', $account_of_head_5->code)
-                                            ->pluck('debit')
-                                            ->sum() -
-                                            $accountLedgers_all
-                                                ->where('account_head_code', $account_of_head_5->code)
-                                                ->pluck('credit')
-                                                ->sum(),
-                                        '-',
-                                    ),
-                                );
-                            @endphp
-                        @endif
-                    @endforeach
-                @endif
-            @endforeach
-            <td class="custom_td">
-                {{ number_format($value_33) }}aksljdflkjsdaklfj
-            </td>
-        @endif
-    @endforeach
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 @endsection
 
 @section('vendor-js')
@@ -697,23 +517,286 @@
 
 @section('custom-js')
 
+    <script>
+        function getFourthLevelAccounts(code) {
+            showBlockUI('#tree1');
+            let url =
+                "{{ route('sites.accounts.charts-of-accounts.ajax-get-fourth-level-accounts', ['site_id' => encryptParams($site->id)]) }}";
+            var _token = '{{ csrf_token() }}';
+            $.ajax({
+                url: url,
+                type: 'post',
+                dataType: 'json',
+                data: {
+                    'code': code,
+                    '_token': _token
+                },
+                success: function(data) {
+
+                    // $('.third_level_balance').html(data.balance);
+
+                    let fourth_level_accounts = data.fourth_level_accounts;
+                    $('.alreadyExistFourthLevelAccount').remove();
+                    // $('.fourth_level_account').append(fourth_level_accounts);
+                    for (let index = 0; index < fourth_level_accounts.length; index++) {
+                        const account_data = fourth_level_accounts[index];
+
+                        $('.fourth_level_account').append('<li class="alreadyExistFourthLevelAccount ' +
+                           account_data.code + '" id="' + account_data.code +
+                            '"><a class="ps-1" href="#" onclick="fifthLevelAccounts(' + account_data.code +
+                            ')">' +
+                            account_data.name + '</a></li>');
+                    }
+
+                    hideBlockUI('#tree1');
+                },
+                error: function(error) {
+                    console.log(error);
+                    hideBlockUI('#tree1');
+                }
+            });
+            hideBlockUI('#tree1');
+        }
+
+        function fifthLevelAccounts(code) {
+
+            showBlockUI('#tree1');
+            let url =
+                "{{ route('sites.accounts.charts-of-accounts.ajax-get-fifth-level-accounts', ['site_id' => encryptParams($site->id)]) }}";
+            var _token = '{{ csrf_token() }}';
+            $.ajax({
+                url: url,
+                type: 'post',
+                dataType: 'json',
+                data: {
+                    'code': code,
+                    '_token': _token
+                },
+                success: function(data) {
+                    let selected_account = data.fourth_level_account;
+
+                    $('.removeAlreadyUl').remove();
+                    $('.' + code + '').append('<ul class="removeAlreadyUl fifthLevelAccounts">\
+                                                                <li>\
+                                                                    <div class="table-responsive">\
+                                                                    <table class="table">\
+                                                                        <thead>\
+                                                                        <tr>\
+                                                                            <th scope="col">Name</th>\
+                                                                             <th scope="col">ACCOUNT LEVEL</th>\
+                                                                             <th scope="col">ACCOUNT CODES</th>\
+                                                                            <th scope="col">ACCOUNT NATURE</th>\
+                                                                            <th scope="col">Balance</th>\
+                                                                         </thead>\
+                                                                    <tbody >\
+                                                                        <tr>\
+                                                                            <td class="custom_td">' + selected_account
+                        .name + ' </td>\
+                                                                            <td class="custom_td">' + selected_account
+                        .level + ' </td>\
+                                                                            <td class="custom_td">' + selected_account
+                        .formated_code + ' </td>\
+                                                                            <td class="custom_td">' + selected_account
+                        .account_type + ' </td>\
+                                                                            <td class="custom_td">'+data.fourth_level_balance+'</td>\
+                                                                        </tr>\
+                                                                    </tbody>\
+                                                                    </table>\
+                                                                    </div>\
+                                                                 </li>\
+                                                                 <li class="ps-4 alreadyExistFifthLevelAccount">\
+                                                            <div class="table-responsive">\
+                                                                <table class="table">\
+                                                                        <thead>\
+                                                                        <tr>\
+                                                                            <th scope="col">Name</th>\
+                                                                             <th scope="col">ACCOUNT LEVEL</th>\
+                                                                             <th scope="col">ACCOUNT CODES</th>\
+                                                                            <th scope="col">ACCOUNT NATURE</th>\
+                                                                            <th scope="col">Balance</th>\
+                                                                         </thead>\
+                                                                    <tbody class="fifth_level_accounts">\
+                                                                    </tbody>\
+                                                                    </table>\
+                                                                    </div>\
+                                                            </li>\
+                                                                </ul>');
+
+                    let fifth_level_accounts = data.fifth_level_accounts;
+
+                    // $('.fifth_level_accounts').empty();
+                    // $('.alreadyExistFifthLevelAccount').remove();
+                    for (let index = 0; index < fifth_level_accounts.length; index++) {
+                        const account_data = fifth_level_accounts[index];
+
+                        $('.fifth_level_accounts').append('<tr>\
+                                                                <td class="custom_td">' + account_data.name + ' </td>\
+                                                                <td class="custom_td">' + account_data.level + ' </td>\
+                                                                <td class="custom_td">' + account_data.formated_code + ' </td>\
+                                                                <td class="custom_td">' + account_data.account_type + ' </td>\
+                                                                <td class="custom_td">' + account_data.balance+ '</td>\
+                                                            </tr>');
+                    }
+
+
+                    hideBlockUI('#tree1');
+                },
+                error: function(error) {
+                    console.log(error);
+                    hideBlockUI('#tree1');
+                }
+            });
+            hideBlockUI('#tree1');
+        }
+
+        function getFristLevelBalance(code) {
+            showBlockUI('#tree1');
+            let url =
+                "{{ route('sites.accounts.charts-of-accounts.ajax-get-first-level-balance', ['site_id' => encryptParams($site->id)]) }}";
+            var _token = '{{ csrf_token() }}';
+            $.ajax({
+                url: url,
+                type: 'post',
+                dataType: 'json',
+                data: {
+                    'code': code,
+                    '_token': _token
+                },
+                success: function(data) {
+
+                    $('.first_level_balance').html(data.balance);
+
+                    hideBlockUI('#tree1');
+                },
+                error: function(error) {
+                    console.log(error);
+                    hideBlockUI('#tree1');
+                }
+            });
+            hideBlockUI('#tree1');
+        }
+        function getSecondLevelBalance(code) {
+            showBlockUI('#tree1');
+            let url =
+                "{{ route('sites.accounts.charts-of-accounts.ajax-get-second-level-balance', ['site_id' => encryptParams($site->id)]) }}";
+            var _token = '{{ csrf_token() }}';
+            $.ajax({
+                url: url,
+                type: 'post',
+                dataType: 'json',
+                data: {
+                    'code': code,
+                    '_token': _token
+                },
+                success: function(data) {
+
+                    $('.second_level_balance').html(data.balance);
+
+                    hideBlockUI('#tree1');
+                },
+                error: function(error) {
+                    console.log(error);
+                    hideBlockUI('#tree1');
+                }
+            });
+            hideBlockUI('#tree1');
+        }
+
+        function getThirdLevelBalance(code) {
+            showBlockUI('#tree1');
+            let url =
+                "{{ route('sites.accounts.charts-of-accounts.ajax-get-third-level-balance', ['site_id' => encryptParams($site->id)]) }}";
+            var _token = '{{ csrf_token() }}';
+            $.ajax({
+                url: url,
+                type: 'post',
+                dataType: 'json',
+                data: {
+                    'code': code,
+                    '_token': _token
+                },
+                success: function(data) {
+
+                    $('.third_level_balance').html(data.balance);
+
+                    hideBlockUI('#tree1');
+                },
+                error: function(error) {
+                    console.log(error);
+                    hideBlockUI('#tree1');
+                }
+            });
+            hideBlockUI('#tree1');
+        }
+    </script>
+
+    <script>
+        $.fn.extend({
+            treed: function(o) {
+
+                var openedClass = 'glyphicon-minus-sign';
+                var closedClass = 'glyphicon-plus-sign';
+
+                if (typeof o != 'undefined') {
+                    if (typeof o.openedClass != 'undefined') {
+                        openedClass = o.openedClass;
+                    }
+                    if (typeof o.closedClass != 'undefined') {
+                        closedClass = o.closedClass;
+                    }
+                };
+
+                //initialize each of the top levels
+                var tree = $(this);
+                tree.addClass("tree");
+                tree.find('li').has("ul").each(function() {
+                    var branch = $(this); //li with children ul
+                    branch.prepend("<i class='indicator glyphicon " + closedClass + "'></i>");
+                    branch.addClass('branch');
+                    branch.on('click', function(e) {
+                        if (this == e.target) {
+                            var icon = $(this).children('i:first');
+                            icon.toggleClass(openedClass + " " + closedClass);
+                            $(this).children().children().toggle();
+                        }
+                    })
+                    branch.children().children().toggle();
+                });
+                //fire event from the dynamically added icon
+                tree.find('.branch .indicator').each(function() {
+                    $(this).on('click', function() {
+                        $(this).closest('li').click();
+                    });
+                });
+                //fire event to open branch if the li contains an anchor instead of text
+                tree.find('.branch>a').each(function() {
+                    $(this).on('click', function(e) {
+                        $(this).closest('li').click();
+                        e.preventDefault();
+                    });
+                });
+                //fire event to open branch if the li contains a button instead of text
+                tree.find('.branch>button').each(function() {
+                    $(this).on('click', function(e) {
+                        $(this).closest('li').click();
+                        e.preventDefault();
+                    });
+                });
+            }
+        });
+
+        //Initialization of treeviews
+
+        $('#tree1').treed();
+
+        $('#tree2').treed({
+            openedClass: 'glyphicon-folder-open',
+            closedClass: 'glyphicon-folder-close'
+        });
+
+        $('#tree3').treed({
+            openedClass: 'glyphicon-chevron-right',
+            closedClass: 'glyphicon-chevron-down'
+        });
+    </script>
 @endsection
-
-
-
-
-<style>
-    .custom_bg {
-        margin-top: 0.5rem;
-        background: whitesmoke;
-        margin-top: 0 !important;
-    }
-
-    .main_multi_dop_ul {
-        padding-bottom: 0 !important;
-    }
-
-    .custom_multi_drop_main {
-        position: unset;
-    }
-</style>

@@ -84,6 +84,7 @@ class paymentService implements paymentInterface
                 "identity_number" => $inputs['identity_number'],
                 "buiness_address" => $inputs['buiness_address'],
                 "ntn" => $inputs['ntn'],
+                'doc_no'  => $inputs['doc_number'],
                 "tax_status" => $inputs['tax_status'],
                 "representative" => $inputs['representative'],
                 "business_type" => $inputs['business_type'],
@@ -128,6 +129,13 @@ class paymentService implements paymentInterface
 
             $stakeholder_id = $inputs['stakeholder_id'];
             $payment_voucher = $this->model()->create($payment_voucher_data);
+
+            if (isset($inputs['attachment'])&& count($inputs['attachment']) > 0) {
+                for ($j = 0; $j < count($inputs['attachment']); $j++) {
+                    $payment_voucher->addMedia($inputs['attachment'][$j])->toMediaCollection('payment_voucher_attachments');
+                    changeImageDirectoryPermission();
+                }
+            }
             // $transaction = $this->financialTransactionInterface->makePaymentVoucherTransaction($payment_voucher, $stakeholder_id);
         });
 

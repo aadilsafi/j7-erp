@@ -30,85 +30,85 @@ class ImportSalesPlanDataTable extends DataTable
         $columns = array_column($this->getColumns(), 'data');
         return (new EloquentDataTable($query))
             ->addIndexColumn()
-            ->editColumn('unit_short_label', function ($data) {
-                return view(
-                    'app.components.unit-preview-cell',
-                    ['id' => $data->id, 'field' => 'unit_short_label', 'inputtype' => 'text', 'value' => $data->unit_short_label]
-                );
-            })
-            ->editColumn('stakeholder_cnic', function ($data) {
-                return view(
-                    'app.components.unit-preview-cell',
-                    ['id' => $data->id, 'field' => 'stakeholder_cnic', 'inputtype' => 'number', 'value' => $data->stakeholder_cnic]
-                );
-            })
-            ->editColumn('total_price', function ($data) {
-                return view(
-                    'app.components.unit-preview-cell',
-                    ['id' => $data->id, 'field' => 'total_price', 'inputtype' => 'number', 'value' => $data->total_price]
-                );
-            })
-            ->editColumn('unit_price', function ($data) {
-                return view(
-                    'app.components.unit-preview-cell',
-                    ['id' => $data->id, 'field' => 'unit_price', 'inputtype' => 'number', 'value' => $data->unit_price]
-                );
-            })
-            ->editColumn('discount_percentage', function ($data) {
-                return view(
-                    'app.components.unit-preview-cell',
-                    ['id' => $data->id, 'field' => 'discount_percentage', 'inputtype' => 'number', 'value' => $data->discount_percentage]
-                );
-            })
-            ->editColumn('discount_total', function ($data) {
-                return view(
-                    'app.components.unit-preview-cell',
-                    ['id' => $data->id, 'field' => 'discount_total', 'inputtype' => 'number', 'value' => $data->discount_total]
-                );
-            })
-            ->editColumn('down_payment_percentage', function ($data) {
-                return view(
-                    'app.components.unit-preview-cell',
-                    ['id' => $data->id, 'field' => 'down_payment_percentage', 'inputtype' => 'number', 'value' => $data->down_payment_percentage]
-                );
-            })
-            ->editColumn('down_payment_total', function ($data) {
-                return view(
-                    'app.components.unit-preview-cell',
-                    ['id' => $data->id, 'field' => 'down_payment_total', 'inputtype' => 'number', 'value' => $data->down_payment_total]
-                );
-            })
-            ->editColumn('lead_source', function ($data) {
-                return view(
-                    'app.components.unit-preview-cell',
-                    ['id' => $data->id, 'field' => 'lead_source', 'inputtype' => 'text', 'value' => $data->lead_source]
-                );
-            })
-            ->editColumn('validity', function ($data) {
-                return view(
-                    'app.components.unit-preview-cell',
-                    ['id' => $data->id, 'field' => 'validity', 'inputtype' => 'text', 'value' => $data->validity]
-                );
-            })
-            ->editColumn('status', function ($data) {
-                $values = ['pending' => 'Pending', 'approved' => 'Approved', 'disapproved' => 'Disapproved', 'cancelled' => 'Cancelled'];
-                return view(
-                    'app.components.input-select-fields',
-                    ['id' => $data->id, 'field' => 'status', 'values' => $values, 'selectedValue' => $data->status]
-                );
-            })
-            ->editColumn('comment', function ($data) {
-                return view(
-                    'app.components.unit-preview-cell',
-                    ['id' => $data->id, 'field' => 'comment', 'inputtype' => 'text', 'value' => $data->comment]
-                );
-            })
-            ->editColumn('approved_date', function ($data) {
-                return view(
-                    'app.components.unit-preview-cell',
-                    ['id' => $data->id, 'field' => 'approved_date', 'inputtype' => 'text', 'value' => $data->approved_date]
-                );
-            })
+            // ->editColumn('unit_short_label', function ($data) {
+            //     return view(
+            //         'app.components.unit-preview-cell',
+            //         ['id' => $data->id, 'field' => 'unit_short_label', 'inputtype' => 'text', 'value' => $data->unit_short_label]
+            //     );
+            // })
+            // ->editColumn('stakeholder_cnic', function ($data) {
+            //     return view(
+            //         'app.components.unit-preview-cell',
+            //         ['id' => $data->id, 'field' => 'stakeholder_cnic', 'inputtype' => 'number', 'value' => $data->stakeholder_cnic]
+            //     );
+            // })
+            // ->editColumn('total_price', function ($data) {
+            //     return view(
+            //         'app.components.unit-preview-cell',
+            //         ['id' => $data->id, 'field' => 'total_price', 'inputtype' => 'number', 'value' => $data->total_price]
+            //     );
+            // })
+            // ->editColumn('unit_price', function ($data) {
+            //     return view(
+            //         'app.components.unit-preview-cell',
+            //         ['id' => $data->id, 'field' => 'unit_price', 'inputtype' => 'number', 'value' => $data->unit_price]
+            //     );
+            // })
+            // ->editColumn('discount_percentage', function ($data) {
+            //     return view(
+            //         'app.components.unit-preview-cell',
+            //         ['id' => $data->id, 'field' => 'discount_percentage', 'inputtype' => 'number', 'value' => $data->discount_percentage]
+            //     );
+            // })
+            // ->editColumn('discount_total', function ($data) {
+            //     return view(
+            //         'app.components.unit-preview-cell',
+            //         ['id' => $data->id, 'field' => 'discount_total', 'inputtype' => 'number', 'value' => $data->discount_total]
+            //     );
+            // })
+            // ->editColumn('down_payment_percentage', function ($data) {
+            //     return view(
+            //         'app.components.unit-preview-cell',
+            //         ['id' => $data->id, 'field' => 'down_payment_percentage', 'inputtype' => 'number', 'value' => $data->down_payment_percentage]
+            //     );
+            // })
+            // ->editColumn('down_payment_total', function ($data) {
+            //     return view(
+            //         'app.components.unit-preview-cell',
+            //         ['id' => $data->id, 'field' => 'down_payment_total', 'inputtype' => 'number', 'value' => $data->down_payment_total]
+            //     );
+            // })
+            // ->editColumn('lead_source', function ($data) {
+            //     return view(
+            //         'app.components.unit-preview-cell',
+            //         ['id' => $data->id, 'field' => 'lead_source', 'inputtype' => 'text', 'value' => $data->lead_source]
+            //     );
+            // })
+            // ->editColumn('validity', function ($data) {
+            //     return view(
+            //         'app.components.unit-preview-cell',
+            //         ['id' => $data->id, 'field' => 'validity', 'inputtype' => 'text', 'value' => $data->validity]
+            //     );
+            // })
+            // ->editColumn('status', function ($data) {
+            //     $values = ['pending' => 'Pending', 'approved' => 'Approved', 'disapproved' => 'Disapproved', 'cancelled' => 'Cancelled'];
+            //     return view(
+            //         'app.components.input-select-fields',
+            //         ['id' => $data->id, 'field' => 'status', 'values' => $values, 'selectedValue' => $data->status]
+            //     );
+            // })
+            // ->editColumn('comment', function ($data) {
+            //     return view(
+            //         'app.components.unit-preview-cell',
+            //         ['id' => $data->id, 'field' => 'comment', 'inputtype' => 'text', 'value' => $data->comment]
+            //     );
+            // })
+            // ->editColumn('approved_date', function ($data) {
+            //     return view(
+            //         'app.components.unit-preview-cell',
+            //         ['id' => $data->id, 'field' => 'approved_date', 'inputtype' => 'text', 'value' => $data->approved_date]
+            //     );
+            // })
             ->setRowId('id');
     }
 
@@ -148,69 +148,22 @@ class ImportSalesPlanDataTable extends DataTable
     protected function getColumns(): array
     {
         return [
-            Column::computed('unit_short_label')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'name' => 'unit_short_label'
-            ])->render())->searchable(true)->addClass('removeTolltip'),
-            Column::computed('stakeholder_cnic')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'name' => 'stakeholder_cnic'
-            ])->render())->searchable(true)->addClass('removeTolltip'),
-            Column::computed('total_price')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'name' => 'total_price'
-            ])->render())->searchable(true)->addClass('removeTolltip'),
-            Column::computed('unit_price')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'name' => 'unit_price'
-            ])->render())->searchable(true)->addClass('removeTolltip'),
-            Column::computed('discount_percentage')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'name' => 'discount_percentage'
-            ])->render())->searchable(true)->addClass('removeTolltip'),
-            Column::computed('discount_total')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'name' => 'discount_total'
-            ])->render())->searchable(true)->addClass('removeTolltip'),
-            Column::computed('down_payment_percentage')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'name' => 'down_payment_percentage'
-            ])->render())->addClass('removeTolltip'),
-            Column::computed('down_payment_total')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'name' => 'down_payment_total'
-            ])->render())->addClass('removeTolltip'),
-
-            Column::computed('lead_source')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'name' => 'lead_source'
-            ])->render())->searchable(true)->addClass('removeTolltip'),
-            Column::computed('validity')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'name' => 'validity'
-            ])->render())->addClass('removeTolltip'),
-            Column::computed('status')->title('Status')->searchable(true)->addClass('removeTolltip'),
-            Column::computed('comment')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'name' => 'comment'
-            ])->render())->addClass('removeTolltip'),
-
-            Column::computed('approved_date')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'name' => 'approved_date'
-            ])->render())->addClass('removeTolltip'),
+            Column::make('user_email')->addClass('text-nowrap'),
+            Column::make('unit_short_label')->searchable(true)->addClass('removeTolltip')->addClass('text-nowrap'),
+            Column::make('stakeholder_cnic')->searchable(true)->addClass('removeTolltip')->addClass('text-nowrap'),
+            Column::make('total_price')->searchable(true)->addClass('removeTolltip')->addClass('text-nowrap'),
+            Column::make('unit_price')->searchable(true)->addClass('removeTolltip')->addClass('text-nowrap'),
+            Column::make('discount_percentage')->searchable(true)->addClass('removeTolltip')->addClass('text-nowrap'),
+            Column::make('discount_total')->searchable(true)->addClass('removeTolltip')->addClass('text-nowrap'),
+            Column::make('down_payment_percentage')->addClass('removeTolltip')->addClass('text-nowrap'),
+            Column::make('down_payment_total')->addClass('removeTolltip')->addClass('text-nowrap'),
+            Column::make('lead_source')->searchable(true)->addClass('removeTolltip')->addClass('text-nowrap'),
+            Column::make('created_date')->addClass('removeTolltip')->addClass('text-nowrap'),
+            Column::make('validity')->addClass('removeTolltip')->addClass('text-nowrap'),
+            Column::make('status')->title('Status')->searchable(true)->addClass('removeTolltip')->addClass('text-nowrap'),
+            Column::make('comment')->addClass('removeTolltip')->addClass('text-nowrap'),
+            Column::make('approved_date')->addClass('removeTolltip')->addClass('text-nowrap'),
+            Column::make('approve_by_user_email')->addClass('removeTolltip')->addClass('text-nowrap'),
         ];
     }
 }

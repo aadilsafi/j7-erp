@@ -1,7 +1,7 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.file-managements.customers', encryptParams($site_id)) }}
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.file-managements.files.file-refund.index', encryptParams($site_id)) }}
 @endsection
 
 @section('page-title', 'File Refund')
@@ -32,7 +32,7 @@
             <div class="col-12">
                 <h2 class="content-header-title float-start mb-0">File Refund</h2>
                 <div class="breadcrumb-wrapper">
-                    {{ Breadcrumbs::render('sites.file-managements.customers', encryptParams($site_id)) }}
+                    {{ Breadcrumbs::render('sites.file-managements.files.file-refund.index', encryptParams($site_id)) }}
                 </div>
             </div>
         </div>

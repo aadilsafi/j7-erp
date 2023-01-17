@@ -17,20 +17,27 @@ use App\Models\StakeholderType;
 use App\Models\TempReceipt;
 use App\Services\Receipts\Interface\ReceiptInterface;
 use App\Services\FinancialTransactions\FinancialTransactionInterface;
+use App\Services\SalesPlan\Interface\SalesPlanInterface;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\{URL, Auth, DB, Notification};
 use Str;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Barryvdh\DomPDF\Facade\Pdf;
+use File;
 
 class ReceiptService implements ReceiptInterface
 {
 
     private $financialTransactionInterface;
+    private $salesPlanInterface;
 
     public function __construct(
-        FinancialTransactionInterface $financialTransactionInterface
+        FinancialTransactionInterface $financialTransactionInterface,
+        SalesPlanInterface $salesPlanInterface
     ) {
         $this->financialTransactionInterface = $financialTransactionInterface;
+        $this->salesPlanInterface = $salesPlanInterface;
     }
 
     public function model()
@@ -42,8 +49,8 @@ class ReceiptService implements ReceiptInterface
     public function store($site_id, $requested_data)
     {
         DB::transaction(function () use ($site_id, $requested_data) {
-            $data = $requested_data['receipts'];
 
+            $data = $requested_data['receipts'];
             for ($i = 0; $i < count($data); $i++) {
                 $amount_in_numbers = str_replace(',', '', $data[$i]['amount_in_numbers']);
                 $discounted_amount = str_replace(',', '', $requested_data['discounted_amount']);
@@ -111,8 +118,10 @@ class ReceiptService implements ReceiptInterface
                 $max = Receipt::max('id') + 1;
 
                 $receiptData = [
+                    'user_id' => Auth::user()->id,
                     'site_id' => decryptParams($site_id),
                     'unit_id'  => $data[$i]['unit_id'],
+                    'doc_no'  => $requested_data['doc_number'],
                     'sales_plan_id'  => $sales_plan[0]['id'],
                     'name'  => $stakeholder->full_name,
                     'cnic'  => $stakeholder->cnic,
@@ -145,10 +154,16 @@ class ReceiptService implements ReceiptInterface
                     $receipt = ReceiptDraftModel::create($receiptData);
 
                     if (isset($requested_data['attachment'])) {
-                        $receipt->addMedia($requested_data['attachment'])->toMediaCollection('receipt_attachments');
+                        for ($j = 0; $j < count($requested_data['attachment']); $j++) {
+                            $receipt->addMedia($requested_data['attachment'][$j])->toMediaCollection('receipt_attachments');
+                            changeImageDirectoryPermission();
+                        }
                     }
-
-                    $remaining_amount = str_replace(',', '', $requested_data['amount_received']) - str_replace(',', '', $data[$i]['amount_in_numbers']);
+                    if ($data[$i]['mode_of_payment'] != 'Other') {
+                        $remaining_amount = str_replace(',', '', $requested_data['amount_received']) - str_replace(',', '', $data[$i]['amount_in_numbers']);
+                    } else {
+                        $remaining_amount = str_replace(',', '', $requested_data['amount_received']);
+                    }
 
                     $data = [
                         'unit_name'  => $unit->name,
@@ -162,8 +177,10 @@ class ReceiptService implements ReceiptInterface
                     if (isset($draft_receipt_data)) {
                         foreach ($draft_receipt_data as $draftReceiptData) {
                             $receiptDraftData = [
+                                'user_id' => $draftReceiptData->user_id,
                                 'site_id' => $draftReceiptData->site_id,
                                 'unit_id'  => $draftReceiptData->unit_id,
+                                'doc_no'  => $draftReceiptData->doc_number,
                                 'sales_plan_id'  => $draftReceiptData->sales_plan_id,
                                 'name'  => $draftReceiptData->name,
                                 'cnic'  => $draftReceiptData->cnic,
@@ -191,22 +208,26 @@ class ReceiptService implements ReceiptInterface
                             ];
                             //create receipt from drafts
                             $receipt_Draft = Receipt::create($receiptDraftData);
-                            // if ($receipt_Draft->mode_of_payment == "Cash") {
-                            //     $transaction = $this->financialTransactionInterface->makeReceiptTransaction($receipt_Draft->id);
-                            // }
+                            if ($receipt_Draft->mode_of_payment == "Cash") {
+                                $transaction = $this->financialTransactionInterface->makeReceiptTransaction($receipt_Draft->id);
+                            }
 
-                            // if ($receipt_Draft->mode_of_payment == "Cheque") {
-                            //     $transaction = $this->financialTransactionInterface->makeReceiptChequeTransaction($receipt_Draft->id);
-                            // }
+                            if ($receipt_Draft->mode_of_payment == "Cheque") {
+                                $transaction = $this->financialTransactionInterface->makeReceiptChequeTransaction($receipt_Draft->id);
+                            }
 
-                            // if ($receipt_Draft->mode_of_payment == "Online") {
-                            //     $transaction = $this->financialTransactionInterface->makeReceiptOnlineTransaction($receipt_Draft->id);
-                            // }
+                            if ($receipt_Draft->mode_of_payment == "Online") {
+                                $transaction = $this->financialTransactionInterface->makeReceiptOnlineTransaction($receipt_Draft->id);
+                            }
 
-                            // if (is_a($transaction, 'Exception') || is_a($transaction, 'GeneralException')) {
-                            //     Log::info(json_encode($transaction));
-                            //     // return apiErrorResponse('invalid_transaction');
-                            // }
+                            if ($receipt_Draft->mode_of_payment == "Other") {
+                                $transaction = $this->financialTransactionInterface->makeReceiptOtherTransaction($receipt_Draft->id);
+                            }
+
+                            if (is_a($transaction, 'Exception') || is_a($transaction, 'GeneralException')) {
+                                Log::info(json_encode($transaction));
+                                // return apiErrorResponse('invalid_transaction');
+                            }
 
                             $update_installments =  $this->updateInstallments($receipt_Draft);
                         }
@@ -233,8 +254,10 @@ class ReceiptService implements ReceiptInterface
                     }
 
                     if (isset($requested_data['attachment'])) {
-                        $receipt->addMedia($requested_data['attachment'])->toMediaCollection('receipt_attachments');
-                        changeImageDirectoryPermission();
+                        for ($i = 0; $i < count($requested_data['attachment']); $i++) {
+                            $receipt->addMedia($requested_data['attachment'][$i])->toMediaCollection('receipt_attachments');
+                            changeImageDirectoryPermission();
+                        }
                     }
                     // dd($transaction);
                     $update_installments =  $this->updateInstallments($receipt);
@@ -246,150 +269,201 @@ class ReceiptService implements ReceiptInterface
     //update Installments
     public function updateInstallments($receipt)
     {
-        $sales_plan = SalesPlan::where('unit_id', $receipt->unit_id)->where('status', 1)->with('installments', 'unPaidInstallments')->first();
-        $unit = Unit::find($receipt->unit_id);
-        $stakeholder = Stakeholder::find($sales_plan->stakeholder_id);
+        DB::transaction(function () use ($receipt) {
+            $sales_plan = SalesPlan::where('unit_id', $receipt->unit_id)->where('status', 1)->with('installments', 'unPaidInstallments')->first();
+            $unit = Unit::find($receipt->unit_id);
+            $stakeholder = Stakeholder::find($sales_plan->stakeholder_id);
 
-        $installmentFullyPaidUnderAmount = [];
-        $installmentPartialyPaidUnderAmount = [];
-        $calculate_amount = 0;
-        $to_be_paid_calculate_amount = 0;
-        $total_calculated_installments = [];
-        $amount_to_be_paid = $receipt->amount_in_numbers;
+            $installmentFullyPaidUnderAmount = [];
+            $installmentPartialyPaidUnderAmount = [];
+            $calculate_amount = 0;
+            $to_be_paid_calculate_amount = 0;
+            $total_calculated_installments = [];
+            $amount_to_be_paid = $receipt->amount_in_numbers;
 
-        foreach ($sales_plan->unPaidInstallments as $installment) {
-            if ($installment->remaining_amount == 0) {
-                $paid_amount = $installment->amount;
-                $total_amount = $installment->amount;
-            } else {
-                $paid_amount = $installment->remaining_amount;
-                $total_amount = $installment->amount - $paid_amount;
-            }
-            $calculate_amount = $calculate_amount + $paid_amount;
-            if ($amount_to_be_paid >= $calculate_amount) {
-                $partially_paid = 0;
-                if ($installment->status == 'partially_paid') {
-                    $partially_paid = $installment->paid_amount;
-                    $paid_amount = $paid_amount + $installment->paid_amount;
-                    $remaining_amount = $installment->amount - $paid_amount;
+            foreach ($sales_plan->unPaidInstallments as $installment) {
+                if ($installment->remaining_amount == 0) {
+                    $paid_amount = $installment->amount;
+                    $total_amount = $installment->amount;
+                } else {
+                    $paid_amount = $installment->remaining_amount;
+                    $total_amount = $installment->amount - $paid_amount;
                 }
-
-                $installmentFullyPaidUnderAmount[] = [
-                    'id' => $installment->id,
-                    'date' => $installment->date,
-                    'amount' => $installment->amount,
-                    'paid_amount' => $paid_amount,
-                    'remaining_amount' => 0,
-                    'installment_order' => $installment->installment_order,
-                    'partially_paid' => $partially_paid,
-                ];
-            } else {
-                foreach ($installmentFullyPaidUnderAmount as $to_be_paid_installments) {
-                    if ($to_be_paid_installments['partially_paid'] !== 0) {
-                        $to_be_paid_calculate_amount = $to_be_paid_installments['paid_amount'] - $to_be_paid_installments['partially_paid'];
-                    } else {
-                        $to_be_paid_calculate_amount = $to_be_paid_calculate_amount + $to_be_paid_installments['paid_amount'];
-                    }
-                }
-                if ($to_be_paid_calculate_amount < $amount_to_be_paid) {
-
-                    if ($to_be_paid_calculate_amount == 0) {
-                        $amount_to_be_paid = $installment->amount - $amount_to_be_paid;
-                        $paid_amount = $installment->amount - $amount_to_be_paid;
-                        $remaining_amount = $installment->amount - $paid_amount;
-                    } else {
-                        $paid_amount = $amount_to_be_paid - $to_be_paid_calculate_amount;
-                        $remaining_amount = $installment->amount - $paid_amount;
-                    }
+                $calculate_amount = $calculate_amount + $paid_amount;
+                if ($amount_to_be_paid >= $calculate_amount) {
+                    $partially_paid = 0;
                     if ($installment->status == 'partially_paid') {
-                        $partially_paid = $paid_amount;
+                        $partially_paid = $installment->paid_amount;
                         $paid_amount = $paid_amount + $installment->paid_amount;
                         $remaining_amount = $installment->amount - $paid_amount;
                     }
 
-                    $installmentPartialyPaidUnderAmount[] = [
+                    $installmentFullyPaidUnderAmount[] = [
                         'id' => $installment->id,
                         'date' => $installment->date,
                         'amount' => $installment->amount,
                         'paid_amount' => $paid_amount,
-                        'remaining_amount' => $remaining_amount,
+                        'remaining_amount' => 0,
                         'installment_order' => $installment->installment_order,
-                        'partially_paid' => $installment->paid_amount,
+                        'partially_paid' => $partially_paid,
                     ];
+                } else {
+                    foreach ($installmentFullyPaidUnderAmount as $to_be_paid_installments) {
+                        if ($to_be_paid_installments['partially_paid'] !== 0) {
+                            $to_be_paid_calculate_amount = $to_be_paid_installments['paid_amount'] - $to_be_paid_installments['partially_paid'];
+                        } else {
+                            $to_be_paid_calculate_amount = $to_be_paid_calculate_amount + $to_be_paid_installments['paid_amount'];
+                        }
+                    }
+                    if ($to_be_paid_calculate_amount < $amount_to_be_paid) {
+
+                        if ($to_be_paid_calculate_amount == 0) {
+                            $amount_to_be_paid = $installment->amount - $amount_to_be_paid;
+                            $paid_amount = $installment->amount - $amount_to_be_paid;
+                            $remaining_amount = $installment->amount - $paid_amount;
+                        } else {
+                            $paid_amount = $amount_to_be_paid - $to_be_paid_calculate_amount;
+                            $remaining_amount = $installment->amount - $paid_amount;
+                        }
+                        if ($installment->status == 'partially_paid') {
+                            $partially_paid = $paid_amount;
+                            $paid_amount = $paid_amount + $installment->paid_amount;
+                            $remaining_amount = $installment->amount - $paid_amount;
+                        }
+
+                        $installmentPartialyPaidUnderAmount[] = [
+                            'id' => $installment->id,
+                            'date' => $installment->date,
+                            'amount' => $installment->amount,
+                            'paid_amount' => $paid_amount,
+                            'remaining_amount' => $remaining_amount,
+                            'installment_order' => $installment->installment_order,
+                            'partially_paid' => $installment->paid_amount,
+                        ];
+                    }
+
+                    break;
+                }
+            }
+            $total_calculated_installments = array_merge($installmentFullyPaidUnderAmount, $installmentPartialyPaidUnderAmount);
+            $instalment_numbers = [];
+            $total_paid_amount = 0;
+            $purpose = [];
+
+            for ($i = 0; $i < count($total_calculated_installments); $i++) {
+                $installment = SalesPlanInstallments::find($total_calculated_installments[$i]['id']);
+                $installment->paid_amount = $total_calculated_installments[$i]['paid_amount'];
+                $installment->remaining_amount = $total_calculated_installments[$i]['remaining_amount'];
+                if ($total_calculated_installments[$i]['remaining_amount'] == 0) {
+                    $installment->status = 'paid';
+                } else {
+                    $installment->status = 'partially_paid';
+                }
+                $instalment_numbers[] =  $installment->details;
+                $purpose = $installment->details;
+                $total_paid_amount =   $total_paid_amount + $total_calculated_installments[$i]['paid_amount'];
+                $installment->last_paid_at = now();
+                $installment->update();
+            }
+            $update_installment_details = Receipt::find($receipt->id);
+            $update_installment_details->purpose = $purpose;
+            $update_installment_details->installment_number = json_encode($instalment_numbers);
+            $update_installment_details->update();
+
+            $totalAmountOfSalesPlan =  $sales_plan->total_price;
+            $down_payment_total = $sales_plan->down_payment_total;
+            $approved_sales_plan_date = $sales_plan->approved_date;
+            $site_token_percentage = SiteConfigration::where('site_id', $receipt->site_id)->first()->site_token_percentage;
+            $token_price = ($site_token_percentage / 100) * $totalAmountOfSalesPlan;
+            // $installment_date = SalesPlanInstallments::where('sales_plan_id', $sales_plan->id)->where('status', 'paid')->orWhere('status', 'partially_paid')->latest("id")->first()->date;
+
+            // dd($sales_plan,$approved_sales_plan_date, $sales_plan->installments);
+            $total_committed_amount = SalesPlanInstallments::where('sales_plan_id', $sales_plan->id)->whereDate('date', '<=', $approved_sales_plan_date)->get();
+            $total_committed_amount = collect($total_committed_amount)->sum('amount');
+
+            $total_paid_amount = SalesPlanInstallments::where('sales_plan_id', $sales_plan->id)->get();
+            $total_paid_amount = collect($total_paid_amount)->sum('paid_amount');
+
+            if ($total_paid_amount <= $token_price) {
+                $unit->status_id = 2;
+            }
+
+            if ($total_paid_amount > $token_price &&  $total_paid_amount < $total_committed_amount) {
+                $unit->status_id = 3;
+            }
+
+            if ($total_paid_amount >= $total_committed_amount) {
+                if ($unit->status_id <= 3) {
+                    $unit->is_for_rebate = true;
                 }
 
-                break;
-            }
-        }
-        $total_calculated_installments = array_merge($installmentFullyPaidUnderAmount, $installmentPartialyPaidUnderAmount);
-        $instalment_numbers = [];
-        $total_paid_amount = 0;
+                $unit->status_id = 5;
 
-        for ($i = 0; $i < count($total_calculated_installments); $i++) {
-            $installment = SalesPlanInstallments::find($total_calculated_installments[$i]['id']);
-            $installment->paid_amount = $total_calculated_installments[$i]['paid_amount'];
-            $installment->remaining_amount = $total_calculated_installments[$i]['remaining_amount'];
-            if ($total_calculated_installments[$i]['remaining_amount'] == 0) {
-                $installment->status = 'paid';
-            } else {
-                $installment->status = 'partially_paid';
-            }
-            $instalment_numbers[] =  $installment->details;
-            $purpose = $installment->details;
-            $total_paid_amount =   $total_paid_amount + $total_calculated_installments[$i]['paid_amount'];
-            $installment->last_paid_at = now();
-            $installment->update();
-        }
-        $update_installment_details = Receipt::find($receipt->id);
-        $update_installment_details->purpose = $purpose;
-        $update_installment_details->installment_number = json_encode($instalment_numbers);
-        $update_installment_details->update();
+                $unitStakeholderData = [
+                    'site_id' => $receipt->site_id,
+                    'unit_id' => $unit->id,
+                    'stakeholder_id' => $stakeholder->id,
+                ];
+                $stakeholderType = StakeholderType::where(['stakeholder_id' => $stakeholder->id, 'type' => 'C'])->first()->update(['status' => true]);
+                $unitStakeholder = UnitStakeholder::create($unitStakeholderData);
 
-        $totalAmountOfSalesPlan =  $sales_plan->total_price;
-        $down_payment_total = $sales_plan->down_payment_total;
-        $approved_sales_plan_date = $sales_plan->approved_date;
-        $site_token_percentage = SiteConfigration::where('site_id', $receipt->site_id)->first()->site_token_percentage;
-        $token_price = ($site_token_percentage / 100) * $totalAmountOfSalesPlan;
-        $installment_date = SalesPlanInstallments::where('sales_plan_id', $sales_plan->id)->where('status', 'paid')->orWhere('status', 'partially_paid')->latest("id")->first()->date;
-
-        $total_committed_amount = SalesPlanInstallments::where('sales_plan_id', $sales_plan->id)->whereDate('date', '<=', $approved_sales_plan_date)->get();
-        $total_committed_amount = collect($total_committed_amount)->sum('amount');
-
-        $total_paid_amount = SalesPlanInstallments::where('sales_plan_id', $sales_plan->id)->get();
-        $total_paid_amount = collect($total_paid_amount)->sum('paid_amount');
-
-        if ($total_paid_amount <= $token_price) {
-            $unit->status_id = 2;
-        }
-
-        if ($total_paid_amount > $token_price &&  $total_paid_amount < $total_committed_amount) {
-            $unit->status_id = 3;
-        }
-
-        if ($total_paid_amount >= $total_committed_amount) {
-            if($unit->status_id <= 3){
-                $unit->is_for_rebate = true;
+                //Here code to disapprove all pending sales plan of same unit
+                $pendingSalesPlan =  (new SalesPlan())->where('unit_id', $unit->id)->where('id', '!=', $sales_plan->id)->where('status', 0)->first();
+                if ($pendingSalesPlan != null) {
+                    $pendingSalesPlan->status = 2;
+                    $pendingSalesPlan->update();
+                }
             }
 
-            $unit->status_id = 5;
+            $unit->update();
+            $this->updatePaymentPlanPdf($receipt->salesPlan);
+        });
+    }
 
-            $unitStakeholderData = [
-                'site_id' => $receipt->site_id,
-                'unit_id' => $unit->id,
-                'stakeholder_id' => $stakeholder->id,
-            ];
-            $stakeholderType = StakeholderType::where(['stakeholder_id' => $stakeholder->id, 'type' => 'C'])->first()->update(['status' => true]);
-            $unitStakeholder = UnitStakeholder::create($unitStakeholderData);
+    // update paymenmt plan pdf
+    public function updatePaymentPlanPdf($salesPlan)
+    {
+        $path = public_path('app-assets/pdf/sales-plans/payment-plan');
+        $fileName =  'Payment-Plan-' . $salesPlan->unit->id . $salesPlan->unit->floor_unit_number . '-' . $salesPlan->id . '-' .  $salesPlan->stakeholder->id . '.' . 'pdf';
 
-            //Here code to disapprove all pending sales plan of same unit
-            $pendingSalesPlan =  (new SalesPlan())->where('unit_id', $unit->id)->where('id', '!=', $sales_plan->id)->where('status', 0)->first();
-            if ($pendingSalesPlan != null) {
-                $pendingSalesPlan->status = 2;
-                $pendingSalesPlan->update();
-            }
-        }
+        $role = $salesPlan->user->roles->pluck('name');
 
-        $unit->update();
+        $data = [
+            'unit_no' => $salesPlan->unit->floor_unit_number,
+            'floor_short_label' => $salesPlan->unit->floor->short_label,
+            'category' => $salesPlan->unit->type->name,
+            'size' => $salesPlan->unit->gross_area,
+            'client_name' => $salesPlan->stakeholder->full_name,
+            'rate' => $salesPlan->unit_price,
+            'down_payment_percentage' => $salesPlan->down_payment_percentage,
+            'down_payment_total' =>  $salesPlan->down_payment_total,
+            'discount_percentage' => $salesPlan->discount_percentage,
+            'discount_total' =>  $salesPlan->discount_total,
+            'total' => $salesPlan->total_price,
+            'sales_person_name' => $salesPlan->user->name,
+            'sales_person_contact' => $salesPlan->user->contact,
+            'sales_person_status' => $role[0],
+            'sales_person_phone_no' => $salesPlan->user->phone_no,
+            'sales_person_sales_type' => $salesPlan->sales_type,
+            'indirect_source' => $salesPlan->indirect_source,
+            'instalments' => collect($salesPlan->installments)->sortBy('installment_order'),
+            'additional_costs' => $salesPlan->additionalCosts,
+            'validity' =>  $salesPlan->validity,
+            'contact' => $salesPlan->stakeholder->contact,
+            'amount' => $salesPlan->total_price,
+            'serial_no' => $salesPlan->serial_no,
+            'pp_serial_no' => $salesPlan->payment_plan_serial_id,
+            'approveBy' => $salesPlan->approveBy->name,
+            'created_date' => $salesPlan->created_date,
+            'remaining_installments' => $salesPlan->installments->where('remaining_amount', '>', 0)->count(),
+            'remaing_amount' => $salesPlan->installments->sum('remaining_amount'),
+            'paid_amount' => $salesPlan->installments->sum('paid_amount'),
+            'client_number' => $salesPlan->stakeholder->mobile_contact,
+        ];
+        $image = base64_encode(file_get_contents(public_path('app-assets/images/logo/j7global-logo.png')));
+        $pdf = Pdf::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif', 'isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true, 'chroot' => public_path()])->setPaper('letter', 'portrait')->loadView('app.sites.floors.units.sales-plan.sales-plan-templates.pdf-template-02', compact('data', 'image'));
+
+        $pdf->save($path . '/' . $fileName);
     }
 
     public function update($site_id, $id, $inputs)
@@ -502,6 +576,8 @@ class ReceiptService implements ReceiptInterface
 
         $data = [
             'status' => 1,
+            'cheque_active_by' => Auth::user()->id,
+            'cheque_active_date' => now(),
         ];
 
         for ($i = 0; $i < count($id); $i++) {
@@ -518,96 +594,114 @@ class ReceiptService implements ReceiptInterface
 
     public function ImportReceipts($site_id)
     {
-        // dd(Receipt::first());
-        $model = new TempReceipt();
-        $tempdata = $model->cursor();
-        $tempCols = $model->getFillable();
+        $salesPlansIds = [];
+        DB::transaction(function () use ($site_id, &$salesPlansIds) {
+            $model = new TempReceipt();
+            $tempdata = $model->cursor();
+            $tempCols = $model->getFillable();
 
-        $url = [];
+            $url = null;
 
-        foreach ($tempdata as $key => $items) {
-            foreach ($tempCols as $k => $field) {
-                $data[$key][$field] = $items[$tempCols[$k]];
-            }
-
-            $stakeholder = Stakeholder::where('cnic', $data[$key]['stakeholder_cnic'])->first();
-            $unitId = Unit::select('id')->where('floor_unit_number', $data[$key]['unit_short_label'])->first();
-
-            $salePlan = SalesPlan::where('stakeholder_id', $stakeholder->id)
-                ->where('unit_id', $unitId->id)
-                ->where('total_price', $data[$key]['total_price'])
-                ->where('down_payment_total', $data[$key]['down_payment_total'])
-                ->where('validity', $data[$key]['validity'])
-                ->first();
-
-            $data[$key]['site_id'] = decryptParams($site_id);
-            $data[$key]['sales_plan_id'] = $salePlan->id;
-            $data[$key]['unit_id'] = $unitId->id;
-            $data[$key]['name'] = $stakeholder->full_name;
-            $data[$key]['cnic'] = $stakeholder->cnic;
-            $data[$key]['phone_no'] = $stakeholder->contact;
-            $data[$key]['amount_in_numbers'] = $data[$key]['amount'];
-            $data[$key]['amount_in_words'] = numberToWords($data[$key]['amount']);
-            $data[$key]['amount_received'] = $data[$key]['amount'];
-            $data[$key]['other_value'] =  $data[$key]['other_payment_mode_value'];
-            $data[$key]['online_instrument_no'] = $data[$key]['online_transaction_no'];
-
-            $data[$key]['purpose'] = str_replace('-', ' ', $data[$key]['installment_no']);
-            $data[$key]['installment_no'] = json_encode([$data[$key]['purpose']]);
-            $data[$key]['is_imported'] = true;
-
-            if ($data[$key]['mode_of_payment'] == 'cheque' || $data[$key]['mode_of_payment'] == 'online') {
-                $bank = Bank::where('account_number', $data[$key]['bank_acount_number'])->first();
-                if ($bank) {
-                    $data[$key]['bank_id'] = $bank->id;
+            foreach ($tempdata as $key => $items) {
+                foreach ($tempCols as $k => $field) {
+                    $data[$key][$field] = $items[$tempCols[$k]];
                 }
-                $data[$key]['bank_details'] = Str::title(str_replace('-', ' ', $data[$key]['bank_name']));
-            }
 
-            $data[$key]['installment_number'] = $data[$key]['installment_no'];
-            $data[$key]['mode_of_payment'] = Str::title($data[$key]['mode_of_payment']);
-            $data[$key]['status'] = $data[$key]['status'] == 'active' ? 1 : 0;
-            $data[$key]['created_at'] = now();
-            $data[$key]['updated_at'] = now();
+                $salePlan = SalesPlan::where('doc_no', $data[$key]['sales_plan_doc_no'])
+                    ->first();
+                $salesPlansIds[$salePlan->id] = $salePlan->id;
+                $unitId = $salePlan->unit;
+                $stakeholder = $salePlan->stakeholder;
+                $data[$key]['site_id'] = decryptParams($site_id);
+                $data[$key]['sales_plan_id'] = $salePlan->id;
+                $data[$key]['unit_id'] = $unitId->id;
+                $data[$key]['name'] = $stakeholder->full_name;
+                $data[$key]['cnic'] = $stakeholder->cnic;
+                $data[$key]['phone_no'] = $stakeholder->contact;
+                $data[$key]['amount_in_numbers'] = $data[$key]['amount'] + $data[$key]['discounted_amount'];
+                $data[$key]['amount_in_words'] = numberToWords($data[$key]['amount']);
+                $data[$key]['amount_received'] = $data[$key]['amount'];
+                $data[$key]['other_value'] =  $data[$key]['other_payment_mode_value'];
+                $data[$key]['online_instrument_no'] = $data[$key]['online_transaction_no'];
 
-            $url = $data[$key]['image_url'];
+                $data[$key]['purpose'] = str_replace('-', ' ', $data[$key]['installment_no']);
+                $data[$key]['installment_no'] = json_encode([$data[$key]['purpose']]);
+                $data[$key]['is_imported'] = true;
 
-            unset($data[$key]['unit_short_label']);
-            unset($data[$key]['stakeholder_cnic']);
-            unset($data[$key]['total_price']);
-            unset($data[$key]['down_payment_total']);
-            unset($data[$key]['validity']);
-            unset($data[$key]['other_payment_mode_value']);
-            unset($data[$key]['online_transaction_no']);
-            unset($data[$key]['installment_no']);
-            unset($data[$key]['amount']);
-            unset($data[$key]['bank_name']);
-            unset($data[$key]['image_url']);
-
-            $receipt = Receipt::create($data[$key]);
-
-            if ($receipt->mode_of_payment == "Cash") {
-                $transaction = $this->financialTransactionInterface->makeReceiptTransaction($receipt->id);
-            }
-
-            if ($receipt->mode_of_payment == "Cheque") {
-                if ($receipt->status == 0) {
-                    $transaction = $this->financialTransactionInterface->makeReceiptChequeTransaction($receipt->id);
-                } else {
-                    $transaction = $this->financialTransactionInterface->makeReceiptActiveTransaction($receipt->id);
+                if ($data[$key]['mode_of_payment'] == 'cheque' || $data[$key]['mode_of_payment'] == 'online') {
+                    $bank = Bank::where('account_number', $data[$key]['bank_acount_number'])->first();
+                    if ($bank) {
+                        $data[$key]['bank_id'] = $bank->id;
+                    }
+                    $data[$key]['bank_details'] = Str::title(str_replace('-', ' ', $data[$key]['bank_name']));
                 }
+
+                $data[$key]['installment_number'] = $data[$key]['installment_no'];
+                $data[$key]['mode_of_payment'] = Str::title($data[$key]['mode_of_payment']);
+                $data[$key]['status'] = $data[$key]['status'] == 'active' ? 1 : 0;
+                $data[$key]['created_at'] = now();
+                $data[$key]['updated_at'] = now();
+
+                $url = $data[$key]['image_url'];
+
+                unset($data[$key]['unit_short_label']);
+                unset($data[$key]['stakeholder_cnic']);
+                unset($data[$key]['total_price']);
+                unset($data[$key]['down_payment_total']);
+                unset($data[$key]['sales_plan_doc_no']);
+                unset($data[$key]['other_payment_mode_value']);
+                unset($data[$key]['online_transaction_no']);
+                unset($data[$key]['installment_no']);
+                unset($data[$key]['amount']);
+                unset($data[$key]['bank_name']);
+                unset($data[$key]['image_url']);
+                $max = Receipt::max('id') + 1;
+                $data[$key]['serial_no'] = sprintf('%03d', $max++);
+
+                $receipt = Receipt::create($data[$key]);
+
+                if ($receipt->mode_of_payment == "Cash") {
+                    $transaction = $this->financialTransactionInterface->makeReceiptTransaction($receipt->id);
+                }
+
+                if ($receipt->mode_of_payment == "Cheque") {
+                    if ($receipt->status == 0) {
+                        $transaction = $this->financialTransactionInterface->makeReceiptChequeTransaction($receipt->id);
+                    } else {
+                        if ($receipt->status == 1) {
+                            $transaction = $this->financialTransactionInterface->makeReceiptChequeTransaction($receipt->id);
+                            $transaction = $this->financialTransactionInterface->makeReceiptActiveTransaction($receipt->id);
+                        }
+                    }
+                }
+
+                if ($receipt->mode_of_payment == "Online") {
+                    $transaction = $this->financialTransactionInterface->makeReceiptOnlineTransaction($receipt->id);
+                }
+                if ($url != null && $url != '') {
+                    $isFileExists = File::exists(public_path('app-assets/images/Import/' . $url));
+                    if ($isFileExists) {
+                        $tempPath = (public_path('app-assets/images/temporaryfiles/Receipts/'));
+                        $destinationPath = public_path('app-assets/images/Import/');
+
+                        $newfile = File::copy(public_path('app-assets/images/Import/' . $url), $tempPath . $url);
+                        if ($newfile) {
+                            $newFile = $tempPath . $url;
+                            $receipt->addMedia($newFile)->toMediaCollection('receipt_attachments');
+                            changeImageDirectoryPermission();
+                        }
+                    }
+                }
+                $url = null;
+                $update_installments =  $this->updateInstallments($receipt);
             }
 
-            if ($receipt->mode_of_payment == "Online") {
-                $transaction = $this->financialTransactionInterface->makeReceiptOnlineTransaction($receipt->id);
-            }
-            if ($receipt->mode_of_payment == "Cheque") {
-                $receipt->addMedia(public_path('app-assets/images/Import/' . $url))->toMediaCollection('receipt_attachments');
-                changeImageDirectoryPermission();
-            }
-            $update_installments =  $this->updateInstallments($receipt);
+            return $receipt;
+        });
+
+        foreach ($salesPlansIds as $id) {
+            $saleplan = SalesPlan::find($id);
+            $this->salesPlanInterface->generatePDF($saleplan, 'payment_plan');
         }
-
-        return $receipt;
     }
 }

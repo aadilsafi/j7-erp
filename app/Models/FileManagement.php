@@ -16,6 +16,7 @@ class FileManagement extends Model implements HasMedia
 
     protected $fillable = [
         'site_id',
+        'doc_no',
         'unit_id',
         'sales_plan_id',
         'unit_data',
@@ -102,5 +103,9 @@ class FileManagement extends Model implements HasMedia
     public function CustomFieldValues()
     {
         return $this->morphMany(CustomFieldValue::class, 'modelable');
+    }
+    public function stakeholderConatcts()
+    {
+        return $this->belongsToMany(StakeholderContact::class, 'file_stakeholder_contacts')->withPivot('site_id');
     }
 }

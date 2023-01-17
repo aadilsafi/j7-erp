@@ -45,8 +45,10 @@ class CancellationService implements CancellationInterface
             $serail_no =  sprintf('%03d', $serail_no);
 
             $data = [
+                'user_id' => Auth::user()->id,
                 'site_id' => decryptParams($site_id),
                 'file_id' => $inputs['file_id'],
+                'doc_no' => $inputs['doc_number'],
                 'unit_id' => $inputs['unit_id'],
                 'sales_plan_id'=>$file->sales_plan_id,
                 'stakeholder_id' => $inputs['customer_id'],

@@ -44,7 +44,7 @@
                 </th>
                 <th style="width:33%; text-align:start;">
                     <br>
-                    <img height="30px" src="{{ asset('app-assets') }}/images/logo/signature-logo.png" alt="logo">
+                    <img height="30px" src="{{ asset('app-assets') }}/images/logo/j7global-logo.png" alt="logo">
                 </th>
             </tr>
         </table>
@@ -237,7 +237,7 @@
                                 <strong>CNIC:</strong>
                             </div>
                             <div class="col">
-                                {{ cnicFormat($customer->cnic) }}
+                                {{ $customer->cnic }}
                             </div>
                         </div>
                     </td>
@@ -326,7 +326,7 @@
                                 <strong>CNIC:</strong>
                             </div>
                             <div class="col">
-                                {{ cnicFormat($titleTransferPerson->cnic) }}
+                                {{ $titleTransferPerson->cnic }}
                             </div>
                         </div>
                     </td>

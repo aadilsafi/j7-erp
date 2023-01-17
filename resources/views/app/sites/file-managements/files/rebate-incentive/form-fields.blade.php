@@ -89,7 +89,7 @@
                             No</label>
                         <input type="text" class="form-control form-control-lg" id="sales_source_contact_no"
                             name="sales_source_contact_no" placeholder="Contact No"
-                            value="{{ Auth::user()->phone_no }}" disabled />
+                            value="{{ Auth::user()->contact }}" disabled />
 
                     </div>
 
@@ -282,6 +282,8 @@
                                 <th style="vertical-align: middle;" scope="col">%</th>
                             </tr>
                             <input type="hidden" value="" id="unit_total">
+                            <input type="hidden" value="" id="sales_plan_total">
+
                             <input type="hidden" value="" id="rebate_total" name="rebate_total">
                         </thead>
 

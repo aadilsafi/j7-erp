@@ -127,7 +127,7 @@ class UnitController extends Controller
         // dd($request->all());
         try {
             if (!request()->ajax()) {
-                $inputs = $request->validated();
+                $inputs = $request->all();
                 if ($inputs['add_bulk_unit']) {
                     $record = $this->unitInterface->storeInBulk($site_id, $floor_id, $inputs);
                     return redirect()->route('sites.floors.units.index', ['site_id' => $site_id, 'floor_id' => $floor_id])->withSuccess('Unit(s) will be contructed shortly!');

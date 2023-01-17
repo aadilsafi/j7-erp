@@ -15,11 +15,7 @@ return new class extends Migration
     {
         Schema::create('temp_sale_plan_installments', function (Blueprint $table) {
             $table->id();
-            $table->string('unit_short_label');
-            $table->bigInteger('stakeholder_cnic');
-            $table->float('total_price');
-            $table->float('down_payment_total');
-            $table->date('validity');
+            $table->string('sales_plan_doc_no')->nullable();
             $table->string('type');
             $table->string('label')->nullable();
             $table->integer('installment_no');

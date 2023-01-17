@@ -4,7 +4,7 @@
     {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.stakeholders.edit', $site_id) }}
 @endsection
 
-@section('page-title', 'Edit Stakeholder')
+@section('page-title', 'Edit External Stakeholders')
 
 @section('page-vendor')
 @endsection
@@ -58,15 +58,15 @@
         }
 
         /* .filepond--item {
-                            } */
+                                } */
     </style>
 @endsection
 
 @section('breadcrumbs')
-    <div class="content-header-left col-md-9 col-12 mb-2">
+    <div class="content-header-left col-md-12 col-12 mb-2">
         <div class="row breadcrumbs-top">
             <div class="col-12">
-                <h2 class="content-header-title float-start mb-0">Edit Stakeholder</h2>
+                <h2 class="content-header-title float-start mb-0">Create External Stakeholders</h2>
                 <div class="breadcrumb-wrapper">
                     {{ Breadcrumbs::render('sites.stakeholders.edit', $site_id) }}
                 </div>
@@ -116,6 +116,16 @@
                                 @enderror
                             </div>
                             <hr>
+                            <div class="d-block mb-1">
+                                <label class="form-label fs-5" for="type_name">Passport Attachment</label>
+                                <input id="passport_attachment" type="file"
+                                    class="filepond @error('attachment') is-invalid @enderror" name="passport_attachment[]" multiple
+                                    accept="image/png, image/jpeg, image/gif, application/pdf" />
+                                @error('attachment')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <hr>
                             @can('sites.stakeholders.update')
                                 <button id="saveButton" type="submit"
                                     class="btn w-100 btn-relief-outline-success waves-effect waves-float waves-light me-1 buttonToBlockUI mb-1">
@@ -145,6 +155,7 @@
     <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.filesizevalidation.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/filepond/filepond.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/js/forms/repeater/jquery.repeater.min.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-pdf-preview/dist/filepond-plugin-pdf-preview.min.js"></script>
 
 @endsection
 
@@ -170,8 +181,11 @@
             $('#individualForm').hide();
             $('#common_form').hide()
             $('#stakeholderType').hide();
+            $('#div-next-of-kin').hide();
+            $('#div_stakeholders').hide();
 
             $('#nationality').val({{ $stakeholder->nationality }}).trigger('change');
+            $('#origin').val({{ $stakeholder->origin }}).trigger('change');
 
             var dob = $("#dob").flatpickr({
                 defaultDate: "{{ $stakeholder->date_of_birth }}",
@@ -739,6 +753,7 @@
             FilePondPluginFileValidateSize,
             FilePondPluginImageValidateSize,
             FilePondPluginImageCrop,
+            FilePondPluginPdfPreview,
         );
 
         var files = [];
@@ -765,6 +780,29 @@
             maxFiles: 2,
             minFiles: 1,
             // required: true,
+            checkValidity: true,
+            credits: {
+                label: '',
+                url: ''
+            }
+        });
+        var files = [];
+
+        @forelse($passport_images as $image)
+            files.push({
+                source: '{{ $image->getUrl() }}',
+            });
+        @empty
+        @endforelse
+        FilePond.create(document.getElementById('passport_attachment'), {
+            files: files,
+            styleButtonRemoveItemPosition: 'right',
+            imageCropAspectRatio: '1:1',
+            acceptedFileTypes: ['image/png', 'image/jpeg', 'application/pdf'],
+            maxFileSize: '1536KB',
+            ignoredFiles: ['.ds_store', 'thumbs.db', 'desktop.ini'],
+            storeAsFile: true,
+            allowMultiple: true,
             checkValidity: true,
             credits: {
                 label: '',
@@ -892,11 +930,11 @@
 
         var validator = $("#stakeholderForm").validate({
             rules: {
-                'stakeholder_as': {
-                    required: function() {
-                        return $("#stakeholder_as").val() == 0;
-                    }
-                },
+                // 'stakeholder_as': {
+                //     required: function() {
+                //         return $("#stakeholder_as").val() == 0;
+                //     }
+                // },
                 'stakeholder_type': {
                     required: function() {
                         return $("#stakeholder_type").val() == 0;

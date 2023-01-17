@@ -4,7 +4,7 @@
     {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.stakeholders.create', $site_id) }}
 @endsection
 
-@section('page-title', 'Create Stakeholder')
+@section('page-title', 'Create External Stakeholders')
 
 @section('page-vendor')
 @endsection
@@ -13,6 +13,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/vendors/filepond/filepond.min.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.preview.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.3/css/intlTelInput.css" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.preview.min.css">
 @endsection
 
 @section('custom-css')
@@ -79,7 +80,7 @@
     <div class="content-header-left col-md-9 col-12 mb-2">
         <div class="row breadcrumbs-top">
             <div class="col-12">
-                <h2 class="content-header-title float-start mb-0">Create Stakeholder</h2>
+                <h2 class="content-header-title float-start mb-0">Create External Stakeholders</h2>
                 <div class="breadcrumb-wrapper">
                     {{ Breadcrumbs::render('sites.stakeholders.create', $site_id) }}
                 </div>
@@ -126,6 +127,16 @@
                             </div>
 
                             <hr>
+                            <div class="d-block mb-1">
+                                <label class="form-label fs-5" for="type_name">Passport Attachment</label>
+                                <input id="passport_attachment" type="file"
+                                    class="filepond @error('attachment') is-invalid @enderror" name="passport_attachment[]"
+                                    multiple accept="image/png, image/jpeg, image/gif, application/pdf" />
+                                @error('attachment')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <hr>
 
                             @can('sites.stakeholders.store')
                                 <button type="submit" value="save"
@@ -157,6 +168,7 @@
     <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.imagesizevalidation.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.filesizevalidation.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/filepond/filepond.min.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-pdf-preview/dist/filepond-plugin-pdf-preview.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/js/forms/repeater/jquery.repeater.min.js"></script>
 @endsection
 
@@ -185,6 +197,7 @@
             FilePondPluginFileValidateSize,
             FilePondPluginImageValidateSize,
             FilePondPluginImageCrop,
+            FilePondPluginPdfPreview,
         );
 
         FilePond.create(document.getElementById('attachment'), {
@@ -196,6 +209,21 @@
             storeAsFile: true,
             allowMultiple: true,
             maxFiles: 2,
+            checkValidity: true,
+            credits: {
+                label: '',
+                url: ''
+            }
+        });
+
+        FilePond.create(document.getElementById('passport_attachment'), {
+            styleButtonRemoveItemPosition: 'right',
+            imageCropAspectRatio: '1:1',
+            acceptedFileTypes: ['image/png', 'image/jpeg', 'application/pdf'],
+            maxFileSize: '1536KB',
+            ignoredFiles: ['.ds_store', 'thumbs.db', 'desktop.ini'],
+            storeAsFile: true,
+            allowMultiple: true,
             checkValidity: true,
             credits: {
                 label: '',
@@ -259,7 +287,9 @@
         $(".contact-persons-list").repeater({
             // initEmpty: true,
             show: function() {
-                $(this).slideDown(), feather && feather.replace({
+                $(this).slideDown(function() {
+                    $(this).find('.contact-person-select').select2().val(0).trigger('change');
+                }), feather && feather.replace({
                     width: 14,
                     height: 14
                 })

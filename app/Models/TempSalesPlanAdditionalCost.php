@@ -10,11 +10,7 @@ class TempSalesPlanAdditionalCost extends Model
     use HasFactory;
 
     protected $fillable = [
-        'unit_short_label',
-        'stakeholder_cnic',
-        'total_price',
-        'down_payment_total' ,
-        'validity',
+        'sales_plan_doc_no',
         'additional_costs_name',
         'percentage',
         'total_amount',

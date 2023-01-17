@@ -15,6 +15,7 @@ use App\Models\Bank;
 use App\Services\FinancialTransactions\FinancialTransactionInterface;
 use App\Services\Stakeholder\Interface\StakeholderInterface;
 use App\Utils\Enums\StakeholderTypeEnum;
+use Auth;
 use Str;
 
 class RebateIncentiveService implements RebateIncentiveInterface
@@ -139,7 +140,7 @@ class RebateIncentiveService implements RebateIncentiveInterface
                 'id' =>$inputs['dealer_id'],
             ], $stakeholderData);
 
-            if ($inputs['dealer_id'] == 0) {
+            if ($inputs['dealer_id'] == 0 || $inputs['dealer_id'] == null) {
                 $stakeholderTypeCode = Str::of($stakeholder->id)->padLeft(3, '0');
                 $stakeholderTypeData  = [
                     [
@@ -182,6 +183,14 @@ class RebateIncentiveService implements RebateIncentiveInterface
                         'created_at' => now(),
                         'updated_at' => now(),
                     ],
+                    [
+                        'stakeholder_id' => $stakeholder->id,
+                        'type' => StakeholderTypeEnum::INVESTOR->value,
+                        'stakeholder_code' => StakeholderTypeEnum::INVESTOR->value . '-' . $stakeholderTypeCode,
+                        'status' => 0,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ],
                 ];
                 $stakeholderType = (new StakeholderType())->insert($stakeholderTypeData);
             }
@@ -190,8 +199,10 @@ class RebateIncentiveService implements RebateIncentiveInterface
             $serail_no = $this->model()::max('id') + 1;
             $serail_no =  sprintf('%03d', $serail_no);
             $rebatedata = [
+                'user_id'=> Auth::user()->id,
                 'site_id' => $site_id,
                 'unit_id' => $inputs['unit_id'],
+                'doc_no' => $inputs['doc_number'],
                 'stakeholder_id' => $inputs['stakeholder_id'],
                 'stakeholder_data' => json_encode(Stakeholder::find($inputs['stakeholder_id'])),
                 'unit_data' => json_encode(Unit::find($inputs['unit_id'])),

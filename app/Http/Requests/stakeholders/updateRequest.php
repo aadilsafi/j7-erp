@@ -26,7 +26,7 @@ class updateRequest extends FormRequest
     public function rules()
     {
         $rules =  (new Stakeholder())->rules;
-        $rules['company.registration'] .= ',' . decryptParams($this->id);
+        $rules['company.registration'] .= ',' . (int)decryptParams($this->id);
         $rules['individual.individual_email'] .= ',' . decryptParams($this->id);
         $rules['individual.office_email'] .= ',' . decryptParams($this->id);
         $rules['company.office_email'] .= ',' . decryptParams($this->id);
@@ -35,6 +35,8 @@ class updateRequest extends FormRequest
         $rules['individual.ntn'] .= ',' . decryptParams($this->id);
         $rules['individual.passport_no'] .= ',' . decryptParams($this->id);
         $rules['individual.cnic'] .= ',' . decryptParams($this->id);
+        $rules['individual.mobile_contact'] .= ',' . (int)decryptParams($this->id);
+        $rules['individual.office_contact'] .= ',' . decryptParams($this->id);
         $rules['stakeholder_type'] = 'array';
         unset($rules['stakeholder_type']);
 
@@ -56,13 +58,14 @@ class updateRequest extends FormRequest
             if ($parent_id > 0 && (strlen($this->input('relation')) < 1 || empty($this->input('relation')) || is_null($this->input('relation')))) {
                 $validator->errors()->add('relation', 'Relation is required');
             }
-
-            $blacklisted = BacklistedStakeholder::where('cnic', $this->input('cnic'))->first();
+           $cnic=(array_key_exists('individual',$this->input()) ? $this->input()['individual']['cnic'] : '');
+             $blacklisted = BacklistedStakeholder::where('cnic', $cnic)->first();
             if ($blacklisted) {
                 $validator->errors()->add('cnic', 'CNIC is BlackListed.');
             }
+
         });
-        // }
+        //
     }
 
     /**

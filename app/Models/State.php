@@ -13,7 +13,8 @@ class State extends Model
 
     protected $fillable = [
         'name',
-        'country_id'
+        'country_id',
+        'iso2'
     ];
 
     public function getActivitylogOptions(): LogOptions
@@ -21,7 +22,8 @@ class State extends Model
         return LogOptions::defaults()->useLogName(get_class($this))->logFillable()->logOnlyDirty()->dontSubmitEmptyLogs();
     }
 
-    public function country(){
+    public function country()
+    {
         return $this->belongsTo(Country::class);
     }
 

@@ -25,6 +25,8 @@ use App\Models\{
 use App\Notifications\DefaultNotification;
 use App\Services\Stakeholder\Interface\StakeholderInterface;
 use App\Utils\Enums\StakeholderTypeEnum;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Str;
 use Spatie\Activitylog\Facades\LogBatch;
 use Spatie\Activitylog\Models\Activity;
@@ -118,7 +120,7 @@ class SalesPlanService implements SalesPlanInterface
                     'source' => $individual['source'] ?? 0,
                     'date_of_birth' => $individual['dob'],
                     'is_local' => isset($individual['is_local']) ? $individual['is_local'] : 0,
-                    'nationality' => $individual['nationality'],
+                    'nationality' => $individual['nationality'] ?? 167,
                 ];
             } else if ($stakeholder_as == 'c') {
                 $stakeholderData = [
@@ -146,21 +148,37 @@ class SalesPlanService implements SalesPlanInterface
             $stakeholderData['residential_address_type'] = $residential['address_type'];
             $stakeholderData['residential_address'] = $residential['address'];
             $stakeholderData['residential_postal_code'] = $residential['postal_code'];
-            $stakeholderData['residential_country_id'] = $residential['country'] > 0 ? $residential['country'] : 167;
-            $stakeholderData['residential_state_id'] =  $residential['state'];
-            $stakeholderData['residential_city_id'] =  $residential['city'];
+            $stakeholderData['residential_country_id'] = isset($residential['country']) && $residential['country'] > 0 ? $residential['country'] : 167;
+            $stakeholderData['residential_state_id'] =  isset($residential['state']) ? $residential['state'] : 0;
+            $stakeholderData['residential_city_id'] =  isset($residential['city']) ? $residential['city'] : 0;
 
             //mailing address fields
             $mailing = $inputs['mailing'];
             $stakeholderData['mailing_address_type'] = $mailing['address_type'];
             $stakeholderData['mailing_address'] = $mailing['address'];
             $stakeholderData['mailing_postal_code'] = $mailing['postal_code'];
-            $stakeholderData['mailing_country_id'] = $mailing['country'] > 0 ? $mailing['country'] : 167;
-            $stakeholderData['mailing_state_id'] = $mailing['state'];
-            $stakeholderData['mailing_city_id'] = $mailing['city'];
+            $stakeholderData['mailing_country_id'] = isset($mailing['country']) && $mailing['country'] > 0 ? $mailing['country'] : 167;
+            $stakeholderData['mailing_state_id'] = isset($mailing['state']) ? $mailing['state'] : 0;
+            $stakeholderData['mailing_city_id'] = isset($mailing['city']) ? $mailing['city'] : 0;
 
             $stakeholderData['comments'] = $inputs['comments'];
-
+            if ($stakeholderInput['stackholder_id'] == 0) {
+                $pinCode = createRandomAlphaNumericCode();
+                $isPinExists = Stakeholder::where('pin_code', $pinCode)->exists();
+                while ($isPinExists) {
+                    $pinCode = createRandomAlphaNumericCode();
+                    $isPinExists = Stakeholder::where('pin_code', $pinCode)->exists();
+                }
+                $stakeholderData['pin_code'] = $pinCode;
+            } elseif (Stakeholder::find($stakeholderInput['stackholder_id'])->pin_code == null) {
+                $pinCode = createRandomAlphaNumericCode();
+                $isPinExists = Stakeholder::where('pin_code', $pinCode)->exists();
+                while ($isPinExists) {
+                    $pinCode = createRandomAlphaNumericCode();
+                    $isPinExists = Stakeholder::where('pin_code', $pinCode)->exists();
+                }
+                $stakeholderData['pin_code'] = $pinCode;
+            }
             $stakeholder = $this->stakeholderInterface->model()->updateOrCreate([
                 'id' => $stakeholderInput['stackholder_id'],
             ], $stakeholderData);
@@ -208,6 +226,14 @@ class SalesPlanService implements SalesPlanInterface
                         'created_at' => now(),
                         'updated_at' => now(),
                     ],
+                    [
+                        'stakeholder_id' => $stakeholder->id,
+                        'type' => StakeholderTypeEnum::INVESTOR->value,
+                        'stakeholder_code' => StakeholderTypeEnum::INVESTOR->value . '-' . $stakeholderTypeCode,
+                        'status' => 0,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ],
                 ];
                 $stakeholderType = (new StakeholderType())->insert($stakeholderTypeData);
             }
@@ -232,7 +258,6 @@ class SalesPlanService implements SalesPlanInterface
             $serail_no = $this->model()::max('id') + 1;
             $serail_no =  sprintf('%03d', $serail_no);
 
-
             $sales_plan_data = [
                 'unit_id' => $unit->id,
                 'user_id' => auth()->user()->id,
@@ -247,13 +272,15 @@ class SalesPlanService implements SalesPlanInterface
                 'lead_source_id' => ($leadSource['lead_source'] == 0) ? $leadSource->id : $leadSource['lead_source'],
                 'validity' => $inputs['sales_plan_validity'],
                 'comments' => $inputs['sale_plan_comments'],
+                'doc_no' => $inputs['doc_number'],
                 'status' => false,
                 'created_date' => $inputs['created_date'] . date(' H:i:s'),
                 'serial_no' => 'SI-' . $serail_no,
+                'investment_plan_serial_id' => 'IP-' . $serail_no,
             ];
             // dd(json_encode($stakeholderInput['next_of_kin']));
 
-            if(Auth::user()->hasRole('CRM')){
+            if (Auth::user()->hasRole('CRM')) {
                 $sales_plan_data['is_from_crm'] = true;
             }
             if (isset($stakeholderInput['next_of_kin'])) {
@@ -361,11 +388,74 @@ class SalesPlanService implements SalesPlanInterface
             ];
 
             // Notification::send($specificUsers, new DefaultNotification($notificaionData));
+            $this->generatePDF($salesPlan, 'investment_plan');
             LogBatch::endBatch();
             return $salesPlan;
         });
     }
 
+    public function generatePDF($salesPlan, $type = null)
+    {
+        $role = $salesPlan->user->pluck('name');
+
+        $data = [
+            'unit_no' => $salesPlan->unit->floor_unit_number,
+            'floor_short_label' => $salesPlan->unit->floor->short_label,
+            'category' => $salesPlan->unit->type->name,
+            'size' => $salesPlan->unit->gross_area,
+            'client_name' => $salesPlan->stakeholder->full_name,
+            'rate' => $salesPlan->unit_price,
+            'down_payment_percentage' => $salesPlan->down_payment_percentage,
+            'down_payment_total' =>  $salesPlan->down_payment_total,
+            'discount_percentage' => $salesPlan->discount_percentage,
+            'discount_total' =>  $salesPlan->discount_total,
+            'total' => $salesPlan->total_price,
+            'sales_person_name' => $salesPlan->user->name,
+            'sales_person_contact' => $salesPlan->user->contact,
+            'sales_person_status' => $role[0],
+            'sales_person_phone_no' => $salesPlan->user->phone_no,
+            'sales_person_sales_type' => $salesPlan->sales_type,
+            'indirect_source' => $salesPlan->indirect_source,
+            'instalments' => collect($salesPlan->installments)->sortBy('installment_order'),
+            'additional_costs' => $salesPlan->additionalCosts,
+            'validity' =>  $salesPlan->validity,
+            'contact' => $salesPlan->stakeholder->contact,
+            'amount' => $salesPlan->total_price,
+            'serial_no' => $salesPlan->serial_no,
+            'pp_serial_no' => $salesPlan->payment_plan_serial_id,
+            'approveBy' => $salesPlan->approveBy->name ?? '',
+            'created_date' => $salesPlan->created_date,
+            'total_installments' => $salesPlan->installments->count(),
+            'remaining_installments' => $salesPlan->installments->where('remaining_amount', '>', 0)->count(),
+            'remaing_amount' => $salesPlan->installments->sum('remaining_amount'),
+            'paid_amount' => $salesPlan->installments->sum('paid_amount'),
+            'client_number' => $salesPlan->stakeholder->mobile_contact,
+        ];
+
+        if ($type == 'investment_plan') {
+            $path = public_path('app-assets/pdf/sales-plans/investment-plan');
+            $fileName =  'Investment-Plan-' . $salesPlan->unit->id . $salesPlan->unit->floor_unit_number . '-' . $salesPlan->id . '-' .  $salesPlan->stakeholder->id . '.' . 'pdf';
+            $qrCodeName = 'Investment-Plan-' . $salesPlan->unit->id . '-' . $salesPlan->id . '-' .  $salesPlan->stakeholder->id . '.png';
+            $link = route('download-investment-plan', ['file_name' => $fileName]);
+            QrCode::format('png')->size(200)->generate($link, public_path('app-assets/pdf/sales-plans/qrcodes/' . $qrCodeName));
+
+            $image = base64_encode(file_get_contents(public_path('app-assets/images/logo/j7global-logo.png')));
+            $pdf = Pdf::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif', 'isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true, 'chroot' => public_path()])->setPaper('letter', 'portrait')->loadView('app.sites.floors.units.sales-plan.sales-plan-templates.pdf-template-01', compact('data', 'image'));
+
+            $pdf->save($path . '/' . $fileName);
+        } elseif ($type = 'payment_plan') {
+            $path = public_path('app-assets/pdf/sales-plans/payment-plan');
+            $fileName =  'Payment-Plan-' . $salesPlan->unit->id . $salesPlan->unit->floor_unit_number . '-' . $salesPlan->id . '-' .  $salesPlan->stakeholder->id . '.' . 'pdf';
+            $qrCodeName = 'Payment-Plan-' .  $salesPlan->unit->id . '-' . $salesPlan->id . '-' .  $salesPlan->stakeholder->id . '.png';
+            $link = route('authorize-stakeholder', ['file_name' => encryptParams($fileName)]);
+            QrCode::format('png')->size(200)->generate($link, public_path('app-assets/pdf/sales-plans/qrcodes/' . $qrCodeName));
+
+            $image = base64_encode(file_get_contents(public_path('app-assets/images/logo/j7global-logo.png')));
+            $pdf = Pdf::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif', 'isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true, 'chroot' => public_path()])->setPaper('letter', 'portrait')->loadView('app.sites.floors.units.sales-plan.sales-plan-templates.pdf-template-02', compact('data', 'image'));
+
+            $pdf->save($path . '/' . $fileName);
+        }
+    }
     public function generateInstallments($site_id, $floor_id, $unit_id, $inputs)
     {
         try {

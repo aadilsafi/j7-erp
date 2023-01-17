@@ -686,6 +686,13 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'name' => 'sites.sales_plan.generateSalesPlan',
+                'show_name' => 'Can Generate Sales Plan',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
             // [
             //     'name' => 'sites.sales_plan.show',
             //     'show_name' => 'Can View Sales Plans ',
@@ -694,93 +701,93 @@ class PermissionTableSeeder extends Seeder
             //     'updated_at' => now(),
             // ],
             //sales Plan Import
-            // [
-            //     'name' => 'sites.floors.SalesPlanImport.importSalesPlan',
-            //     'show_name' => 'Can Import Sales Plan file',
-            //     'guard_name' => 'web',
-            //     'created_at' => now(),
-            //     'updated_at' => now(),
-            // ],
-            // [
-            //     'name' => 'sites.floors.SalesPlanImport.importSalesPlanPreview',
-            //     'show_name' => 'Can View Import file',
-            //     'guard_name' => 'web',
-            //     'created_at' => now(),
-            //     'updated_at' => now(),
-            // ],
-            // [
-            //     'name' => 'sites.floors.SalesPlanImport.storePreview',
-            //     'show_name' => 'Can View store Preview',
-            //     'guard_name' => 'web',
-            //     'created_at' => now(),
-            //     'updated_at' => now(),
-            // ],
-            // [
-            //     'name' => 'sites.floors.SalesPlanImport.saveImport',
-            //     'show_name' => 'Can Save Import file',
-            //     'guard_name' => 'web',
-            //     'created_at' => now(),
-            //     'updated_at' => now(),
-            // ],
+            [
+                'name' => 'sites.floors.SalesPlanImport.importSalesPlan',
+                'show_name' => 'Can Import Sales Plan file',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.floors.SalesPlanImport.importSalesPlanPreview',
+                'show_name' => 'Can View Import file',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.floors.SalesPlanImport.storePreview',
+                'show_name' => 'Can View store Preview',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.floors.SalesPlanImport.saveImport',
+                'show_name' => 'Can Save Import file',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
             // sales Plan Additional Costs Import
-            // [
-            //     'name' => 'sites.floors.spadcostsImport.importspadcosts',
-            //     'show_name' => 'Can Import Sales Plan Additional Costs file',
-            //     'guard_name' => 'web',
-            //     'created_at' => now(),
-            //     'updated_at' => now(),
-            // ],
-            // [
-            //     'name' => 'sites.floors.spadcostsImport.importspadcostsPreview',
-            //     'show_name' => 'Can View Import file',
-            //     'guard_name' => 'web',
-            //     'created_at' => now(),
-            //     'updated_at' => now(),
-            // ],
-            // [
-            //     'name' => 'sites.floors.spadcostsImport.storePreview',
-            //     'show_name' => 'Can View store Preview',
-            //     'guard_name' => 'web',
-            //     'created_at' => now(),
-            //     'updated_at' => now(),
-            // ],
-            // [
-            //     'name' => 'sites.floors.spadcostsImport.saveImport',
-            //     'show_name' => 'Can Save Import file',
-            //     'guard_name' => 'web',
-            //     'created_at' => now(),
-            //     'updated_at' => now(),
-            // ],
+            [
+                'name' => 'sites.floors.spadcostsImport.importspadcosts',
+                'show_name' => 'Can Import Sales Plan Additional Costs file',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.floors.spadcostsImport.importspadcostsPreview',
+                'show_name' => 'Can View Import file',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.floors.spadcostsImport.storePreview',
+                'show_name' => 'Can View store Preview',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.floors.spadcostsImport.saveImport',
+                'show_name' => 'Can Save Import file',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
 
             // sales Plan Installments Import
-            // [
-            //     'name' => 'sites.floors.spInstallmentsImport.ImportInstallments',
-            //     'show_name' => 'Can Import Sales Plan Installments file',
-            //     'guard_name' => 'web',
-            //     'created_at' => now(),
-            //     'updated_at' => now(),
-            // ],
-            // [
-            //     'name' => 'sites.floors.spInstallmentsImport.ImportPreviewinstallments',
-            //     'show_name' => 'Can View Import file',
-            //     'guard_name' => 'web',
-            //     'created_at' => now(),
-            //     'updated_at' => now(),
-            // ],
-            // [
-            //     'name' => 'sites.floors.spInstallmentsImport.storePreviewInstallments',
-            //     'show_name' => 'Can View store Preview',
-            //     'guard_name' => 'web',
-            //     'created_at' => now(),
-            //     'updated_at' => now(),
-            // ],
-            // [
-            //     'name' => 'sites.floors.spInstallmentsImport.saveImportInstallments',
-            //     'show_name' => 'Can Save Import file',
-            //     'guard_name' => 'web',
-            //     'created_at' => now(),
-            //     'updated_at' => now(),
-            // ],
+            [
+                'name' => 'sites.floors.spInstallmentsImport.ImportInstallments',
+                'show_name' => 'Can Import Sales Plan Installments file',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.floors.spInstallmentsImport.ImportPreviewinstallments',
+                'show_name' => 'Can View Import file',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.floors.spInstallmentsImport.storePreviewInstallments',
+                'show_name' => 'Can View store Preview',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.floors.spInstallmentsImport.saveImportInstallments',
+                'show_name' => 'Can Save Import file',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
             //Sales Plan Print
             [
                 'name' => 'sites.floors.units.sales-plans.templates.print',
@@ -896,6 +903,36 @@ class PermissionTableSeeder extends Seeder
             ],
             [
                 'name' => 'sites.stakeholders.kins.saveImport',
+                'show_name' => 'Can Save Import file',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
+            // stakeholder Conatcts Import
+            [
+                'name' => 'sites.stakeholders.contacts.importStakeholders',
+                'show_name' => 'Can Import Stakeholders Contacts',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.stakeholders.contacts.importStakeholdersPreview',
+                'show_name' => 'Can View Stakeholders Contacts Import file',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.stakeholders.contacts.storePreview',
+                'show_name' => 'Can View store Preview',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.stakeholders.contacts.saveImport',
                 'show_name' => 'Can Save Import file',
                 'guard_name' => 'web',
                 'created_at' => now(),
@@ -1158,34 +1195,34 @@ class PermissionTableSeeder extends Seeder
 
 
             // Receipts imports
-            // [
-            //     'name' => 'sites.receipts.importReceipts',
-            //     'show_name' => 'Can Import Receipts File',
-            //     'guard_name' => 'web',
-            //     'created_at' => now(),
-            //     'updated_at' => now(),
-            // ],
-            // [
-            //     'name' => 'sites.receipts.importReceiptsPreview',
-            //     'show_name' => 'Can View Import file',
-            //     'guard_name' => 'web',
-            //     'created_at' => now(),
-            //     'updated_at' => now(),
-            // ],
-            // [
-            //     'name' => 'sites.receipts.storePreview',
-            //     'show_name' => 'Can View store Preview of Import File',
-            //     'guard_name' => 'web',
-            //     'created_at' => now(),
-            //     'updated_at' => now(),
-            // ],
-            // [
-            //     'name' => 'sites.receipts.saveImport',
-            //     'show_name' => 'Can Save Import file',
-            //     'guard_name' => 'web',
-            //     'created_at' => now(),
-            //     'updated_at' => now(),
-            // ],
+            [
+                'name' => 'sites.receipts.importReceipts',
+                'show_name' => 'Can Import Receipts File',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.receipts.importReceiptsPreview',
+                'show_name' => 'Can View Import file',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.receipts.storePreview',
+                'show_name' => 'Can View store Preview of Import File',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.receipts.saveImport',
+                'show_name' => 'Can Save Import file',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
             // Customer File Management Routes
             [
                 'name' => 'sites.file-managements.customers',
@@ -1257,6 +1294,72 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
+            // sites.file-managements.importFiles
+            // sites.file-managements.importFilesPreview
+            // sites.file-managements.saveImport
+            // sites.file-managements.storePreview
+
+            // Import Files
+            [
+                'name' => 'sites.file-managements.importFiles',
+                'show_name' => 'Can Import Files',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.file-managements.importFilesPreview',
+                'show_name' => 'Can View Import file',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.file-managements.storePreview',
+                'show_name' => 'Can View store Preview of Import File',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.file-managements.saveImport',
+                'show_name' => 'Can Save Import file',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
+            // Import files Conatcts
+            [
+                'name' => 'sites.file-managements.importFilesContacts',
+                'show_name' => 'Can Import Files Contacts',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.file-managements.importFilesContactsPreview',
+                'show_name' => 'Can View Import file Contacts',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.file-managements.storeFileContactsPreview',
+                'show_name' => 'Can View store Preview of Import File Contacts',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.file-managements.saveFileContactsImport',
+                'show_name' => 'Can Save Import file Contacts',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
             // file management rebate incentive
             [
                 'name' => 'sites.file-managements.rebate-incentive.index',
@@ -1840,16 +1943,16 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-            // Accounts trial-balance
+            // Accounts general-ledger
             [
-                'name' => 'sites.accounts.trial-balance.index',
+                'name' => 'sites.accounts.general-ledger.index',
                 'show_name' => 'Can View Accounts Trial Balance',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'name' => 'sites.accounts.trial-balance.filter-trial-blance',
+                'name' => 'sites.accounts.general-ledger.filter-trial-blance',
                 'show_name' => 'Can View Accounts Trial Balance',
                 'guard_name' => 'web',
                 'created_at' => now(),
@@ -2230,8 +2333,38 @@ class PermissionTableSeeder extends Seeder
             ],
             // Journal Vouchers Entries
             [
-                'name'=>'sites.settings.journal-vouchers.journal-vouchers-entries.show',
+                'name' => 'sites.settings.journal-vouchers.journal-vouchers-entries.show',
                 'show_name' => 'Can View Journal Vouchers Entires',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
+            // Import Journal voucher 
+            [
+                'name' => 'sites.settings.journal-vouchers.importJournalVoucher',
+                'show_name' => 'Can Import Journal Vouchers',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.settings.journal-vouchers.importJournalVoucherPreview',
+                'show_name' => 'Can Preview Journal Vouchers',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.settings.journal-vouchers.saveImport',
+                'show_name' => 'Can Save Journal Vouchers',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.settings.journal-vouchers.storePreview',
+                'show_name' => 'Can Store Journal Vouchers',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -2280,34 +2413,34 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-            // [
-            //     'name' => 'sites.settings.countries.create',
-            //     'show_name' => 'Can Create Country',
-            //     'guard_name' => 'web',
-            //     'created_at' => now(),
-            //     'updated_at' => now(),
-            // ],
-            // [
-            //     'name' => 'sites.settings.countries.store',
-            //     'show_name' => 'Can save Country',
-            //     'guard_name' => 'web',
-            //     'created_at' => now(),
-            //     'updated_at' => now(),
-            // ],
-            // [
-            //     'name' => 'sites.settings.countries.edit',
-            //     'show_name' => 'Can Edit Countries',
-            //     'guard_name' => 'web',
-            //     'created_at' => now(),
-            //     'updated_at' => now(),
-            // ],
-            // [
-            //     'name' => 'sites.settings.countries.update',
-            //     'show_name' => 'Can Update Countries',
-            //     'guard_name' => 'web',
-            //     'created_at' => now(),
-            //     'updated_at' => now(),
-            // ],
+            [
+                'name' => 'sites.settings.countries.create',
+                'show_name' => 'Can Create Country',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.settings.countries.store',
+                'show_name' => 'Can save Country',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.settings.countries.edit',
+                'show_name' => 'Can Edit Countries',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.settings.countries.update',
+                'show_name' => 'Can Update Countries',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
             // [
             //     'name' => 'sites.settings.countries.destroy',
             //     'show_name' => 'Can Delete Countries',
@@ -2324,34 +2457,34 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-            // [
-            //     'name' => 'sites.settings.states.create',
-            //     'show_name' => 'Can Create State',
-            //     'guard_name' => 'web',
-            //     'created_at' => now(),
-            //     'updated_at' => now(),
-            // ],
-            // [
-            //     'name' => 'sites.settings.states.store',
-            //     'show_name' => 'Can save State',
-            //     'guard_name' => 'web',
-            //     'created_at' => now(),
-            //     'updated_at' => now(),
-            // ],
-            // [
-            //     'name' => 'sites.settings.states.edit',
-            //     'show_name' => 'Can Edit State',
-            //     'guard_name' => 'web',
-            //     'created_at' => now(),
-            //     'updated_at' => now(),
-            // ],
-            // [
-            //     'name' => 'sites.settings.states.update',
-            //     'show_name' => 'Can Update State',
-            //     'guard_name' => 'web',
-            //     'created_at' => now(),
-            //     'updated_at' => now(),
-            // ],
+            [
+                'name' => 'sites.settings.states.create',
+                'show_name' => 'Can Create State',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.settings.states.store',
+                'show_name' => 'Can save State',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.settings.states.edit',
+                'show_name' => 'Can Edit State',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.settings.states.update',
+                'show_name' => 'Can Update State',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
             // [
             //     'name' => 'sites.settings.states.destroy',
             //     'show_name' => 'Can Delete States',
@@ -2368,34 +2501,34 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-            // [
-            //     'name' => 'sites.settings.cities.create',
-            //     'show_name' => 'Can Create City',
-            //     'guard_name' => 'web',
-            //     'created_at' => now(),
-            //     'updated_at' => now(),
-            // ],
-            // [
-            //     'name' => 'sites.settings.cities.store',
-            //     'show_name' => 'Can save City',
-            //     'guard_name' => 'web',
-            //     'created_at' => now(),
-            //     'updated_at' => now(),
-            // ],
-            // [
-            //     'name' => 'sites.settings.cities.edit',
-            //     'show_name' => 'Can Edit City',
-            //     'guard_name' => 'web',
-            //     'created_at' => now(),
-            //     'updated_at' => now(),
-            // ],
-            // [
-            //     'name' => 'sites.settings.cities.update',
-            //     'show_name' => 'Can Update City',
-            //     'guard_name' => 'web',
-            //     'created_at' => now(),
-            //     'updated_at' => now(),
-            // ],
+            [
+                'name' => 'sites.settings.cities.create',
+                'show_name' => 'Can Create City',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.settings.cities.store',
+                'show_name' => 'Can save City',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.settings.cities.edit',
+                'show_name' => 'Can Edit City',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.settings.cities.update',
+                'show_name' => 'Can Update City',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
             // [
             //     'name' => 'sites.settings.cities.destroy',
             //     'show_name' => 'Can Delete City',
@@ -2454,9 +2587,118 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            // Stakeholder Investor Deals Routes
+            [
+                'name' => 'sites.investors-deals.index',
+                'show_name' => 'Can View  Investor Deals',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.investors-deals.create',
+                'show_name' => 'Can Create Investor Deals',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.investors-deals.store',
+                'show_name' => 'Can Store  Investor Deals',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.investors-deals.preview',
+                'show_name' => 'Can Preview  Investor Deals',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.investors-deals.check-investor',
+                'show_name' => 'Can Check  Investor Deals',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.investors-deals.approve-investor',
+                'show_name' => 'Can Approve  Investor Deals',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.investors-deals.revert-investor',
+                'show_name' => 'Can Revert  Investor Deals',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.investors-deals.dis-approve',
+                'show_name' => 'Can Disapprove  Investor Deals',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            // Investor Deal Receipts
+             // File Transfer Receipts
+             [
+                'name' => 'sites.investor-deals-receipts.index',
+                'show_name' => 'Can View File Transfer Receipts',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.investor-deals-receipts.create',
+                'show_name' => 'Can Create File Transfer Receipts',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.investor-deals-receipts.store',
+                'show_name' => 'Can Store File Transfer Receipts',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.investor-deals-receipts.show',
+                'show_name' => 'Can View File Transfer Receipts',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.investor-deals-receipts.make-active-selected',
+                'show_name' => 'Can Make Active Receipts',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.investor-deals-receipts.destroy-draft',
+                'show_name' => 'Can Destroy Draft Receipts',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.investor-deals-receipts.templates.print',
+                'show_name' => 'Can Print Selected Receipts',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
 
             // Outside Sales Plan Permission
-            
+
 
             //  Company permissions
             // [

@@ -18,6 +18,7 @@ use App\Models\{
 };
 use App\Utils\Enums\NatureOfAccountsEnum;
 use Carbon\Carbon;
+use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\{Collection};
 use Illuminate\Support\Facades\{Crypt, File};
@@ -99,14 +100,19 @@ if (!function_exists('encryptParams')) {
 if (!function_exists('decryptParams')) {
     function decryptParams($params): array|string
     {
-        if (is_array($params)) {
-            $data = [];
-            foreach ($params as $item) {
-                $data[] = Crypt::decryptString($item);
+        try {
+
+            if (is_array($params)) {
+                $data = [];
+                foreach ($params as $item) {
+                    $data[] = Crypt::decryptString($item);
+                }
+                return $data;
             }
-            return $data;
+            return Crypt::decryptString($params);
+        } catch (DecryptException $e) {
+            return $params;
         }
-        return Crypt::decryptString($params);
     }
 }
 
@@ -1073,5 +1079,26 @@ if (!function_exists('getTypeAncesstorData')) {
             $type = getTypeAncesstorData($type->parent_id);
         }
         return $type;
+    }
+}
+
+if (!function_exists('createRandomAlphaNumericCode')) {
+    function createRandomAlphaNumericCode()
+    {
+        $numerics = '0123456789';
+        $alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+        $pass = array();
+        $alphaLength = strlen($alphabet) - 1;
+        $numericLength = strlen($numerics) - 1;
+        for ($i = 0; $i < 4; $i++) {
+            $n = rand(0, $numericLength);
+            $pass[] = $numerics[$n];
+        }
+        for ($i = 0; $i < 2; $i++) {
+            $n = rand(0, $alphaLength);
+            $pass[] = $alphabet[$n];
+        }
+        $code = implode($pass);
+        return str_shuffle($code);
     }
 }

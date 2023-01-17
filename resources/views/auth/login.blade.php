@@ -40,19 +40,20 @@
                         </g>
                     </g>
                 </svg> --}}
-                <h2 class="brand-text text-primary ms-1">{{ env('APP_NAME') }}</h2>
+                {{-- <h2 class="brand-text text-primary ms-1">{{ env('APP_NAME') }}</h2> --}}
             </a>
             <!-- /Brand logo-->
             <!-- Left Text-->
             <div class="d-none d-lg-flex col-lg-8 align-items-center p-5">
-                <div class="w-100 d-lg-flex align-items-center justify-content-center px-5"><img class="img-fluid"
-                        src="{{ asset('app-assets') }}/images/pages/login-v2.svg" alt="Login V2" /></div>
+                <div class="w-100 d-lg-flex align-items-center justify-content-center px-5">
+                    <img class="img-fluid" src="{{ asset('app-assets') }}/images/j9.png" alt="Login V2" width="65%"/>
+                </div>
             </div>
             <!-- /Left Text-->
             <!-- Login-->
             <div class="d-flex col-lg-4 align-items-center auth-bg px-2 p-lg-5">
                 <div class="col-12 col-sm-8 col-md-6 col-lg-12 px-xl-2 mx-auto">
-                    <h2 class="card-title fw-bold mb-1">Welcome to - {{ env('APP_NAME') }}! 👋</h2>
+                    <h2 class="card-title fw-bold mb-1 brand-text">Welcome to - {{ Str::title(env('APP_NAME')) }}! 👋</h2>
                     <p class="card-text mb-2">Please sign-in to your account and start the adventure</p>
                     <div class="">
                         {{ view('app.layout.alerts') }}
@@ -91,6 +92,9 @@
                         </div>
                         <button class="btn btn-primary w-100" tabindex="4">Sign in</button>
                     </form>
+                    <span class="text-center mt-5 d-none d-md-block">
+                        Powered by <a href="https://islootech.com/" target="_blank"> ISLOO TECH</a>
+                    </span>
                     {{-- <p class="text-center mt-2">
                         <span>New on our platform?</span>
                         <a href="auth-register-cover.html">

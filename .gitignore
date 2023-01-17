@@ -2,7 +2,11 @@
 /public/build
 /public/hot
 /public/storage
+/public/app-assets/images/Import/
 /public/app-assets/server-uploads
+/public/app-assets/pdf/sales-plans/investment-plan/
+/public/app-assets/pdf/sales-plans/payment-plan/
+/public/app-assets/pdf/sales-plans/qrcodes/
 /storage/*.key
 /vendor
 .env
@@ -16,3 +20,4 @@ yarn-error.log
 /.idea
 /.vscode
 /.well-known/acme-challenge/
+horizon.log

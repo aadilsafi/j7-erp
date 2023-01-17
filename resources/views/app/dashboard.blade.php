@@ -11,14 +11,17 @@
 @endsection
 
 @section('page-css')
-<link rel="stylesheet" type="text/css"
-        href="{{ asset('app-assets') }}/css/core/menu/menu-types/vertical-menu.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/css/core/menu/menu-types/vertical-menu.min.css">
     <link rel="stylesheet" type="text/css"
         href="{{ asset('app-assets') }}/css/plugins/extensions/ext-component-sweet-alerts.min.css">
     <link rel="stylesheet" type="text/css"
         href="{{ asset('app-assets') }}/css/plugins/extensions/ext-component-toastr.min.css">
     <link rel="stylesheet" type="text/css"
         href="{{ asset('app-assets') }}/css/plugins/forms/pickers/form-flat-pickr.min.css">
+@endsection
+
+@section('seo-breadcrumb')
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'dashboard') }}
 @endsection
 
 @section('custom-css')
@@ -33,16 +36,68 @@
             width: 80%;
             margin: 15px auto;
         }
+
+        .centered {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
     </style>
 @endsection
 
-@section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'dashboard') }}
-@endsection
 
+@section('breadcrumbs')
+    <div class="content-header-left col-md-9 col-12 mb-2">
+        <div class="row breadcrumbs-top">
+            <div class="col-12">
+                <h2 class="float-start mb-0">Dashboard</h2>
+            </div>
+        </div>
+    </div>
+@endsection
 @section('content')
+    <p class="mb-2">
+    </p>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="p-2 m-3">
+                <div class="col align-items-center">
+                    <div class="w-100 d-lg-flex align-items-center justify-content-center px-5">
+                        {{-- <ul class="ps-0 text-center">
+                            <li class="d-block"><h2 class="mb-1 mx-2">We are launching soon</h2></li>
+                            <li class="d-block"><p class="mb-4 mx-2">We're creating something awesome. Please subscribe to get notified when it's ready!</p></li>
+                            <li class="d-block text-center justify-content-center d-flex">
+                                <form onsubmit="return false" class="mb-4 w-50">
+                                    <div class="mb-0">
+                                      <div class="input-group">
+                                        <input type="text" class="form-control" placeholder="email" autofocus="">
+                                        <button type="submit" class="btn btn-primary waves-effect waves-light">Notify</button>
+                                      </div>
+                                    </div>
+                                  </form>
+                            </li>
+                            <li class="d-block">
+                                <img width="134" class="img-fluid" src="{{ asset('app-assets') }}/images/comming-soon/page-misc-launching-soon.png" alt="Login V2" />
+                            </li>
+                        </ul> --}}
+
+                        <img class="img-fluid" width="491" src="{{ asset('app-assets') }}/images/girl.png" alt="Login V2" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- <div class="centered p-2 m-3">
+        <div class="col align-items-center">
+            <div class="w-100 d-lg-flex align-items-center justify-content-center px-5"><img class="img-fluid"
+                    src="{{ asset('app-assets') }}/images/coming_soon.png" alt="Login V2" /></div>
+        </div>
+    </div> --}}
+
     <!-- Dashboard Ecommerce Starts -->
-    <section id="dashboard-ecommerce">
+    {{-- <section id="dashboard-ecommerce">
         <div class="row match-height">
             <!-- Medal Card -->
             <div class="col-xl-4 col-md-6 col-12">
@@ -799,7 +854,7 @@
                     </div>
                 </div>
             </div>
-    </section>
+    </section> --}}
     <!-- Dashboard Ecommerce ends -->
 @endsection
 

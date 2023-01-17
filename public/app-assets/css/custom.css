@@ -1,0 +1,95 @@
+.main-menu.menu-light .navigation li a > * {
+    font-size: 13px;
+}
+
+.main-menu .navbar-header .navbar-brand {
+    margin-top: 0.9rem !important;
+}
+.custom_sidebar_logo {
+    width: 119px;
+}
+
+.table:not(.table-dark):not(.table-light) tfoot:not(.table-dark) th,
+.table:not(.table-dark):not(.table-light) thead:not(.table-dark) th {
+    font-size: 11px !important;
+}
+
+.main-menu .navbar-header .navbar-brand .brand-logo img {
+    max-width: 118px !important;
+}
+.vertical-layout.vertical-menu-modern.menu-collapsed
+    .main-menu:not(.expanded)
+    .custom_side_full_logo {
+    display: none;
+}
+.vertical-layout.vertical-menu-modern.menu-collapsed
+    .main-menu:not(.expanded)
+    .custom_side_icon {
+    display: block;
+    width: 28px;
+}
+.custom_side_icon {
+    display: none;
+}
+
+#floors-table-form table.dataTable thead .sorting:before,
+#floors-table-form table.dataTable thead .sorting_asc:before,
+#floors-table-form table.dataTable thead .sorting_desc:before {
+    top: 1.7rem !important;
+}
+
+#floors-table-form table.dataTable thead .sorting:after,
+#floors-table-form table.dataTable thead .sorting_asc:after,
+#floors-table-form table.dataTable thead .sorting_desc:after {
+    top: 2.5rem !important;
+}
+
+@media (max-width: 767px) {
+    .header-navbar .navbar-container ul.navbar-nav li > a.nav-link {
+        padding: 0 5px !important;
+    }
+}
+@media (min-width: 1100px) {
+    .vertical-layout.vertical-menu-modern.menu-collapsed
+        .header-navbar.floating-nav {
+        width: calc(100vw - (100vw - 100%) - 4.4rem - 5rem) !important;
+    }
+
+    .header-navbar.floating-nav {
+        margin-left: 2rem;
+        margin-right: 2rem;
+        max-width: 100%;
+    }
+
+    .container,
+    .container-lg,
+    .container-md,
+    .container-sm,
+    .container-xl,
+    .container-xxl {
+        max-width: 100% !important;
+    }
+    html .content.app-content {
+        padding: calc(2rem + 4.45rem + 1.3rem) 2rem 0 !important;
+    }
+
+    .header-navbar.floating-nav {
+        width: calc(100vw - (100vw - 100%) - calc(2rem * 2) - 260px) !important;
+    }
+    footer.footer {
+        padding: 0.8rem 2rem !important;
+    }
+}
+
+
+.custom_y_arrow{
+    width: 18px;
+    height: auto;
+}
+
+.bi-clipboard-data{
+    font-size: 0.45rem !important;
+}
+.bi::before, [class^="bi-"]::before, [class*=" bi-"]::before {
+    font-size: 1.4rem;
+}

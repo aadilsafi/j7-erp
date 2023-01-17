@@ -13,12 +13,15 @@ use App\Services\DealerIncentive\DealerInterface;
 use Exception;
 use App\Services\CustomFields\CustomFieldInterface;
 use App\Services\FinancialTransactions\FinancialTransactionInterface;
+use Auth;
 use DB;
+use Redirect;
+use Validator;
 
 class DealerIncentiveController extends Controller
 {
 
-    private $dealerIncentiveInterface, $financialTransactionInterface;
+    private $dealerIncentiveInterface, $financialTransactionInterface, $customFieldInterface;
 
     public function __construct(DealerInterface $dealerIncentiveInterface, CustomFieldInterface $customFieldInterface, FinancialTransactionInterface $financialTransactionInterface)
     {
@@ -84,6 +87,18 @@ class DealerIncentiveController extends Controller
     public function store(Request $request, $site_id)
     {
         try {
+
+            $validator = Validator::make($request->all(), [
+                'doc_number' => ['required', 'unique:dealer_incentive_models,doc_no'],
+
+            ], [
+                "doc_number.required" => "Document number is  Required.",
+                "doc_number.unique" => "Document number is already taken.",
+            ]);
+
+            if ($validator->fails()) {
+                return Redirect::back()->withErrors($validator);
+            }
 
             if (!request()->ajax()) {
                 $inputs = $request->all();
@@ -154,7 +169,7 @@ class DealerIncentiveController extends Controller
         // }
 
         $rebate_units = RebateIncentiveModel::with('unit')->where('dealer_id', $request->dealer_id)
-            ->where('is_for_dealer_incentive', true)->distinct()->get();
+            ->where(['is_for_dealer_incentive'=>true , 'status'=>true])->distinct()->get();
         $units = [];
 
         if ($rebate_units) {
@@ -200,6 +215,8 @@ class DealerIncentiveController extends Controller
 
             $dealer_incentive = DealerIncentiveModel::find(decryptParams($dealer_incentive_id));
             $dealer_incentive->status = 1;
+            $dealer_incentive->approved_by = Auth::user()->id;
+            $dealer_incentive->approved_date = now();
             $dealer_incentive->update();
 
         });

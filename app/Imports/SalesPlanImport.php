@@ -28,6 +28,7 @@ class SalesPlanImport implements ToModel, WithChunkReading, WithBatchInserts, Wi
     {
 
         return new TempSalePlan([
+            'doc_no' => $row['doc_no'],
             'unit_short_label' => $row['unit_short_label'],
             'stakeholder_cnic' => $row['stakeholder_cnic'],
             'unit_price' => $row['unit_price'],
@@ -37,10 +38,13 @@ class SalesPlanImport implements ToModel, WithChunkReading, WithBatchInserts, Wi
             'down_payment_percentage' => $row['down_payment_percentage'],
             'down_payment_total' => $row['down_payment_total'],
             'lead_source' => $row['lead_source'],
-            'validity' => Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['validity']))->format('Y-m-d'),
+            'validity' => Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['validity']))->format('Y-m-d 00:00:00'),
+            'created_date' => Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['creation_date']))->format('Y-m-d 00:00:00') ?? null,
             'status' => 'approved',
+            'user_email' => $row['user_email'],
             'comment' => $row['comment'],
-            'approved_date' => strtolower($row['approved_date']) != 'null' ? Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['approved_date']))->format('Y-m-d') : null,
+            'approve_by_user_email' => $row['approve_by_user_email'],
+            'approved_date' => strtolower($row['approved_date']) != 'null' ? Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['approved_date']))->format('Y-m-d 00:00:00') : null,
         ]);
     }
 
@@ -58,6 +62,8 @@ class SalesPlanImport implements ToModel, WithChunkReading, WithBatchInserts, Wi
     public function rules(): array
     {
         return [
+            'user_email' => ['required', 'exists:users,email'],
+            'doc_no' =>  ['required', 'unique:App\Models\SalesPlan,doc_no', 'distinct'],
             'unit_short_label' =>  ['required', 'exists:App\Models\Unit,floor_unit_number'],
             'stakeholder_cnic' =>  ['required', 'exists:App\Models\Stakeholder,cnic'],
             'unit_price' =>  ['required', 'numeric', 'gt:0'],
@@ -66,8 +72,8 @@ class SalesPlanImport implements ToModel, WithChunkReading, WithBatchInserts, Wi
             'down_payment_percentage' =>  ['required'],
             'lead_source' =>  ['required'],
             'validity' =>  ['required'],
-            // 'status' =>  ['required'],
-            'approved_date' =>  ['sometimes', 'nullable'],
+            'approved_date' =>  ['required'],
+            'approve_by_user_email' =>  ['required', 'exists:App\Models\User,email'],
         ];
     }
 

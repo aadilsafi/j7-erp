@@ -11,6 +11,11 @@ class City extends Model
 {
     use HasFactory, LogsActivity;
 
+    protected $fillable = [
+        'name',
+        'country_id',
+        'state_id'
+    ];
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()->useLogName(get_class($this))->logFillable()->logOnlyDirty()->dontSubmitEmptyLogs();

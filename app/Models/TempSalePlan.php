@@ -11,6 +11,7 @@ class TempSalePlan extends Model
 
     protected $fillable = [
         'unit_short_label',
+        'doc_no',
         'stakeholder_cnic',
         'unit_price',
         'total_price',
@@ -22,6 +23,9 @@ class TempSalePlan extends Model
         'validity',
         'status',
         'comment',
-        'approved_date'
+        'created_date',
+        'approved_date',
+        'user_email',
+        'approve_by_user_email',
     ];
 }

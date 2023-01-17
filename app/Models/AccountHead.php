@@ -27,6 +27,8 @@ class AccountHead extends Model
         'closing_balance_date',
         'status',
         'show_in_vouchers',
+        'credit_entry',
+        'debit_entry',
     ];
 
     protected $casts = [
@@ -41,7 +43,7 @@ class AccountHead extends Model
 
     public function accountLedgers()
     {
-        return $this->HasMany(AccountLedger::class);
+        return $this->HasMany(AccountLedger::class, 'account_head_code', 'code');
     }
     public function accountLedgersWithCreditAndDebit()
     {

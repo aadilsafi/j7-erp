@@ -5,8 +5,8 @@
             <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
                 <label class="form-label" style="font-size: 15px" for="stakeholder_as">Stakeholder As
                     <span class="text-danger">*</span></label>
-                <select class="form-select form-select-lg" id="stakeholder_as" name="stakeholder_as">
-                    <option value="0" selected>Select Stakeholder As</option>
+                <select required class="form-select form-select-lg" id="stakeholder_as" name="stakeholder_as">
+                    <option value="" selected>Select Stakeholder As</option>
                     <option value="i" {{ old('stakeholder_as') == 'i' ? 'selected' : '' }}>Individual</option>
                     <option value="c" {{ old('stakeholder_as') == 'c' ? 'selected' : '' }}>Company</option>
                 </select>
@@ -51,7 +51,8 @@
                                                 id="stakeholder_type_{{ $type->type }}"
                                                 onchange="performAction('{{ $type->type }}')"
                                                 name="stakeholder_type[{{ $type->type }}]" value="1"
-                                                {{ $type->status ? 'checked' : null }} {{$type->status ? 'disabled' : null}}/>
+                                                {{ $type->status ? 'checked' : null }}
+                                                {{ $type->status ? 'disabled' : null }} />
                                             <label class="form-check-label" for="stakeholder_type_{{ $type->type }}">
                                                 <span class="switch-icon-left"><i data-feather="check"></i></span>
                                                 <span class="switch-icon-right"><i data-feather="x"></i></span>
@@ -94,7 +95,7 @@
             </div>
             <div class="col-lg-6 col-md-6 position-relative">
                 <label class="form-label fs-5" for="registration">Registration # <span
-                        class="text-danger">*</span></label>
+                        class="text-danger showRequired">*</span></label>
                 <input type="text"
                     class="cp_cnic form-control form-control-md @error('registration') is-invalid @enderror"
                     id="registration" name="company[registration]" placeholder="Registration Number"
@@ -107,7 +108,8 @@
 
         <div class="row mb-1">
             <div class="col-lg-6 col-md-6 position-relative">
-                <label class="form-label fs-5" for="industry">Industry <span class="text-danger">*</span></label>
+                <label class="form-label fs-5" for="industry">Industry <span
+                        class="text-danger showRequired">*</span></label>
                 <input type="text" class="form-control form-control-md @error('industry') is-invalid @enderror"
                     id="industry" name="company[industry]" placeholder="Industry"
                     value="{{ isset($stakeholder) ? $stakeholder->industry : old('company.industry') }}" />
@@ -116,11 +118,11 @@
                 @enderror
             </div>
             <div class="col-lg-6 col-md-6 position-relative">
-                <label class="form-label fs-5" for="strn">Origin </label>
+                <label class="form-label fs-5" for="strn">Origin</label>
                 <select class="select2" id="origin" name="company[origin]">
                     <option value="0" selected>Select Company Origin</option>
                     @foreach ($country as $countryRow)
-                        <option @if ((isset($stakeholder) && $stakeholder->origin) || old('company.origin') == $countryRow->id) selected @endif value="{{ $countryRow->id }}">
+                        <option @if ((isset($stakeholder) && $stakeholder->origin) ?  $stakeholder->origin : old('company.origin') == $countryRow->id) selected @endif value="{{ $countryRow->id }}">
                             {{ $countryRow->name }}</option>
                     @endforeach
                 </select>
@@ -132,7 +134,8 @@
 
         <div class="row mb-1">
             <div class="col-lg-6 col-md-6 position-relative">
-                <label class="form-label fs-5" for="company_ntn">NTN <span class="text-danger">*</span></label>
+                <label class="form-label fs-5" for="company_ntn">NTN <span
+                        class="text-danger showRequired">*</span></label>
                 <input type="text" class="form-control form-control-md @error('company_ntn') is-invalid @enderror"
                     id="company_ntn" name="company[company_ntn]" placeholder="NTN"
                     value="{{ isset($stakeholder) ? $stakeholder->ntn : old('company.company_ntn') }}" />
@@ -141,7 +144,8 @@
                 @enderror
             </div>
             <div class="col-lg-6 col-md-6 position-relative">
-                <label class="form-label fs-5" for="strn">STRN <span class="text-danger">*</span></label>
+                <label class="form-label fs-5" for="strn">STRN <span
+                        class="text-danger showRequired">*</span></label>
                 <input type="number" class="form-control form-control-md @error('strn') is-invalid @enderror"
                     id="strn" name="company[strn]" placeholder="STRN"
                     value="{{ isset($stakeholder) ? $stakeholder->strn : old('company.strn') }}" />
@@ -158,7 +162,7 @@
                 <input type="tel"
                     class="form-control form-control-md ContactNoError optional_contact @error('company_office_contact') is-invalid @enderror"
                     id="company_office_contact" name="company[company_office_contact]" placeholder=""
-                    value="{{ isset($stakeholder) ? $stakeholder->office_contact : old('company.company_office_contact') }}" />
+                    value="{{ isset($stakeholder) ? $stakeholder->office_contact : old('company.company_office_contact') }}" required />
                 @error('company.company_office_contact')
                     <div class="invalid-feedback ">{{ $message }}</div>
                 @enderror
@@ -256,7 +260,7 @@
 
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                 <label class="form-label fs-5" for="father_name">Father / Husband Name <span
-                        class="text-danger">*</span></label>
+                        class="text-danger showRequired">*</span></label>
                 <input type="text" class="form-control form-control-md @error('father_name') is-invalid @enderror"
                     id="father_name" name="individual[father_name]" placeholder="Father / Husband Name"
                     value="{{ isset($stakeholder) ? $stakeholder->father_name : old('individual.father_name') }}" />
@@ -265,7 +269,8 @@
                 @enderror
             </div>
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                <label class="form-label fs-5" for="occupation">Occupation <span class="text-danger">*</span></label>
+                <label class="form-label fs-5" for="occupation">Occupation <span
+                        class="text-danger showRequired">*</span></label>
                 <input type="text" class="form-control form-control-md @error('occupation') is-invalid @enderror"
                     id="occupation" name="individual[occupation]" placeholder="Occupation"
                     value="{{ isset($stakeholder) ? $stakeholder->occupation : old('individual.occupation') }}" />
@@ -276,7 +281,8 @@
         </div>
         <div class="row mb-1">
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                <label class="form-label fs-5" for="cnic">CNIC<span class="text-danger">*</span></label>
+                <label class="form-label fs-5" for="cnic">CNIC<span
+                        class="text-danger showRequired">*</span></label>
                 <input type="text"
                     class="cp_cnic form-control form-control-md @error('cnic') is-invalid @enderror" id="cnic"
                     name="individual[cnic]" placeholder="CNIC Without Dashes"
@@ -354,7 +360,8 @@
                     value="{{ old('mobileContactCountryDetails') }}">
             </div>
             <div class="col-lg-4 col-md-4 col-sm-4">
-                <label class="form-label fs-5" for="office_contact">Office Contact</label>
+                 <label class="form-label fs-5" for="office_contact">Office Contact <span
+                        class="text-danger"></span></label>
                 <input type="tel"
                     class="form-control form-control-md OPTContactNoError optional_contact @error('office_contact') is-invalid @enderror"
                     id="office_contact" name="individual[office_contact]" placeholder=""
@@ -367,7 +374,7 @@
                 value="{{ old('OfficeContactCountryDetails') }}">
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                 <label class="form-label fs-5" for="dob">Date of Birth <span
-                        class="text-danger">*</span></label>
+                        class="text-danger showRequired">*</span></label>
                 <input id="dob" type="date" required placeholder="YYYY-MM-DD" name="individual[dob]"
                     class="form-control form-control-md"
                     value="{{ isset($stakeholder) ? $stakeholder->date_of_birth : old('individual.dob') }}" />
@@ -403,7 +410,7 @@
             <div class="col-1 col-md-1 col-lg-1 position-relative">
                 <div class="d-flex flex-column">
                     <label class="form-check-label mb-1" for="is_local"> Local<span
-                            class="text-danger">*</span></label>
+                            class="text-danger showRequired">*</span></label>
                     <div class="form-check form-switch form-check-primary">
                         <input type="checkbox" class="form-check-input" id="is_local" name="individual[is_local]"
                             value="1"
@@ -425,7 +432,7 @@
             </div>
             <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
                 <label class="form-label fs-5" for="nationality">Nationality <span
-                        class="text-danger">*</span></label>
+                        class="text-danger showRequired">*</span></label>
                 <select class="select2" id="nationality" name="individual[nationality]">
                     <option value="0" selected>Select Nationality</option>
                     @foreach ($country as $countryRow)
@@ -460,7 +467,7 @@
                 <div class="row">
                     <div class="col-lg-12 col-md-12 col-sm-12 position-relative mb-1">
                         <label class="form-label" style="font-size: 15px" for="residential_address_type">Address
-                            Type <span class="text-danger">*</span></label>
+                            Type <span class="text-danger showRequired">*</span></label>
                         <input type="text"
                             class="form-control form-control-md @error('occupation') is-invalid @enderror"
                             id="residential_address_type" name="residential[address_type]" placeholder="Address Type"
@@ -471,13 +478,11 @@
                     </div>
                     <div class="col-lg-12 col-md-12 col-sm-12 position-relative mb-1">
                         <label class="form-label" style="font-size: 15px" for="residential_country">Select
-                            Country <span class="text-danger">*</span></label>
+                            Country <span class="text-danger showRequired">*</span></label>
                         <select class="select2" id="residential_country" name="residential[country]">
                             <option value="0" selected>Select Country</option>
                             @foreach ($country as $countryRow)
-                                <option @if ((isset($stakeholder) && $stakeholder->residential_country_id) ||
-                                    old('residential_country') == $countryRow->id) selected @endif
-                                    value="{{ $countryRow->id }}">
+                                <option @if ((isset($stakeholder) && $stakeholder->residential_country_id) == $countryRow->id) selected @endif                                    value="{{ $countryRow->id }}">
                                     {{ $countryRow->name }}</option>
                             @endforeach
                         </select>
@@ -488,7 +493,7 @@
 
                     <div class="col-lg-12 col-md-12 col-sm-12 position-relative mb-1">
                         <label class="form-label" style="font-size: 15px" for="residential_state">Select
-                            State <span class="text-danger">*</span></label>
+                            State <span class="text-danger showRequired">*</span></label>
                         <select class="select2" id="residential_state" name="residential[state]">
                             <option value="0" selected>Select State</option>
 
@@ -500,7 +505,7 @@
 
                     <div class="col-lg-12 col-md-12 col-sm-12 position-relative mb-1">
                         <label class="form-label" style="font-size: 15px" for="residential_city">Select City <span
-                                class="text-danger">*</span></label>
+                                class="text-danger showRequired">*</span></label>
                         <select class="select2" id="residential_city" name="residential[city]">
                             <option value="0" selected>Select City</option>
                         </select>
@@ -510,7 +515,7 @@
                     </div>
                     <div class="col-lg-12 col-md-12 col-sm-12 position-relative mb-1">
                         <label class="form-label" style="font-size: 15px" for="residential_postal_code">Postal Code
-                            <span class="text-danger">*</span>
+                            <span class="text-danger showRequired">*</span>
                         </label>
                         <input type="number"
                             class="form-control form-control-md @error('residential_postal_code') is-invalid @enderror"
@@ -522,7 +527,7 @@
                     </div>
                     <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
                         <label class="form-label fs-5" for="residential_address">Address <span
-                                class="text-danger">*</span></label>
+                                class="text-danger showRequired">*</span></label>
                         <textarea class="form-control @error('residential_address') is-invalid @enderror" name="residential[address]"
                             id="residential_address" rows="3" placeholder="Address">{{ isset($stakeholder) ? $stakeholder->residential_address : old('residential_address') }}</textarea>
                         @error('residential.address')
@@ -540,7 +545,7 @@
                 <div class="row">
                     <div class="col-lg-12 col-md-12 col-sm-12 position-relative mb-1">
                         <label class="form-label" style="font-size: 15px" for="mailing_address_type">Address
-                            Type <span class="text-danger">*</span></label>
+                            Type <span class="text-danger showRequired">*</span></label>
                         <input type="text"
                             class="form-control form-control-md @error('occupation') is-invalid @enderror"
                             id="mailing_address_type" name="mailing[address_type]" placeholder="Address Type"
@@ -551,7 +556,7 @@
                     </div>
                     <div class="col-lg-12 col-md-12 col-sm-12 position-relative mb-1">
                         <label class="form-label" style="font-size: 15px" for="mailing_country">Select
-                            Country <span class="text-danger">*</span></label>
+                            Country <span class="text-danger showRequired">*</span></label>
                         <select class="select2" id="mailing_country" name="mailing[country]">
                             <option value="0" selected>Select Country</option>
                             @foreach ($country as $countryRow)
@@ -567,7 +572,7 @@
 
                     <div class="col-lg-12 col-md-12 col-sm-12 position-relative mb-1">
                         <label class="form-label" style="font-size: 15px" for="mailing_state">Select State <span
-                                class="text-danger">*</span></label>
+                                class="text-danger showRequired">*</span></label>
                         <select class="select2" id="mailing_state" name="mailing[state]">
                             <option value="0" selected>Select State</option>
                         </select>
@@ -578,7 +583,7 @@
 
                     <div class="col-lg-12 col-md-12 col-sm-12 position-relative mb-1">
                         <label class="form-label" style="font-size: 15px" for="mailing_city">Select City <span
-                                class="text-danger">*</span></label>
+                                class="text-danger showRequired">*</span></label>
                         <select class="select2" id="mailing_city" name="mailing[city]">
                             <option value="0" selected>Select City</option>
                         </select>
@@ -588,7 +593,7 @@
                     </div>
                     <div class="col-lg-12 col-md-12 col-sm-12 position-relative mb-1">
                         <label class="form-label" style="font-size: 15px" for="mailing_postal_code">Postal Code <span
-                                class="text-danger">*</span>
+                                class="text-danger showRequired">*</span>
                         </label>
                         <input type="number"
                             class="form-control form-control-md @error('mailing_postal_code') is-invalid @enderror"
@@ -600,7 +605,7 @@
                     </div>
                     <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
                         <label class="form-label fs-5" for="mailing_address">Address <span
-                                class="text-danger">*</span></label>
+                                class="text-danger showRequired">*</span></label>
                         <textarea class="form-control @error('mailing_address') is-invalid @enderror" name="mailing[address]"
                             id="mailing_address" rows="3" placeholder="Address">{{ isset($stakeholder) ? $stakeholder->mailing_address : old('mailing_address') }}</textarea>
                         @error('mailing.address')

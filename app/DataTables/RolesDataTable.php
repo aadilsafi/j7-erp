@@ -63,6 +63,7 @@ class RolesDataTable extends DataTable
         $selectedDeletePermission =  Auth::user()->hasPermissionTo('roles.destroy-selected');
         return $this->builder()
             ->setTableId('roles-table')
+            ->addTableClass(['table-hover'])
             ->columns($this->getColumns())
             ->minifiedAjax()
             ->scrollX()
@@ -75,7 +76,7 @@ class RolesDataTable extends DataTable
             ->lengthMenu([10, 20, 30, 50, 70, 100])
             ->dom('<"card-header pt-0"<"head-label"><"dt-action-buttons text-end"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>> C<"clear">')
             ->buttons(
-                Button::make('export')->addClass('btn btn-relief-outline-secondary waves-effect waves-float waves-light dropdown-toggle')->buttons([
+                Button::make('export')->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light dropdown-toggle')->buttons([
                     Button::make('print')->addClass('dropdown-item'),
                     Button::make('copy')->addClass('dropdown-item'),
                     Button::make('csv')->addClass('dropdown-item'),
@@ -118,8 +119,8 @@ class RolesDataTable extends DataTable
                 ],
             ])
             ->orders([
-                [4, 'asc'],
-                [4, 'desc'],
+                [2, 'asc'],
+
             ]);
     }
 

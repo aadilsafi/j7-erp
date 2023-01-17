@@ -132,7 +132,7 @@ html .navbar-floating.footer-static .app-content .kanban-wrapper {
 }
 
 @media (max-width: 575.98px) {
-    
+
     html .navbar-floating.footer-static .app-content .content-area-wrapper,
     html .navbar-floating.footer-static .app-content .kanban-wrapper {
         height: calc(100vh - calc(calc(calc(2rem * 1) - calc(.8rem * 1)) + 4.45rem + 3.35rem + 1.3rem + 0rem));
@@ -147,7 +147,7 @@ html .navbar-floating.footer-hidden .app-content .kanban-wrapper {
 }
 
 @media (max-width: 575.98px) {
-    
+
     html .navbar-floating.footer-hidden .app-content .content-area-wrapper,
     html .navbar-floating.footer-hidden .app-content .kanban-wrapper {
         height: calc(100vh - calc(calc(calc(2rem * 2) - calc(.8rem * 2)) + 4.45rem + 0rem + 1.3rem + 0rem));
@@ -162,7 +162,7 @@ html .navbar-floating.footer-fixed .app-content .kanban-wrapper {
 }
 
 @media (max-width: 575.98px) {
-    
+
     html .navbar-floating.footer-fixed .app-content .content-area-wrapper,
     html .navbar-floating.footer-fixed .app-content .kanban-wrapper {
         height: calc(100vh - calc(calc(calc(2rem * 2) - calc(.8rem * 2)) + 4.45rem + 3.35rem + 1.3rem + 0rem));
@@ -181,7 +181,7 @@ html .navbar-hidden.footer-static .app-content .kanban-wrapper {
 }
 
 @media (max-width: 575.98px) {
-    
+
     html .navbar-hidden.footer-static .app-content .content-area-wrapper,
     html .navbar-hidden.footer-static .app-content .kanban-wrapper {
         height: calc(100vh - calc(calc(calc(2rem * 1) - calc(.8rem * 1)) + 0rem + 3.35rem + 0rem + 0rem));
@@ -196,7 +196,7 @@ html .navbar-hidden.footer-hidden .app-content .kanban-wrapper {
 }
 
 @media (max-width: 575.98px) {
-    
+
     html .navbar-hidden.footer-hidden .app-content .content-area-wrapper,
     html .navbar-hidden.footer-hidden .app-content .kanban-wrapper {
         height: calc(100vh - calc(calc(calc(2rem * 2) - calc(.8rem * 2)) + 0rem + 0rem + 0rem + 0rem));
@@ -211,7 +211,7 @@ html .navbar-hidden.footer-fixed .app-content .kanban-wrapper {
 }
 
 @media (max-width: 575.98px) {
-    
+
     html .navbar-hidden.footer-fixed .app-content .content-area-wrapper,
     html .navbar-hidden.footer-fixed .app-content .kanban-wrapper {
         height: calc(100vh - calc(calc(calc(2rem * 2) - calc(.8rem * 2)) + 0rem + 3.35rem + 0rem + 0rem));
@@ -238,7 +238,7 @@ html .navbar-static.footer-static .app-content .kanban-wrapper {
 }
 
 @media (max-width: 575.98px) {
-    
+
     html .navbar-static.footer-static .app-content .content-area-wrapper,
     html .navbar-static.footer-static .app-content .kanban-wrapper {
         height: calc(100vh - calc(calc(calc(2rem * 1) - calc(.8rem * 1)) + 4.45rem + 3.35rem + 0rem + 0rem));
@@ -253,7 +253,7 @@ html .navbar-static.footer-hidden .app-content .kanban-wrapper {
 }
 
 @media (max-width: 575.98px) {
-    
+
     html .navbar-static.footer-hidden .app-content .content-area-wrapper,
     html .navbar-static.footer-hidden .app-content .kanban-wrapper {
         height: calc(100vh - calc(calc(calc(2rem * 2) - calc(.8rem * 2)) + 4.45rem + 0rem + 0rem + 0rem));
@@ -268,7 +268,7 @@ html .navbar-static.footer-fixed .app-content .kanban-wrapper {
 }
 
 @media (max-width: 575.98px) {
-    
+
     html .navbar-static.footer-fixed .app-content .content-area-wrapper,
     html .navbar-static.footer-fixed .app-content .kanban-wrapper {
         height: calc(100vh - calc(calc(calc(2rem * 2) - calc(.8rem * 2)) + 4.45rem + 3.35rem + 0rem + 0rem));
@@ -287,7 +287,7 @@ html .navbar-sticky.footer-static .app-content .kanban-wrapper {
 }
 
 @media (max-width: 575.98px) {
-    
+
     html .navbar-sticky.footer-static .app-content .content-area-wrapper,
     html .navbar-sticky.footer-static .app-content .kanban-wrapper {
         height: calc(100vh - calc(calc(calc(2rem * 1) - calc(.8rem * 1)) + 4.45rem + 3.35rem + 0rem + 0rem));
@@ -302,7 +302,7 @@ html .navbar-sticky.footer-hidden .app-content .kanban-wrapper {
 }
 
 @media (max-width: 575.98px) {
-    
+
     html .navbar-sticky.footer-hidden .app-content .content-area-wrapper,
     html .navbar-sticky.footer-hidden .app-content .kanban-wrapper {
         height: calc(100vh - calc(calc(calc(2rem * 2) - calc(.8rem * 2)) + 4.45rem + 0rem + 0rem + 0rem));
@@ -317,7 +317,7 @@ html .navbar-sticky.footer-fixed .app-content .kanban-wrapper {
 }
 
 @media (max-width: 575.98px) {
-    
+
     html .navbar-sticky.footer-fixed .app-content .content-area-wrapper,
     html .navbar-sticky.footer-fixed .app-content .kanban-wrapper {
         height: calc(100vh - calc(calc(calc(2rem * 2) - calc(.8rem * 2)) + 4.45rem + 3.35rem + 0rem + 0rem));
@@ -410,49 +410,49 @@ html .pace .pace-progress {
 }
 
 @media (min-width: 992px) {
-    
+
     body .content-left,
     body .content-right {
         width: calc(100vw - (100vw - 100%) - 260px)
     }
-    
+
     body .content-right {
         float: right
     }
-    
+
     body .content-left {
         float: left
     }
-    
+
     body .content-detached {
         width: 100%
     }
-    
+
     body .content-detached.content-right {
         float: right;
         margin-left: -260px
     }
-    
+
     body .content-detached.content-right .content-body {
         margin-left: calc(260px + 2rem)
     }
-    
+
     body .content-detached.content-left {
         float: left;
         margin-right: -260px
     }
-    
+
     body .content-detached.content-left .content-body {
         margin-right: calc(260px + 2rem)
     }
-    
+
     .sidebar-right.sidebar-sticky {
         float: right !important;
         margin-left: -260px;
         width: 260px !important;
         margin-top: 5.7rem
     }
-    
+
     .sidebar {
         vertical-align: top
     }
@@ -462,19 +462,19 @@ html .pace .pace-progress {
     html body .app-content {
         padding: calc(2rem - .8rem + 4.45rem + 1.3rem) calc(2rem - .8rem) 0 !important
     }
-    
+
     html body.navbar-static .app-content {
         padding: calc(2rem - .8rem) calc(2rem - .8rem) 0 !important
     }
-    
+
     html body.navbar-sticky .app-content {
         padding: calc(2rem - .8rem + 4.45rem) calc(2rem - .8rem) 0 !important
     }
-    
+
     html body.navbar-hidden .app-content {
         padding: calc(2rem - .8rem) calc(2rem - .8rem) 0 !important
     }
-    
+
     .navbar-static .app-content .header-navbar .navbar-container,
     .navbar-sticky .app-content .header-navbar .navbar-container {
         padding-left: 1rem;
@@ -487,7 +487,7 @@ html .pace .pace-progress {
     html.full-screen {
         width: 100%
     }
-    
+
     html.full-screen .content.app-content {
         height: 100%;
         overflow: scroll;
@@ -546,7 +546,7 @@ html .pace .pace-progress {
     .sidebar-left {
         float: left
     }
-    
+
     .sidebar-right {
         float: right
     }
@@ -675,7 +675,8 @@ footer.footer-border {
     -webkit-transition: -webkit-transform .25s ease;
     transition: -webkit-transform .25s ease;
     transition: transform .25s ease;
-    transition: transform .25s ease, -webkit-transform .25s ease
+    transition: transform .25s ease, -webkit-transform .25s ease;
+
 }
 
 .main-menu.menu-light .navigation li.nav-item a:hover > *,
@@ -1139,7 +1140,7 @@ footer.footer-border {
 }
 
 @media (max-width: 767.98px) {
-    
+
     .menu-hide .main-menu,
     .menu-open .main-menu {
         -webkit-transition: top .35s, height .35s, -webkit-transform .25s;
@@ -1147,7 +1148,7 @@ footer.footer-border {
         transition: transform .25s, top .35s, height .35s;
         transition: transform .25s, top .35s, height .35s, -webkit-transform .25s
     }
-    
+
     .main-menu {
         -webkit-transform: translate3d(-240px, 0, 0);
         transform: translate3d(-240px, 0, 0);
@@ -1156,7 +1157,7 @@ footer.footer-border {
         -webkit-perspective: 1000;
         perspective: 1000
     }
-    
+
     .menu-open .main-menu {
         -webkit-transform: translate3d(0, 0, 0);
         transform: translate3d(0, 0, 0)
@@ -3303,7 +3304,7 @@ footer.footer-border {
     head {
         font-family: 'xs 0px'
     }
-    
+
     body:after {
         content: 'xs - min-width: 0px'
     }
@@ -3313,7 +3314,7 @@ footer.footer-border {
     head {
         font-family: 'sm 544px'
     }
-    
+
     body:after {
         content: 'sm - min-width: 544px'
     }
@@ -3323,7 +3324,7 @@ footer.footer-border {
     head {
         font-family: 'md 768px'
     }
-    
+
     body:after {
         content: 'md - min-width: 768px'
     }
@@ -3333,7 +3334,7 @@ footer.footer-border {
     head {
         font-family: 'lg 992px'
     }
-    
+
     body:after {
         content: 'lg - min-width: 992px'
     }
@@ -3343,7 +3344,7 @@ footer.footer-border {
     head {
         font-family: 'xl 1200px'
     }
-    
+
     body:after {
         content: 'xl - min-width: 1200px'
     }
@@ -3835,11 +3836,11 @@ tr.group {
         -ms-flex-pack: center;
         justify-content: center
     }
-    
+
     div.dataTables_wrapper div.dataTables_info {
         white-space: inherit
     }
-    
+
     div.dt-buttons {
         -webkit-box-pack: center;
         -webkit-justify-content: center;
@@ -3847,32 +3848,32 @@ tr.group {
         justify-content: center;
         margin-top: 1rem
     }
-    
+
     div.dt-buttons button {
         margin-bottom: .5rem
     }
 }
 
 @media (max-width: 575.98px) {
-    
+
     .dtr-bs-modal .modal-body,
     .dtr-bs-modal .table.dtr-details td {
         padding-left: 0;
         padding-right: 0
     }
-    
+
     .dtr-bs-modal .modal-body {
         overflow-x: scroll
     }
-    
+
     .dtr-bs-modal .table.dtr-details {
         margin: 0 auto 1rem
     }
-    
+
     .dtr-bs-modal .table.dtr-details tr td:first-child {
         padding-left: .75rem
     }
-    
+
     div.dataTables_wrapper {
         overflow: scroll
     }

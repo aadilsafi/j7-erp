@@ -22,10 +22,25 @@ class BacklistedStakeholder extends Model
         'cnic',
         'province',
         'district',
+        'country_id',
+        'state_id',
+        'city_id'
     ];
 
     public function CustomFieldValues()
     {
         return $this->morphMany(CustomFieldValue::class, 'modelable');
     }
+
+    public function state()
+    {
+        return $this->belongsTo(State::class);
+    }
+
+     public function city()
+    {
+        return $this->belongsTo(City::class);
+    }
+
+
 }

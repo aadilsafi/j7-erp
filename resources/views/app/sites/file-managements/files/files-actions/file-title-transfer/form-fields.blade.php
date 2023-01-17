@@ -11,8 +11,8 @@
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                         <label class="form-label fs-5" for="amount_to_be_refunded">Transfer Charges <span
                                 class="text-danger">*</span></label>
-                        <input type="text"  onchange="calculateTransferAmount()" required
-                            name="transfer_rate" class="form-control amountFormat form-control-lg"
+                        <input type="text" onchange="calculateTransferAmount()" required name="transfer_rate"
+                            class="form-control amountFormat form-control-lg"
                             {{ isset($transfer_file) ? 'disabled' : '' }} id="transfer_rate"
                             placeholder="Transfer Charges"
                             value="{{ isset($transfer_file) ? number_format($transfer_file->transfer_rate) : '' }}" />
@@ -85,7 +85,8 @@
                                     <div class="col-lg-12 col-md-12 col-sm-12 position-relative mt-1">
                                         <label class="form-label fs-5" for="type_name">Attachment</label>
                                         <input id="attachment" type="file" class="filepond attachment" disabled
-                                            name="attachment[image]" accept="image/png, image/jpeg, image/gif" />
+                                            name="attachment[image]"
+                                            accept="image/png, image/jpeg, image/gif,application/pdf" />
                                     </div>
                                 </div>
                             </div>
@@ -114,7 +115,7 @@
                                                     <input id="attachment" type="file"
                                                         class="filepond attachment @error('image') is-invalid @enderror"
                                                         name="attachment[image]"
-                                                        accept="image/png, image/jpeg, image/gif" />
+                                                        accept="image/png, image/jpeg, image/gif,application/pdf" />
                                                     @error('image')
                                                         <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror
@@ -222,109 +223,25 @@
             </div>
 
             <div class="card-body">
-                {{-- @dd($customer) --}}
-                <div class="row mb-1">
-                    <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
-                        <label class="form-label fs-5" for="stackholder_full_name">Full Name</label>
-                        <input type="text" readonly value="{{ $customer->full_name }}"
-                            class="form-control form-control-lg" id="" placeholder="Full Name" />
-                    </div>
-
-                    <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
-                        <label class="form-label fs-5" for="stackholder_father_name">Father / Husband Name</label>
-                        <input type="text" readonly value="{{ $customer->father_name }}"
-                            class="form-control form-control-lg" id=""
-                            placeholder="Father / Husband Name" />
-                    </div>
-
-                    <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
-                        <label class="form-label fs-5" for="stackholder_occupation">Occupation</label>
-                        <input type="text" readonly value="{{ $customer->occupation }}"
-                            class="form-control form-control-lg" id="" placeholder="Occupation" />
-                    </div>
-
-                    <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
-                        <label class="form-label fs-5" for="stackholder_designation">Designation</label>
-                        <input type="text" readonly value="{{ $customer->designation }}"
-                            class="form-control form-control-lg" id="" placeholder="Designation" />
-                    </div>
-                </div>
-
-                <div class="row mb-1">
-
-                    <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
-                        <label class="form-label fs-5">NTN</label>
-                        <input type="number" readonly value="{{ $customer->ntn }}"
-                            class="form-control form-control-lg" placeholder="NTN" />
-                    </div>
-
-                    <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
-                        <label class="form-label fs-5">CNIC</label>
-                        <input type="text" readonly value="{{ cnicFormat($customer->cnic) }}"
-                            class="form-control form-control-lg" placeholder="CNIC" />
-                    </div>
-
-                    <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
-                        <label class="form-label fs-5">Mobile Contact</label>
-                        <input type="text" readonly value="{{ $customer->mobile_contact }}"
-                            class="form-control form-control-lg" id="" placeholder="Contact" />
-                    </div>
-
-                    <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
-                        <label class="form-label fs-5">Office Contact</label>
-                        <input type="text" readonly value="{{ $customer->office_contact }}"
-                            class="form-control form-control-lg" placeholder="Optional Contact" />
-                    </div>
-                </div>
-
-                <div class="row mb-1">
-                    <div class="col-lg-6 col-md-6 position-relative">
-                        <label class="form-label fs-5" for="email">Email <span
-                                class="text-danger">*</span></label>
-                        <input type="email"
-                            class="form-control form-control-lg @error('email') is-invalid @enderror" name="email"
-                            placeholder="Email" autocomplete="false" readonly
-                            value="{{ isset($customer) ? $customer->email : old('email') }}" />
-                        @error('email')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    <div class="col-lg-6 col-md-6 position-relative">
-                        <label class="form-label fs-5" for="optional_email">Office Email</label>
-                        <input type="email"
-                            class="form-control form-control-lg @error('email') is-invalid @enderror"
-                            name="optional_email" placeholder="Optional Email" autocomplete="false" readonly
-                            value="{{ isset($customer) ? $customer->office_email : old('email') }}" />
-                        @error('email')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                </div>
-                <div class="row mb-1">
-                    <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
-                        <label class="form-label fs-5" for="stackholder_address">Address</label>
-                        <textarea class="form-control  form-control-lg" readonly id="" name="" placeholder="Address"
-                            rows="4">{{ $customer->residential_address }}</textarea>
-                    </div>
-
-                    <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
-                        <label class="form-label fs-5" for="stackholder_address">Mailling Address</label>
-                        <textarea class="form-control  form-control-lg" readonly id="" name="" placeholder="Address"
-                            rows="4">{{ $customer->mailing_address }}</textarea>
-                    </div>
-                </div>
-                <div class="row mb-1">
-                    <div class="col-lg col-md col-sm-12 position-relative">
-                        <label class="form-label fs-5" for="stackholder_comments">Comments</label>
-                        <textarea class="form-control form-control-lg" readonly id="" name="" placeholder="Comments"
-                            rows="4">{{ $customer->comments }}</textarea>
-                    </div>
-
-                </div>
+                {{ view('app.sites.stakeholders.partials.stakeholder-preview-fields', ['stakeholder' => $customer, 'hideBorders' => true]) }}
             </div>
         </div>
     </div>
+    @if (isset($transfer_file))
+        <div id="transferownerInformation" class="col-lg-12 col-md-12 col-sm-12 position-relative">
+            <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;"
+                id="">
+                <input type="hidden" value="{{ $customer->id }}" name="customer_id">
+                <div class="card-header justify-content-between">
+                    <h3> Transfer Owner Informaton </h3>
+                </div>
+
+                <div class="card-body">
+                    {{ view('app.sites.stakeholders.partials.stakeholder-preview-fields', ['stakeholder' => $transfer_customer, 'hideBorders' => true]) }}
+                </div>
+            </div>
+        </div>
+    @endif
 
     <div id="unitData" class="col-lg-12 col-md-12 col-sm-12 position-relative">
         <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;"
@@ -364,20 +281,20 @@
 
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                         <label class="form-label fs-5" for="stackholder_occupation">Gross Area</label>
-                        <input type="text" readonly value="{{ number_format($unit->gross_area) }}"
+                        <input type="text" readonly value="{{ number_format($unit->gross_area, 2) }}"
                             class="form-control form-control-lg" id="stackholder_occupation" placeholder="Unit No" />
                     </div>
 
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                         <label class="form-label fs-5" for="stackholder_full_name">Price Per Sqft</label>
-                        <input type="text" readonly value="{{ number_format($salesPlan->unit_price) }}"
+                        <input type="text" readonly value="{{ number_format($salesPlan->unit_price, 2) }}"
                             class="form-control form-control-lg" id="stackholder_full_name"
                             placeholder="Unit Name" />
                     </div>
 
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                         <label class="form-label fs-5" for="stackholder_father_name">Total Price</label>
-                        <input type="text" readonly value="{{ number_format($salesPlan->total_price) }}"
+                        <input type="text" readonly value="{{ number_format($salesPlan->total_price, 2) }}"
                             class="form-control form-control-lg" id="stackholder_father_name"
                             placeholder="Unit Type" />
                     </div>
@@ -430,9 +347,9 @@
                                                         <td>{{ $intsallment->details }}</td>
                                                         <td>{{ \Carbon\Carbon::parse($intsallment->date)->format('F j, Y') }}
                                                         </td>
-                                                        <td>{{ number_format($intsallment->amount) }}</td>
-                                                        <td>{{ number_format($intsallment->paid_amount) }}</td>
-                                                        <td>{{ number_format($intsallment->remaining_amount) }}</td>
+                                                        <td>{{ number_format($intsallment->amount, 2) }}</td>
+                                                        <td>{{ number_format($intsallment->paid_amount, 2) }}</td>
+                                                        <td>{{ number_format($intsallment->remaining_amount, 2) }}</td>
                                                         <td>{{ Str::of($intsallment->status)->replace('_', ' ')->title() }}
                                                         </td>
                                                     </tr>
@@ -450,9 +367,9 @@
                                                         <td>{{ $intsallment->details }}</td>
                                                         <td>{{ \Carbon\Carbon::parse($intsallment->date)->format('F j, Y') }}
                                                         </td>
-                                                        <td>{{ number_format($intsallment->amount) }}</td>
-                                                        <td>{{ number_format($intsallment->paid_amount) }}</td>
-                                                        <td>{{ number_format($intsallment->remaining_amount) }}</td>
+                                                        <td>{{ number_format($intsallment->amount, 2) }}</td>
+                                                        <td>{{ number_format($intsallment->paid_amount, 2) }}</td>
+                                                        <td>{{ number_format($intsallment->remaining_amount, 2) }}</td>
                                                         <td>{{ Str::of($intsallment->status)->replace('_', ' ')->title() }}
                                                         </td>
                                                     </tr>

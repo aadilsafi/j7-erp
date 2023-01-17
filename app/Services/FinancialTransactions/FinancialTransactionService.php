@@ -3,9 +3,10 @@
 namespace App\Services\FinancialTransactions;
 
 use App\Exceptions\GeneralException;
-use App\Models\{AccountAction, AccountHead, AccountingStartingCode, AccountLedger, Bank, DealerIncentiveModel, FileBuyBack, FileCancellation, FileManagement, FileRefund, FileResale, FileTitleTransfer, PaymentVocuher, RebateIncentiveModel, Receipt, SalesPlan, SalesPlanInstallments, Stakeholder, StakeholderType, TransferReceipt};
+use App\Models\{AccountAction, AccountHead, AccountingStartingCode, AccountLedger, Bank, DealerIncentiveModel, FileBuyBack, FileCancellation, FileManagement, FileRefund, FileResale, FileTitleTransfer, InvsetorDealsReceipt, PaymentVocuher, RebateIncentiveModel, Receipt, SalesPlan, SalesPlanInstallments, Stakeholder, StakeholderInvestor, StakeholderType, TransferReceipt};
 use App\Services\FinancialTransactions\FinancialTransactionInterface;
 use App\Utils\Enums\NatureOfAccountsEnum;
+use Auth;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Svg\Tag\Rect;
@@ -188,7 +189,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
         $unit->save();
         $account_type = 'debit';
 
-        $this->saveAccountHead($unit->floor->site->id, $unit, $unit->floor_unit_number . ' Receviable', (string)$accountHead, 4, $account_type);
+        $this->saveAccountHead($unit->floor->site->id, $unit, $unit->floor_unit_number . ' Receivable', (string)$accountHead, 4, $account_type);
 
         return (string)$accountHead;
     }
@@ -278,7 +279,9 @@ class FinancialTransactionService implements FinancialTransactionInterface
         $data[$type] = $amount;
 
         if ($account_action == 1 || $account_action == 8) {
-            $data['origin_name'] = $data['nature_of_account']->value . '-' . sprintf('%03d', $sales_plan);
+            $saalesPlan = SalesPlan::find($sales_plan);
+
+            $data['origin_name'] = $saalesPlan->payment_plan_serial_id;
         } else {
             $data['origin_name'] = $data['nature_of_account']->value . '-' . sprintf('%03d', $action_id);
         }
@@ -361,6 +364,15 @@ class FinancialTransactionService implements FinancialTransactionInterface
         if ($account_action == 36) {
             $data['journal_voucher_id'] = $action_id;
         }
+
+        if ($account_action == 38) {
+            $data['investor_deal_id'] = $action_id;
+        }
+
+        if ($account_action == 39) {
+            $data['investor_deal_receipt_id'] = $action_id;
+        }
+
         return (new AccountLedger())->create($data);
     }
 
@@ -496,10 +508,10 @@ class FinancialTransactionService implements FinancialTransactionInterface
                 $amount_in_numbers = $receipt->amount_in_numbers;
             }
             $bankAccount = $receipt->bank->account_head_code;
-            $origin_number = AccountLedger::where('account_action_id', 9)->get();
+            $origin_number = AccountLedger::get();
             if (isset($origin_number)) {
                 $origin_number = collect($origin_number)->last();
-                $origin_number = (int)$origin_number->origin_number + 1;
+                $origin_number = $origin_number->origin_number + 1;
                 $origin_number =  sprintf('%03d', $origin_number);
             } else {
                 $origin_number = '001';
@@ -629,8 +641,8 @@ class FinancialTransactionService implements FinancialTransactionInterface
             $this->makeFinancialTransaction($receipt->site_id, $origin_number, $vendorPayableAccount, 29, $receipt->sales_plan_id, 'debit', $receipt->vendor_ap_amount, NatureOfAccountsEnum::Vendor_AP_Account, $receipt->id);
         }
 
-         // if disocunt amount availaibe
-         if (isset($receipt->discounted_amount) && $receipt->discounted_amount > 0) {
+        // if disocunt amount availaibe
+        if (isset($receipt->discounted_amount) && $receipt->discounted_amount > 0) {
             $cashDiscountAccount = AccountHead::where('name', 'Cash Discount')->where('level', 5)->first()->code;
             // Discount Transaction
             $this->makeFinancialTransaction($receipt->site_id, $origin_number, $cashDiscountAccount, 12, $receipt->sales_plan_id, 'debit', $receipt->discounted_amount, NatureOfAccountsEnum::RECEIPT_VOUCHER, $receipt->id);
@@ -1092,7 +1104,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
             $customerAAccountRecievable =  $this->findOrCreateCustomerAccount($sales_plan->unit->id, $accountUnitHeadCode, $stakeholderTypeA);
 
             $file = FileManagement::where('id', $fileTitleTransfer->file_id)->first();
-            $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->where('status', 1)->get();
+            $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->get();
             $total_paid_amount = $receipts->sum('amount_in_numbers');
             $remainingSalesPlanAmount = (int)$sales_plan->total_price -  (int)$total_paid_amount;
 
@@ -1566,41 +1578,41 @@ class FinancialTransactionService implements FinancialTransactionInterface
     {
         // try {
         //     DB::beginTransaction();
-            $stakeholder = Stakeholder::find($stakeholder_id);
-            $stakeholderType = StakeholderType::where(['stakeholder_id' => $stakeholder_id, 'type' => 'C'])->first();
+        $stakeholder = Stakeholder::find($stakeholder_id);
+        $stakeholderType = StakeholderType::where(['stakeholder_id' => $stakeholder_id, 'type' => 'C'])->first();
 
-            if ($stakeholderType->payable_account == null) {
-                $stakeholderAllType = StakeholderType::where('type', 'C')->where('payable_account', '!=', null)->get();
+        if ($stakeholderType->payable_account == null) {
+            $stakeholderAllType = StakeholderType::where('type', 'C')->where('payable_account', '!=', null)->get();
 
-                if (count($stakeholderAllType) > 0) {
-                    $stakeholderTypeLastCode = collect($stakeholderAllType)->last();
-                    if (isset($stakeholderTypeLastCode->payable_account)) {
-                        $customer_payable_account_code = (float)$stakeholderTypeLastCode->payable_account + 1;
-                    } else {
-                        $customer_payable_account_code = '20201010000001';
-                    }
+            if (count($stakeholderAllType) > 0) {
+                $stakeholderTypeLastCode = collect($stakeholderAllType)->last();
+                if (isset($stakeholderTypeLastCode->payable_account)) {
+                    $customer_payable_account_code = (float)$stakeholderTypeLastCode->payable_account + 1;
                 } else {
                     $customer_payable_account_code = '20201010000001';
                 }
-
-                $accountCodeData = [
-                    'site_id' => 1,
-                    'modelable_id' => 1,
-                    'modelable_type' => 'App\Models\StakeholderType',
-                    'code' => (string)$customer_payable_account_code,
-                    'name' =>  $stakeholder->full_name . ' Customer A/P',
-                    'level' => 5,
-                    'account_type' => 'credit',
-                ];
-
-                (new AccountHead())->create($accountCodeData);
-
-                // add payable code to stakeholder type
-                $stakeholderType = StakeholderType::where(['stakeholder_id' => $stakeholder_id, 'type' => 'C'])->first();
-                $stakeholderType->payable_account = (string)$customer_payable_account_code;
-                $stakeholderType->status = true;
-                $stakeholderType->update();
+            } else {
+                $customer_payable_account_code = '20201010000001';
             }
+
+            $accountCodeData = [
+                'site_id' => 1,
+                'modelable_id' => 1,
+                'modelable_type' => 'App\Models\StakeholderType',
+                'code' => (string)$customer_payable_account_code,
+                'name' =>  $stakeholder->full_name . ' Customer A/P',
+                'level' => 5,
+                'account_type' => 'credit',
+            ];
+
+            (new AccountHead())->create($accountCodeData);
+
+            // add payable code to stakeholder type
+            $stakeholderType = StakeholderType::where(['stakeholder_id' => $stakeholder_id, 'type' => 'C'])->first();
+            $stakeholderType->payable_account = (string)$customer_payable_account_code;
+            $stakeholderType->status = true;
+            $stakeholderType->update();
+        }
         // } catch (GeneralException | Exception $ex) {
         //     DB::rollBack();
         //     return $ex;
@@ -1611,41 +1623,41 @@ class FinancialTransactionService implements FinancialTransactionInterface
     {
         // try {
         //     DB::beginTransaction();
-            $stakeholder = Stakeholder::find($stakeholder_id);
-            $stakeholderType = StakeholderType::where(['stakeholder_id' => $stakeholder_id, 'type' => 'D'])->first();
+        $stakeholder = Stakeholder::find($stakeholder_id);
+        $stakeholderType = StakeholderType::where(['stakeholder_id' => $stakeholder_id, 'type' => 'D'])->first();
 
-            if ($stakeholderType->payable_account == null) {
-                $stakeholderAllType = StakeholderType::where('type', 'D')->where('payable_account', '!=', null)->get();
+        if ($stakeholderType->payable_account == null) {
+            $stakeholderAllType = StakeholderType::where('type', 'D')->where('payable_account', '!=', null)->get();
 
-                if (count($stakeholderAllType) > 0) {
-                    $stakeholderTypeLastCode = collect($stakeholderAllType)->last();
-                    if (isset($stakeholderTypeLastCode->payable_account)) {
-                        $dealer_payable_account_code = (float)$stakeholderTypeLastCode->payable_account + 1;
-                    } else {
-                        $dealer_payable_account_code = '20201020000001';
-                    }
+            if (count($stakeholderAllType) > 0) {
+                $stakeholderTypeLastCode = collect($stakeholderAllType)->last();
+                if (isset($stakeholderTypeLastCode->payable_account)) {
+                    $dealer_payable_account_code = (float)$stakeholderTypeLastCode->payable_account + 1;
                 } else {
                     $dealer_payable_account_code = '20201020000001';
                 }
-
-                $accountCodeData = [
-                    'site_id' => 1,
-                    'modelable_id' => 1,
-                    'modelable_type' => 'App\Models\StakeholderType',
-                    'code' => (string)$dealer_payable_account_code,
-                    'name' =>  $stakeholder->full_name . ' Dealer A/P',
-                    'level' => 5,
-                    'account_type' => 'credit',
-                ];
-
-                $code = (new AccountHead())->create($accountCodeData);
-
-                // add payable code to stakeholder type
-                $stakeholderType = StakeholderType::where(['stakeholder_id' => $stakeholder_id, 'type' => 'D'])->first();
-                $stakeholderType->payable_account = (string)$dealer_payable_account_code;
-                $stakeholderType->status = true;
-                $stakeholderType->update();
+            } else {
+                $dealer_payable_account_code = '20201020000001';
             }
+
+            $accountCodeData = [
+                'site_id' => 1,
+                'modelable_id' => 1,
+                'modelable_type' => 'App\Models\StakeholderType',
+                'code' => (string)$dealer_payable_account_code,
+                'name' =>  $stakeholder->full_name . ' Dealer A/P',
+                'level' => 5,
+                'account_type' => 'credit',
+            ];
+
+            $code = (new AccountHead())->create($accountCodeData);
+
+            // add payable code to stakeholder type
+            $stakeholderType = StakeholderType::where(['stakeholder_id' => $stakeholder_id, 'type' => 'D'])->first();
+            $stakeholderType->payable_account = (string)$dealer_payable_account_code;
+            $stakeholderType->status = true;
+            $stakeholderType->update();
+        }
         // } catch (GeneralException | Exception $ex) {
         //     DB::rollBack();
         //     return $ex;
@@ -1656,44 +1668,255 @@ class FinancialTransactionService implements FinancialTransactionInterface
     {
         // try {
         //     DB::beginTransaction();
-            $stakeholder = Stakeholder::find($stakeholder_id);
-            $stakeholderType = StakeholderType::where(['stakeholder_id' => $stakeholder_id, 'type' => 'V'])->first();
+        $stakeholder = Stakeholder::find($stakeholder_id);
+        $stakeholderType = StakeholderType::where(['stakeholder_id' => $stakeholder_id, 'type' => 'V'])->first();
 
-            if ($stakeholderType->payable_account == null) {
-                $stakeholderAllType = StakeholderType::where('type', 'V')->where('payable_account', '!=', null)->get();
+        if ($stakeholderType->payable_account == null) {
+            $stakeholderAllType = StakeholderType::where('type', 'V')->where('payable_account', '!=', null)->get();
 
-                if (count($stakeholderAllType) > 0) {
-                    $stakeholderTypeLastCode = collect($stakeholderAllType)->last();
-                    if (isset($stakeholderTypeLastCode->payable_account)) {
-                        $vendor_payable_account_code = (float)$stakeholderTypeLastCode->payable_account + 1;
-                    } else {
-                        $vendor_payable_account_code = '20201030000001';
-                    }
+            if (count($stakeholderAllType) > 0) {
+                $stakeholderTypeLastCode = collect($stakeholderAllType)->last();
+                if (isset($stakeholderTypeLastCode->payable_account)) {
+                    $vendor_payable_account_code = (float)$stakeholderTypeLastCode->payable_account + 1;
                 } else {
                     $vendor_payable_account_code = '20201030000001';
                 }
-
-                $accountCodeData = [
-                    'site_id' => 1,
-                    'modelable_id' => 1,
-                    'modelable_type' => 'App\Models\StakeholderType',
-                    'code' => (string)$vendor_payable_account_code,
-                    'name' =>  $stakeholder->full_name . ' Supplier A/P',
-                    'level' => 5,
-                    'account_type' => 'credit',
-                ];
-
-                $code = (new AccountHead())->create($accountCodeData);
-
-                // add payable code to stakeholder type
-                $stakeholderType = StakeholderType::where(['stakeholder_id' => $stakeholder_id, 'type' => 'V'])->first();
-                $stakeholderType->payable_account = (string)$vendor_payable_account_code;
-                $stakeholderType->status = true;
-                $stakeholderType->update();
+            } else {
+                $vendor_payable_account_code = '20201030000001';
             }
+
+            $accountCodeData = [
+                'site_id' => 1,
+                'modelable_id' => 1,
+                'modelable_type' => 'App\Models\StakeholderType',
+                'code' => (string)$vendor_payable_account_code,
+                'name' =>  $stakeholder->full_name . ' Supplier A/P',
+                'level' => 5,
+                'account_type' => 'credit',
+            ];
+
+            $code = (new AccountHead())->create($accountCodeData);
+
+            // add payable code to stakeholder type
+            $stakeholderType = StakeholderType::where(['stakeholder_id' => $stakeholder_id, 'type' => 'V'])->first();
+            $stakeholderType->payable_account = (string)$vendor_payable_account_code;
+            $stakeholderType->status = true;
+            $stakeholderType->update();
+        }
         // } catch (GeneralException | Exception $ex) {
         //     DB::rollBack();
         //     return $ex;
         // }
     }
+
+    public function makeInvestorDealReceivableTransaction($id)
+    {
+        try {
+            DB::beginTransaction();
+
+            $investor_deal = StakeholderInvestor::find($id);
+            $investor_type = StakeholderType::where(['stakeholder_id' => $investor_deal->investor_id, 'type' => 'I'])->first();
+            $receivable_account_code = $this->makeInvsetorReceivableAccounts($investor_deal);
+
+            if(isset( $investor_type->payable_account)){
+                $account_payable_code = $investor_type->payable_account;
+            }
+            else{
+                $account_payable_code = $this->makeInvsetorPayableAccounts($investor_deal);
+            }
+
+            $arrStakeholderAccount = $investor_type->receivable_account;
+            $arrStakeholderAccount[] = [
+                "deal_id" => $id,
+                "account_code" => $receivable_account_code,
+                "default" => true,
+                "active" => true
+            ];
+
+            $investor_type->receivable_account = $arrStakeholderAccount;
+            $investor_type->payable_account = $account_payable_code;
+            $investor_type->save();
+
+            $origin_number = AccountLedger::get();
+            if (isset($origin_number) && count($origin_number) > 0) {
+
+                $origin_number = collect($origin_number)->last();
+                $origin_number = $origin_number->origin_number + 1;
+                $origin_number =  sprintf('%03d', $origin_number);
+            } else {
+                $origin_number = '001';
+            }
+
+            // AR Transaction
+            $this->makeFinancialTransaction($investor_deal->site_id, $origin_number, $receivable_account_code, 38, null, 'debit', $investor_deal->total_received_amount, NatureOfAccountsEnum::INVESTOR_DEAL, $investor_deal->id);
+
+            //  AP Transaction
+            $this->makeFinancialTransaction($investor_deal->site_id, $origin_number, $account_payable_code, 38, null, 'credit', $investor_deal->total_received_amount, NatureOfAccountsEnum::INVESTOR_DEAL, $investor_deal->id);
+
+
+            $investor_deal->status = 'approved';
+            $investor_deal->approved_by = Auth::user()->id;
+            $investor_deal->approved_date = now();
+            $investor_deal->update();
+            DB::commit();
+            return 'transaction_completed';
+        } catch (GeneralException | Exception $ex) {
+            DB::rollBack();
+            return $ex;
+        }
+    }
+
+    public function makeInvsetorReceivableAccounts($investor_deal)
+    {
+        // Get Investor Receivable Starting Code (10-20-11-0001) (4th Level)
+        $StartingCode = '10201100010000';
+        $EndingCode = '1020120001000';
+
+        $accountCodes = AccountHead::whereBetween('code', [$StartingCode, $EndingCode])->where('level', 5)->get();
+        if (isset($accountCodes) && count($accountCodes) > 0) {
+            $last_investor_code = collect($accountCodes)->last()->code;
+            $account = (float)$last_investor_code + 1;
+
+            $accountCodeData = [
+                'site_id' => 1,
+                'modelable_id' => 1,
+                'modelable_type' => 'App\Models\StakeholderType',
+                'code' => (string)$account,
+                'name' =>  $investor_deal->investor->full_name . ' Investor  A/R  ' . $investor_deal->serial_number,
+                'level' => 5,
+                'account_type' => 'debit',
+            ];
+            $code = (new AccountHead())->create($accountCodeData);
+            return  (string)$account;
+        } else {
+            $account = '10201100010001';
+            $accountCodeData = [
+                'site_id' => 1,
+                'modelable_id' => 1,
+                'modelable_type' => 'App\Models\StakeholderType',
+                'code' => (string)$account,
+                'name' =>  $investor_deal->investor->full_name . ' Investor  A/R ' . $investor_deal->serial_number,
+                'level' => 5,
+                'account_type' => 'debit',
+            ];
+            $code = (new AccountHead())->create($accountCodeData);
+            return (string)$account;
+        }
+    }
+
+    public function makeInvsetorPayableAccounts($investor_deal)
+    {
+        $stakeholderAllType = StakeholderType::where('type', 'I')->where('payable_account', '!=', null)->orderBy('id','desc')->get();
+
+        if (count($stakeholderAllType) > 0) {
+            $stakeholderTypeLastCode = collect($stakeholderAllType)->last();
+
+            if (isset($stakeholderTypeLastCode->payable_account)) {
+                $investor_payable_account_code = (float)$stakeholderTypeLastCode->payable_account + 1;
+            } else {
+                $investor_payable_account_code = '20200100010001';
+            }
+        } else {
+            $investor_payable_account_code = '20200100010001';
+        }
+
+        $accountCodeData = [
+            'site_id' => 1,
+            'modelable_id' => 1,
+            'modelable_type' => 'App\Models\StakeholderType',
+            'code' => (string)$investor_payable_account_code,
+            'name' =>  $investor_deal->investor->full_name . ' Investor  A\P ',
+            'level' => 5,
+            'account_type' => 'credit',
+        ];
+
+        $code = (new AccountHead())->create($accountCodeData);
+
+        return (string)$investor_payable_account_code;
+    }
+
+    public function makeInvestorDealReceivableReceiptTransaction($id)
+    {
+        try {
+            DB::beginTransaction();
+
+            $deal_receipt = InvsetorDealsReceipt::find($id);
+
+            $origin_number = AccountLedger::get();
+            if (isset($origin_number)) {
+                $origin_number = collect($origin_number)->last();
+                $origin_number = $origin_number->origin_number + 1;
+                $origin_number =  sprintf('%03d', $origin_number);
+            } else {
+                $origin_number = '001';
+            }
+            // Investor AR Transaction
+            $investorAccount = StakeholderType::where('stakeholder_id',$deal_receipt->investor_id)->where('type','I')->first()->receivable_account;
+
+            $investorAccount = collect($investorAccount)->where('deal_id', $deal_receipt->investor_deal_id)->first();
+            // ;
+            $this->makeFinancialTransaction($deal_receipt->site_id, $origin_number, $investorAccount['account_code'], 39, null, 'credit', $deal_receipt->total_received_amount, NatureOfAccountsEnum::INVESTOR_DEAL_RECEIPT, $deal_receipt->id);
+
+            $cashAccount = (new AccountingStartingCode())->where('site_id', $deal_receipt->site_id)
+                ->where('model', 'App\Models\Cash')->where('level', 5)->first();
+
+            if (is_null($cashAccount)) {
+                throw new GeneralException('Cash Account is not defined. Please define cash account first.');
+            }
+
+            $cashAccount = $cashAccount->level_code . $cashAccount->starting_code;
+            if($deal_receipt->mode_of_payment == 'Cash'){
+                $this->makeFinancialTransaction($deal_receipt->site_id, $origin_number, $cashAccount, 39, null, 'debit', $deal_receipt->total_received_amount, NatureOfAccountsEnum::INVESTOR_DEAL_RECEIPT, $deal_receipt->id);
+
+            }
+
+            if ($deal_receipt->mode_of_payment == "Online") {
+                //Bank account credit
+                // Bank Transaction
+                $bank = Bank::find($deal_receipt->bank_id);
+                $bankAccount = $bank->account_head_code;
+
+                $this->makeFinancialTransaction($deal_receipt->site_id, $origin_number, $bankAccount, 39, null, 'debit', $deal_receipt->total_received_amount, NatureOfAccountsEnum::INVESTOR_DEAL_RECEIPT, $deal_receipt->id);
+            }
+
+            if ($deal_receipt->mode_of_payment == "Cheque") {
+                // Cheuqe Clearance Transaction
+                $clearanceAccout = AccountHead::where('name', 'Cheques Clearing Account')->first()->code;
+
+                $this->makeFinancialTransaction($deal_receipt->site_id, $origin_number, $clearanceAccout, 39, null, 'debit', $deal_receipt->total_received_amount, NatureOfAccountsEnum::INVESTOR_DEAL_RECEIPT, $deal_receipt->id);
+            }
+
+            DB::commit();
+            return 'transaction_completed';
+        } catch (GeneralException | Exception $ex) {
+            DB::rollBack();
+            return $ex;
+        }
+    }
+
+    public function makeInvestorReceiptActive($id)
+    {
+        $deal_receipt = InvsetorDealsReceipt::find($id);
+
+            $origin_number = AccountLedger::get();
+            if (isset($origin_number)) {
+                $origin_number = collect($origin_number)->last();
+                $origin_number = (int)$origin_number->origin_number + 1;
+                $origin_number =  sprintf('%03d', $origin_number);
+            } else {
+                $origin_number = '001';
+            }
+
+            if($deal_receipt->status == 'inactive'){
+
+                $bankAccount = $deal_receipt->bank->account_head_code;
+                $this->makeFinancialTransaction($deal_receipt->site_id, $origin_number, $bankAccount, 39, null, 'debit', $deal_receipt->total_received_amount, NatureOfAccountsEnum::INVESTOR_DEAL_RECEIPT, $deal_receipt->id);
+
+                $clearanceAccout = AccountHead::where('name', 'Cheques Clearing Account')->first()->code;
+                $this->makeFinancialTransaction($deal_receipt->site_id, $origin_number, $clearanceAccout, 39, null, 'credit', $deal_receipt->total_received_amount, NatureOfAccountsEnum::INVESTOR_DEAL_RECEIPT, $deal_receipt->id);
+
+            }
+    }
+
+
 }

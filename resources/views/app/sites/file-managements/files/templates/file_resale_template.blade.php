@@ -201,7 +201,7 @@
             </div>
             <div class="col text-center">
                 <div style="border-bottom: 1px solid black">
-                    {{ $salesPlan->approved_date }}</div>
+                    {{ $salesPlan->created_date }}</div>
             </div>
         </div>
 

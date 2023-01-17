@@ -62,24 +62,24 @@ class ImportSalesPlanAdCostsDataTable extends DataTable
             //         ['id' => $data->id, 'field' => 'validity', 'inputtype' => 'text', 'value' => $data->validity]
             //     );
             // })
-            ->editColumn('additional_costs_name', function ($data) {
-                return view(
-                    'app.components.unit-preview-cell',
-                    ['id' => $data->id, 'field' => 'additional_costs_name', 'inputtype' => 'text', 'value' => $data->additional_costs_name]
-                );
-            })
-            ->editColumn('percentage', function ($data) {
-                return view(
-                    'app.components.unit-preview-cell',
-                    ['id' => $data->id, 'field' => 'percentage', 'inputtype' => 'number', 'value' => $data->percentage]
-                );
-            })
-            ->editColumn('total_amount', function ($data) {
-                return view(
-                    'app.components.unit-preview-cell',
-                    ['id' => $data->id, 'field' => 'total_amount', 'inputtype' => 'number', 'value' => $data->total_amount]
-                );
-            })
+            // ->editColumn('additional_costs_name', function ($data) {
+            //     return view(
+            //         'app.components.unit-preview-cell',
+            //         ['id' => $data->id, 'field' => 'additional_costs_name', 'inputtype' => 'text', 'value' => $data->additional_costs_name]
+            //     );
+            // })
+            // ->editColumn('percentage', function ($data) {
+            //     return view(
+            //         'app.components.unit-preview-cell',
+            //         ['id' => $data->id, 'field' => 'percentage', 'inputtype' => 'number', 'value' => $data->percentage]
+            //     );
+            // })
+            // ->editColumn('total_amount', function ($data) {
+            //     return view(
+            //         'app.components.unit-preview-cell',
+            //         ['id' => $data->id, 'field' => 'total_amount', 'inputtype' => 'number', 'value' => $data->total_amount]
+            //     );
+            // })
             ->setRowId('id');
     }
 
@@ -119,32 +119,10 @@ class ImportSalesPlanAdCostsDataTable extends DataTable
     protected function getColumns(): array
     {
         return [
-            Column::computed('unit_short_label')->title('Unit')->addClass('text-nowrap')->searchable(true),
-            Column::computed('stakeholder_cnic')->title('CNIC')->searchable(true),
-            Column::computed('total_price')->title('Price')->searchable(true),
-            Column::computed('down_payment_total')->title('DP Price')->addClass('text-nowrap'),
-            Column::computed('validity')->title('Validity')->addClass('text-nowrap'),
-            Column::computed('additional_costs_name')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'spInstallment' => true,
-                'name' => 'additional_costs_name'
-            ])->render())->searchable(true)->addClass('removeTolltip'),
-            Column::computed('percentage')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'spInstallment' => true,
-
-                'name' => 'percentage'
-            ])->render())->addClass('removeTolltip'),
-
-            Column::computed('total_amount')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'spInstallment' => true,
-
-                'name' => 'total_amount'
-            ])->render())->addClass('removeTolltip'),
+            Column::make('sales_plan_doc_no')->addClass('text-nowrap'),
+            Column::computed('additional_costs_name')->searchable(true)->addClass('removeTolltip'),
+            Column::computed('percentage')->addClass('removeTolltip'),
+            Column::computed('total_amount')->addClass('removeTolltip'),
         ];
     }
 }

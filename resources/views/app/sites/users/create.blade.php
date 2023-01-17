@@ -194,6 +194,13 @@
             $('#OptionalCountryDetails').val(JSON.stringify(intlOptional.getSelectedCountryData()))
 
 
+            @if (!is_null(old('contact')))
+                inputOptional.setCountry('pk');
+
+                intl.setCountry('pk');
+            @endif
+
+
             var e = $("#country_id");
             e.wrap('<div class="position-relative"></div>');
             e.select2({

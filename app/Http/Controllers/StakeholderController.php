@@ -17,6 +17,7 @@ use App\Models\BacklistedStakeholder;
 use App\Models\City;
 use App\Models\Country;
 use App\Models\LeadSource;
+use App\Models\SiteConfigration;
 use App\Models\Stakeholder;
 use App\Models\StakeholderNextOfKin;
 use App\Models\StakeholderType;
@@ -24,6 +25,7 @@ use App\Models\State;
 use App\Models\TempStakeholder;
 use App\Utils\Enums\StakeholderTypeEnum;
 use Exception;
+use File;
 use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\HeadingRowImport;
 use Redirect;
@@ -32,7 +34,7 @@ use Str;
 
 class StakeholderController extends Controller
 {
-    private $stakeholderInterface;
+    private $stakeholderInterface, $customFieldInterface;
 
     public function __construct(StakeholderInterface $stakeholderInterface, CustomFieldInterface $customFieldInterface)
     {
@@ -106,15 +108,18 @@ class StakeholderController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(stakeholderStoreRequest $request, $site_id)
-    // public function store(Request $request, $site_id)
     {
-
+        // $BacklistedStakeholder = BacklistedStakeholder::where('cnic', $request->individual['cnic'])->first();
         try {
             if (!request()->ajax()) {
-                $inputs = $request->all();
-                $customFields = $this->customFieldInterface->getAllByModel(decryptParams($site_id), get_class($this->stakeholderInterface->model()));
-                $record = $this->stakeholderInterface->store($site_id, $inputs, $customFields);
-                return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('lang.commons.data_saved'));
+                // if (empty($BacklistedStakeholder)) {
+                    $inputs = $request->all();
+                    $customFields = $this->customFieldInterface->getAllByModel(decryptParams($site_id), get_class($this->stakeholderInterface->model()));
+                    $record = $this->stakeholderInterface->store($site_id, $inputs, $customFields);
+                    return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('lang.commons.data_saved'));
+                // } else {
+                //     return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger(__('Stakeholder CNIC Is BlackListed!'));
+                // }
             } else {
                 abort(403);
             }
@@ -154,7 +159,6 @@ class StakeholderController extends Controller
             $parentStakeholders = [];
             $stakeholder = $this->stakeholderInterface->getById($site_id, $id, ['contacts', 'stakeholder_types', 'nextOfKin', 'kinStakeholders']);
             $parentStakeholders = StakeholderNextOfKin::where('kin_id', $stakeholder->id)->get();
-            // dd($parentStakeholders);
             $customFields = $this->customFieldInterface->getAllByModel($site_id, get_class($this->stakeholderInterface->model()));
             $customFields = collect($customFields)->sortBy('order');
             $customFields = generateCustomFields($customFields, true, $stakeholder->id);
@@ -171,6 +175,7 @@ class StakeholderController extends Controller
                     'stakeholders' => Stakeholder::where('id', '!=', $stakeholder->id)->get(),
                     'stakeholder' => $stakeholder,
                     'images' => $stakeholder->getMedia('stakeholder_cnic'),
+                    'passport_images'=>$stakeholder->getMedia('stakeholder_passport'),
                     'country' => Country::all(),
                     'city' => [],
                     'state' => [],
@@ -204,15 +209,18 @@ class StakeholderController extends Controller
     {
         $site_id = decryptParams($site_id);
         $id = decryptParams($id);
-
+        // $BacklistedStakeholder = BacklistedStakeholder::where('cnic', $request->individual['cnic'])->first();
         try {
             if (!request()->ajax()) {
-                $inputs = $request->all();
+                // if (empty($BacklistedStakeholder)) {
+                    $inputs = $request->all();
+                    $customFields = $this->customFieldInterface->getAllByModel($site_id, get_class($this->stakeholderInterface->model()));
 
-                $customFields = $this->customFieldInterface->getAllByModel($site_id, get_class($this->stakeholderInterface->model()));
-
-                $record = $this->stakeholderInterface->update($site_id, $id, $inputs, $customFields);
-                return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams($site_id)])->withSuccess(__('lang.commons.data_updated'));
+                    $record = $this->stakeholderInterface->update($site_id, $id, $inputs, $customFields);
+                    return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams($site_id)])->withSuccess(__('lang.commons.data_updated'));
+                // } else {
+                //     return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger(__('Stakeholder CNIC Is BlackListed!'));
+                // }
             } else {
                 abort(403);
             }
@@ -259,5 +267,53 @@ class StakeholderController extends Controller
         }
     }
 
-    
+    public function authorizeStakeholder(Request $request, $file_name)
+    {
+        $path = public_path('app-assets/pdf/sales-plans/payment-plan');
+        $file_path = $path . '/' . decryptParams($file_name);
+        if (file_exists($file_path)) {
+            $file_name = decryptParams($file_name);
+
+            $id = explode('.', $file_name);
+            $id = explode('-', $id[0]);
+            $stakeholder_id = $id[count($id) - 1];
+
+            $data = [
+                'file_name' => encryptParams($file_name),
+                'stakeholder_id' => encryptParams($stakeholder_id),
+            ];
+            return view('app.sites.stakeholders.authorize', $data);
+        } else {
+            return response()->json(
+                [
+                    'message' => 'File Does Not Exist',
+                ],
+                500
+            );
+        }
+    }
+
+    public function verifyPin(Request $request, $file_name, $stakeholder_id)
+    {
+        $file_name = decryptParams($file_name);
+        $stakeholder_id = decryptParams($stakeholder_id);
+
+        $stakeholder = Stakeholder::where('id', $stakeholder_id)->where('pin_code', $request->pin)->exists();
+        if ($stakeholder) {
+            return apiSuccessResponse($file_name);
+        } else {
+            $masterCode = SiteConfigration::where('salesplan_master_code', $request->pin)->exists();
+            if ($masterCode) {
+                return apiSuccessResponse($file_name);
+            } else {
+                return response()->json(
+                    [
+                        'status' => false,
+                        'message' => 'Pin code is not correct',
+                    ],
+                    500
+                );
+            }
+        }
+    }
 }

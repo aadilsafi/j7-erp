@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\DataTables\SitesDataTable;
 use App\Http\Requests\sites\{storeRequest};
-use App\Models\{Site, Country, SiteConfigration};
+use App\Models\{Site, Country, SalesPlanTemplate, SiteConfigration};
 use App\Services\Interfaces\SiteConfigurationInterface;
 use Exception;
 use Illuminate\Http\Request;
@@ -180,7 +180,9 @@ class SiteController extends Controller
             // dd($site);
 
             if ($site && !empty($site)) {
-                return view('app.sites.configs', ['site' => $site]);
+                return view('app.sites.configs', [
+                    'site' => $site,
+                'salesPlanTemplates' => (new SalesPlanTemplate())->all(),]);
             }
             return redirect()->route('dashboard')->withWarning(__('lang.commons.data_not_found'));
         } catch (Exception $ex) {

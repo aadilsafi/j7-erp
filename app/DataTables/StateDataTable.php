@@ -46,7 +46,7 @@ class StateDataTable extends DataTable
                 return $user->country->emoji;
             })
             ->editColumn('actions', function ($user) {
-                return view('app.sites.countries.actions', ['site_id' => decryptParams($this->site_id), 'id' => $user->id]);
+                return view('app.sites.locations.states.actions', ['site_id' => decryptParams($this->site_id), 'id' => $user->id]);
             })
             ->editColumn('created_at', function ($fileManagement) {
                 return editDateColumn($fileManagement->created_at);
@@ -73,7 +73,7 @@ class StateDataTable extends DataTable
 
     public function html(): HtmlBuilder
     {
-        $createPermission =  Auth::user()->hasPermissionTo('sites.users.create');
+        $createPermission =  Auth::user()->hasPermissionTo('sites.settings.states.create');
         $selectedDeletePermission =  Auth::user()->hasPermissionTo('sites.users.destroy-selected');
 
         return $this->builder()
@@ -89,20 +89,20 @@ class StateDataTable extends DataTable
             ->lengthMenu([20, 30, 50, 70, 100])
             ->dom('<"card-header pt-0"<"head-label"><"dt-action-buttons text-end"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>> C<"clear">')
             ->buttons(
-                // ($createPermission  ?
-                //     Button::raw('delete-selected')
-                //     ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
-                //     ->text('<i class="bi bi-plus"></i> Add New')->attr([
-                //         'onclick' => 'addNew()',
-                //     ])
-                //     :
-                //     Button::raw('delete-selected')
-                //     ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light hidden')
-                //     ->text('<i class="bi bi-plus"></i> Add New')->attr([
-                //         'onclick' => 'addNew()',
-                //     ])
+                ($createPermission  ?
+                    Button::raw('delete-selected')
+                    ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
+                    ->text('<i class="bi bi-plus"></i> Add New')->attr([
+                        'onclick' => 'addNew()',
+                    ])
+                    :
+                    Button::raw('delete-selected')
+                    ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light hidden')
+                    ->text('<i class="bi bi-plus"></i> Add New')->attr([
+                        'onclick' => 'addNew()',
+                    ])
 
-                // ),
+                ),
 
                 Button::make('export')->addClass('btn btn-relief-outline-secondary waves-effect waves-float waves-light dropdown-toggle')->buttons([
                     Button::make('print')->addClass('dropdown-item'),
@@ -130,21 +130,21 @@ class StateDataTable extends DataTable
             )
             // ->rowGroupDataSrc('parent_id')
             ->columnDefs([
-                [
-                    'targets' => 0,
-                    'className' => 'text-center text-primary',
-                    'width' => '10%',
-                    'orderable' => false,
-                    'searchable' => false,
-                    'responsivePriority' => 3,
-                    // 'render' => "function (data, type, full, setting) {
-                    //     var role = JSON.parse(data);
-                    //     return '<div class=\"form-check\"> <input class=\"form-check-input dt-checkboxes\" onchange=\"changeTableRowColor(this)\" type=\"checkbox\" value=\"' + role.id + '\" name=\"chkUsers[]\" id=\"chkUsers_' + role.id + '\" /><label class=\"form-check-label\" for=\"chkUsers_' + role.id + '\"></label></div>';
-                    // }",
-                    // 'checkboxes' => [
-                    //     'selectAllRender' =>  '<div class="form-check"> <input class="form-check-input" onchange="changeAllTableRowColor()" type="checkbox" value="" id="checkboxSelectAll" /><label class="form-check-label" for="checkboxSelectAll"></label></div>',
-                    // ]
-                ],
+                // [
+                //     'targets' => 0,
+                //     'className' => 'text-center text-primary',
+                //     'width' => '10%',
+                //     'orderable' => false,
+                //     'searchable' => false,
+                //     'responsivePriority' => 3,
+                //     'render' => "function (data, type, full, setting) {
+                //         var role = JSON.parse(data);
+                //         return '<div class=\"form-check\"> <input class=\"form-check-input dt-checkboxes\" onchange=\"changeTableRowColor(this)\" type=\"checkbox\" value=\"' + role.id + '\" name=\"chkUsers[]\" id=\"chkUsers_' + role.id + '\" /><label class=\"form-check-label\" for=\"chkUsers_' + role.id + '\"></label></div>';
+                //     }",
+                //     'checkboxes' => [
+                //         'selectAllRender' =>  '<div class="form-check"> <input class="form-check-input" onchange="changeAllTableRowColor()" type="checkbox" value="" id="checkboxSelectAll" /><label class="form-check-label" for="checkboxSelectAll"></label></div>',
+                //     ]
+                // ],
             ])
             ->orders([
                 [1, 'asc'],
@@ -159,7 +159,7 @@ class StateDataTable extends DataTable
     protected function getColumns(): array
     {
         $selectedDeletePermission =  Auth::user()->hasPermissionTo('sites.users.destroy-selected');
-        $editPermission =  Auth::user()->hasPermissionTo('sites.users.edit');
+        $editPermission =  Auth::user()->hasPermissionTo('sites.settings.states.edit');
         return [
             // ($selectedDeletePermission ?
             //     Column::computed('check')->exportable(false)->printable(false)->width(60)
@@ -173,11 +173,11 @@ class StateDataTable extends DataTable
             Column::make('created_at')->title('Created At'),
             Column::make('updated_at')->title('Updated At'),
 
-            // ($editPermission ?
-            //     Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center')
-            //     :
-            //     Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center')->addClass('hidden')
-            // )
+            ($editPermission ?
+                Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center')
+                :
+                Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center')->addClass('hidden')
+            )
 
         ];
     }

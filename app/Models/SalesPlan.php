@@ -13,6 +13,7 @@ class SalesPlan extends Model
 
     protected $fillable = [
         'unit_id',
+        'doc_no',
         'user_id',
         'stakeholder_id',
         'kin_data',
@@ -32,7 +33,16 @@ class SalesPlan extends Model
         'cancel',
         'created_date',
         'serial_no',
-        'is_from_crm'
+        'is_from_crm',
+        'investment_plan_serial_id',
+        'payment_plan_serial_id',
+        'checked_by',
+        'checked_date',
+        'approved_by',
+        'reverted_by',
+        'reverted_date',
+        'dis_approved_by',
+        'dis_approved_date',
     ];
 
     protected $casts = [
@@ -52,6 +62,11 @@ class SalesPlan extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function approveBy()
+    {
+        return $this->belongsTo(User::class, 'approved_by', 'id');
     }
 
     public function stakeholder()

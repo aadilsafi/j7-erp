@@ -22,6 +22,7 @@ use App\Services\FileManagements\FileActions\BuyBack\BuyBackInterface;
 use Maatwebsite\Excel\Imports\ModelManager;
 use App\Services\CustomFields\CustomFieldInterface;
 use App\Services\FinancialTransactions\FinancialTransactionInterface;
+use Auth;
 use DB;
 
 class FileBuyBackController extends Controller
@@ -32,7 +33,7 @@ class FileBuyBackController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    private $buyBackInterface,$financialTransactionInterface;
+    private $buyBackInterface,$financialTransactionInterface,$customFieldInterface;
 
     public function __construct(
         FinancialTransactionInterface $financialTransactionInterface,
@@ -66,7 +67,7 @@ class FileBuyBackController extends Controller
         if (!request()->ajax()) {
             $unit = Unit::find(decryptParams($unit_id));
             $file = FileManagement::where('id', decryptParams($file_id))->first();
-            $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->where('status', 1)->get();
+            $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->get();
             $total_paid_amount = $receipts->sum('amount_in_numbers');
             $salesPlan = SalesPlan::find($file->sales_plan_id);
 
@@ -191,6 +192,8 @@ class FileBuyBackController extends Controller
 
             $file_buy_back = FileBuyBack::where('file_id', decryptParams($file_id))->first();
             $file_buy_back->status = 1;
+            $file_buy_back->approved_by = Auth::user()->id;
+            $file_buy_back->approved_date =now();
             $file_buy_back->update();
 
             $unit = Unit::find(decryptParams($unit_id));

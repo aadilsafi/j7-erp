@@ -8,6 +8,7 @@ use App\Models\AccountLedger;
 use App\Models\Bank;
 use App\Models\PaymentVocuher;
 use App\Models\Stakeholder;
+use App\Models\Site;
 use App\Models\StakeholderType;
 use App\Services\FinancialTransactions\FinancialTransactionInterface;
 use App\Services\PaymentVoucher\paymentInterface;
@@ -15,6 +16,7 @@ use DB;
 use Exception;
 use Illuminate\Http\Request;
 use App\Http\Requests\PaymentVoucher\store;
+use Auth;
 
 class PaymentVocuherController extends Controller
 {
@@ -90,9 +92,22 @@ class PaymentVocuherController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($site_id, $id)
     {
-        //
+        $site = (new Site())->find(decryptParams($site_id));
+        $payment_voucher = PaymentVocuher::find(decryptParams($id));
+        $images = $payment_voucher->getMedia('payment_voucher_attachments');
+        $stakeholder_id = !is_null($payment_voucher->vendor_id) ? $payment_voucher->vendor_id : (!is_null($payment_voucher->dealer_id) ? $payment_voucher->dealer_id  : $payment_voucher->customer_id);
+
+        $stakeholder_data = Stakeholder::where('id', $stakeholder_id)->first();
+        return view('app.sites.payment-voucher.preview',
+            [
+                'site' => $site,
+                'stakeholder_data' => $stakeholder_data,
+                'payment_voucher' => $payment_voucher,
+                'images'=>$images,
+            ]
+        );
     }
 
     /**
@@ -257,6 +272,8 @@ class PaymentVocuherController extends Controller
 
             $transaction = $this->financialTransactionInterface->makePaymentVoucherTransaction($payment_voucher, $stakeholder_id);
             $payment_voucher->status = 1;
+            $payment_voucher->approved_by = Auth::user()->id;
+            $payment_voucher->approved_date = now();
             $payment_voucher->update();
         });
         return redirect()->route('sites.payment-voucher.index', ['site_id' => decryptParams($site_id)])->withSuccess(__('lang.commons.data_saved'));
@@ -269,6 +286,8 @@ class PaymentVocuherController extends Controller
             if ($payment_voucher->status == 1) {
                 $transaction = $this->financialTransactionInterface->makePaymentVoucherChequeActiveTransaction($payment_voucher);
                 $payment_voucher->cheque_status = 1;
+                $payment_voucher->cheque_active_by = Auth::user()->id;
+                $payment_voucher->cheque_active_date = now();
                 $payment_voucher->update();
             }
         });

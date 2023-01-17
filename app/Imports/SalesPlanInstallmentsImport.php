@@ -30,31 +30,27 @@ class SalesPlanInstallmentsImport implements ToModel, WithChunkReading, WithBatc
 
     public function model(array $row)
     {
-        $stakeholderId = Stakeholder::select('id')->where('cnic', $row['stakeholder_cnic'])->first();
-        $unitId = Unit::select('id')->where('floor_unit_number', $row['unit_short_label'])->first();
+        // $stakeholderId = Stakeholder::select('id')->where('cnic', $row['stakeholder_cnic'])->first();
+        // $unitId = Unit::select('id')->where('floor_unit_number', $row['unit_short_label'])->first();
 
-        $salePlan = SalesPlan::where('stakeholder_id', $stakeholderId->id)
-            ->where('unit_id', $unitId->id)
-            ->where('total_price', $row['total_price'])
-            ->where('down_payment_total', $row['down_payment_total'])
-            ->where('validity', Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['validity']))->format('Y-m-d'))
-            ->first();
-        if (!$salePlan) {
-            $error = ['Could not find sales Plan'];
-            $failures[] = new Failure($this->getRowNumber(), 'unit_short_label', $error, $row);
+        // $salePlan = SalesPlan::where('stakeholder_id', $stakeholderId->id)
+        //     ->where('unit_id', $unitId->id)
+        //     ->where('total_price', $row['total_price'])
+        //     ->where('down_payment_total', $row['down_payment_total'])
+        //     ->where('validity', Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['validity']))->format('Y-m-d 00:00:00'))
+        //     ->first();
+        // if (!$salePlan) {
+        //     $error = ['Could not find sales Plan'];
+        //     $failures[] = new Failure($this->getRowNumber(), 'unit_short_label', $error, $row);
 
-            throw new \Maatwebsite\Excel\Validators\ValidationException(\Illuminate\Validation\ValidationException::withMessages($error), $failures);
-        }
+        //     throw new \Maatwebsite\Excel\Validators\ValidationException(\Illuminate\Validation\ValidationException::withMessages($error), $failures);
+        // }
 
         return new TempSalePlanInstallment([
-            'unit_short_label' => $row['unit_short_label'],
-            'stakeholder_cnic' => $row['stakeholder_cnic'],
-            'total_price' => $row['total_price'],
-            'down_payment_total' => $row['down_payment_total'],
-            'validity' => Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['validity']))->format('Y-m-d'),
+            'sales_plan_doc_no' => $row['sales_plan_doc_no'],
             'type' => $row['type'],
             'label' => $row['label'],
-            'due_date' => Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['due_date']))->format('Y-m-d'),
+            'due_date' => Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['due_date']))->format('Y-m-d 00:00:00'),
             'installment_no' => $row['installment_no'],
             'total_amount' => $row['total_amount'],
         ]);
@@ -74,23 +70,19 @@ class SalesPlanInstallmentsImport implements ToModel, WithChunkReading, WithBatc
     public function rules(): array
     {
         return [
-            'unit_short_label' =>  ['required', 'exists:App\Models\Unit,floor_unit_number'],
-            'stakeholder_cnic' =>  ['required', 'exists:App\Models\Stakeholder,cnic'],
-            'total_price' =>  ['required', 'numeric', 'gt:0'],
-            'down_payment_total' =>  ['required', 'numeric', 'gt:0'],
-            'validity' =>  ['required'],
+            'sales_plan_doc_no' => ['required', 'exists:sales_plans,doc_no'],
             'type' =>  ['required'],
             'due_date' => ['required'],
             'installment_no' =>  ['required'],
             'total_amount' =>  ['required', 'numeric', 'gt:0'],
-    
+
         ];
     }
 
     public function customValidationMessages()
     {
         return [
-            'unit_short_label.exists' => 'Unit dose not Exists.',
+            'sales_plan_doc_no.exists' => 'Sales Plan dose not Exists.',
             'stakeholder_cnic.exists' => 'Stakeholder does not Exists.',
         ];
     }

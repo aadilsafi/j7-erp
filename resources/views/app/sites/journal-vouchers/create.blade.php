@@ -19,6 +19,9 @@
 
 @section('page-css')
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/css/plugins/forms/form-validation.css">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/vendors/filepond/filepond.min.css">
+    <link rel="stylesheet" type="text/css"
+        href="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.preview.min.css">
 @endsection
 
 @section('custom-css')
@@ -40,6 +43,22 @@
         .custom_row {
             background-color: #f3f2f7;
         }
+
+        .filepond--drop-label {
+            color: #7367F0 !important;
+        }
+
+        .filepond--item-panel {
+            background-color: #7367F0;
+        }
+
+        .filepond--panel-root {
+            background-color: #e3e0fd;
+        }
+
+        /* .filepond--item {
+            width: calc(50% - 0.5em);
+        } */
     </style>
 @endsection
 
@@ -47,7 +66,7 @@
     <div class="content-header-left col-md-9 col-12 mb-2">
         <div class="row breadcrumbs-top">
             <div class="col-12">
-                <h2 class="content-header-title float-start mb-0">Create Journal Vouchers</h2>
+                <h2 class="content-header-title float-start mb-0">Create Journal Voucher</h2>
                 <div class="breadcrumb-wrapper">
                     {{ Breadcrumbs::render('sites.settings.journal-vouchers.create', encryptParams($site_id)) }}
                 </div>
@@ -57,7 +76,7 @@
 @endsection
 
 @section('content')
-    <form class="form form-vertical"
+    <form class="form form-vertical" enctype="multipart/form-data"
         action="{{ route('sites.settings.journal-vouchers.store', ['site_id' => encryptParams($site_id)]) }}" method="POST"
         id="journalVouchers">
 
@@ -81,6 +100,18 @@
                         <div class="card-body">
                             <div class="row g-1">
                                 <div class="d-block">
+                                    <div class="d-block mb-1">
+                                        <label class="form-label" style="font-size: 15px" for="doc_number">
+                                            Document Number
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <input name="doc_number" type="text"
+                                            class="form-control  @error('doc_number') is-invalid @enderror" id="doc_number"
+                                            placeholder="Document Number" />
+                                        @error('doc_number')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
                                     <label class="form-label fs-5" for="created_date">Creation Date<span
                                             class="text-danger">*</span></label>
                                     <input id="created_date" type="date" required placeholder="YYYY-MM-DD"
@@ -100,14 +131,26 @@
                                         name="total_credit" class="form-control form-control-md" />
                                 </div> --}}
 
-                                <hr>
-                                <div class="col-md-12">
-                                    <a id="saveButton" href="#"
-                                        class="btn text-nowrap w-100 btn-relief-outline-success waves-effect waves-float waves-light me-1 mb-1">
-                                        <i data-feather='save'></i>
-                                        Save
-                                    </a>
+                                <div class="d-block mb-1">
+                                    <label class="form-label fs-5" for="type_name">Attachment</label>
+                                    <input id="attachment" type="file"
+                                        class="filepond @error('attachment') is-invalid @enderror" name="attachment[]"
+                                        multiple accept="image/png, image/jpeg, image/gif, application/pdf" />
+                                    @error('attachment')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
                                 </div>
+
+                                <hr>
+                                @can('sites.settings.journal-vouchers.store')
+                                    <div class="col-md-12">
+                                        <a id="saveButton" href="#"
+                                            class="btn text-nowrap w-100 btn-relief-outline-success waves-effect waves-float waves-light me-1 mb-1">
+                                            <i data-feather='save'></i>
+                                            Save
+                                        </a>
+                                    </div>
+                                @endcan
                                 <div class="col-md-12">
                                     <a href="{{ route('sites.settings.journal-vouchers.index', ['site_id' => encryptParams($site_id)]) }}"
                                         class="btn btn-relief-outline-danger w-100 waves-effect waves-float waves-light">
@@ -126,6 +169,13 @@
 
 @section('vendor-js')
     <script src="{{ asset('app-assets') }}/vendors/js/forms/repeater/jquery.repeater.min.js"></script>
+    <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.preview.min.js"></script>
+    <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.typevalidation.min.js"></script>
+    <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.imagecrop.min.js"></script>
+    <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.imagesizevalidation.min.js"></script>
+    <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.filesizevalidation.min.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-pdf-preview/dist/filepond-plugin-pdf-preview.min.js"></script>
+    <script src="{{ asset('app-assets') }}/vendors/filepond/filepond.min.js"></script>
 @endsection
 
 @section('page-js')
@@ -134,10 +184,43 @@
 
 @section('custom-js')
     <script>
+        FilePond.registerPlugin(
+            FilePondPluginImagePreview,
+            FilePondPluginFileValidateType,
+            FilePondPluginFileValidateSize,
+            FilePondPluginImageValidateSize,
+            FilePondPluginImageCrop,
+            FilePondPluginPdfPreview,
+        );
+
+        FilePond.create(document.getElementById('attachment'), {
+            styleButtonRemoveItemPosition: 'right',
+            imageCropAspectRatio: '1:1',
+            acceptedFileTypes: ['image/png', 'image/jpeg', 'application/pdf'],
+            maxFileSize: '1536KB',
+            ignoredFiles: ['.ds_store', 'thumbs.db', 'desktop.ini'],
+            storeAsFile: true,
+            allowMultiple: true,
+            // maxFiles: 2,
+            checkValidity: true,
+            allowPdfPreview: true,
+            credits: {
+                label: '',
+                url: ''
+            }
+        });
+        FilePond.setOptions({
+            allowPdfPreview: true,
+            pdfPreviewHeight: 320,
+            pdfComponentExtraParams: 'toolbar=0&view=fit&page=1'
+        });
+    </script>
+    <script>
         $(document).ready(function() {
             $("#created_date").flatpickr({
                 defaultDate: "today",
                 // minDate: "today",
+                maxDate: 'today',
                 altInput: !0,
                 altFormat: "F j, Y",
                 dateFormat: "Y-m-d",
@@ -146,13 +229,13 @@
             $("#voucher_date").flatpickr({
                 defaultDate: "today",
                 // minDate: "today",
+                maxDate: 'today',
                 altInput: !0,
                 altFormat: "F j, Y",
                 dateFormat: "Y-m-d",
             });
 
-            $(this).find('.accountsSelect').select2({
-                    });
+            $(this).find('.accountsSelect').select2({});
 
         });
     </script>
@@ -162,8 +245,9 @@
             // initEmpty: true,
             show: function() {
                 $(this).slideDown(function() {
-                    $(this).find('.accountsSelect').select2({
-                    });
+                    $(this).find('.accountsSelect').select2({});
+                    $(this).find('.creditInput').val(0);
+                    $(this).find('.debitInput').val(0);
                 }), feather && feather.replace({
                     width: 14,
                     height: 14
@@ -171,6 +255,7 @@
                 // initializeSelect2();
                 $(".voucher_date").flatpickr({
                     defaultDate: "today",
+                    maxDate: 'today',
                     // minDate: "today",
                     altInput: !0,
                     altFormat: "F j, Y",
@@ -179,6 +264,8 @@
 
             },
             hide: function(e) {
+                $('.creditInput').trigger('change')
+                $('.debitInput').trigger('change')
                 $(this).slideUp(e)
             }
 

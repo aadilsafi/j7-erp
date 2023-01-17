@@ -34,6 +34,7 @@ return new class extends Migration
             $table->bigInteger('transfer_receipt_id')->nullable();
             $table->bigInteger('journal_voucher_id')->nullable();
             $table->bigInteger('investor_deal_id')->nullable();
+            $table->bigInteger('investor_deal_receipt_id')->nullable();
             $table->double('credit')->default(0);
             $table->double('debit')->default(0);
             $table->double('balance')->default(0);

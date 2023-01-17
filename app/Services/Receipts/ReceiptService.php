@@ -680,7 +680,7 @@ class ReceiptService implements ReceiptInterface
                     if ($isFileExists) {
                         $tempPath = (public_path('app-assets/images/temporaryfiles/Receipts/'));
                         $destinationPath = public_path('app-assets/images/Import/');
-        
+
                         $newfile = File::copy(public_path('app-assets/images/Import/' . $url), $destinationPath . $url);
                         $receipt->addMedia($newfile)->toMediaCollection('receipt_attachments');
                         changeImageDirectoryPermission();

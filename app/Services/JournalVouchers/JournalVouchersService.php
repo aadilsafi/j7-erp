@@ -33,8 +33,8 @@ class JournalVouchersService implements JournalVouchersInterface
                 'total_credit' => str_replace(',', '', $inputs['total_credit']),
                 'status' => 'pending',
                 'remarks' => $inputs['remarks'],
-                'voucher_date' => $inputs['created_date'],
-                'created_date' => $inputs['created_date'],
+                'voucher_date' => $inputs['created_date']. date(' H:i:s'),
+                'created_date' => $inputs['created_date']. date(' H:i:s'),
             ];
             $journal_voucher = $this->model()->create($voucher_data);
 
@@ -59,7 +59,7 @@ class JournalVouchersService implements JournalVouchersInterface
                 $journal_voucher_entry->journal_voucher_id = $journal_voucher->id;
                 $journal_voucher_entry->account_head_code = $account_head->code;
                 $journal_voucher_entry->account_number = $voucher_entires[$i]['account_number'];
-                $journal_voucher_entry->created_date = $voucher_entires[$i]['voucher_date'];
+                $journal_voucher_entry->created_date = $voucher_entires[$i]['voucher_date']. date(' H:i:s');
                 $journal_voucher_entry->debit = $voucher_entires[$i]['debit'];
                 $journal_voucher_entry->credit = $voucher_entires[$i]['credit'];
                 $journal_voucher_entry->remarks = $voucher_entires[$i]['remarks'];

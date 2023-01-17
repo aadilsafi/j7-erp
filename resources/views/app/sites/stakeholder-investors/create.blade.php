@@ -60,7 +60,7 @@
     <div class="content-header-left col-md-9 col-12 mb-2">
         <div class="row breadcrumbs-top">
             <div class="col-12">
-                <h2 class="content-header-title float-start mb-0">Create Investor Deal</h2>
+                <h2 class="content-header-title float-start mb-0">Create Investor Deals</h2>
                 <div class="breadcrumb-wrapper">
                     {{ Breadcrumbs::render('sites.investors-deals.create', encryptParams($site_id)) }}
                 </div>

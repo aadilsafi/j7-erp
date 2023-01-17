@@ -1300,7 +1300,7 @@ class PermissionTableSeeder extends Seeder
             // sites.file-managements.saveImport
             // sites.file-managements.storePreview
 
-            // Import Files 
+            // Import Files
             [
                 'name' => 'sites.file-managements.importFiles',
                 'show_name' => 'Can Import Files',
@@ -2557,7 +2557,7 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-            // Stakeholder Investor Routes
+            // Stakeholder Investor Deals Routes
             [
                 'name' => 'sites.investors-deals.index',
                 'show_name' => 'Can View  Investor Deals',
@@ -2610,6 +2610,57 @@ class PermissionTableSeeder extends Seeder
             [
                 'name' => 'sites.investors-deals.dis-approve',
                 'show_name' => 'Can Disapprove  Investor Deals',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            // Investor Deal Receipts
+             // File Transfer Receipts
+             [
+                'name' => 'sites.investor-deals-receipts.index',
+                'show_name' => 'Can View File Transfer Receipts',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.investor-deals-receipts.create',
+                'show_name' => 'Can Create File Transfer Receipts',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.investor-deals-receipts.store',
+                'show_name' => 'Can Store File Transfer Receipts',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.investor-deals-receipts.show',
+                'show_name' => 'Can View File Transfer Receipts',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.investor-deals-receipts.make-active-selected',
+                'show_name' => 'Can Make Active Receipts',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.investor-deals-receipts.destroy-draft',
+                'show_name' => 'Can Destroy Draft Receipts',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.investor-deals-receipts.templates.print',
+                'show_name' => 'Can Print Selected Receipts',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),

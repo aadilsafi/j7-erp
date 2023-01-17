@@ -21,8 +21,8 @@ return new class extends Migration
             $table->bigInteger('unit_id')->nullable();
             $table->bigInteger('sales_plan_id')->nullable();
             $table->bigInteger('bank_id')->nullable();
-            $table->string('name');
-            $table->string('cnic');
+            $table->string('name')->nullable();
+            $table->string('cnic')->nullable();
             $table->string('phone_no')->nullable();
             $table->string('mode_of_payment');
             $table->string('other_value')->nullable();
@@ -31,10 +31,10 @@ return new class extends Migration
             $table->string('online_instrument_no')->nullable();
             $table->string('drawn_on_bank')->nullable();
             $table->string('transaction_date')->nullable();
-            $table->string('amount_in_words');
+            $table->string('amount_in_words')->nullable();
             $table->string('discounted_amount')->nullable();
-            $table->double('amount_in_numbers');
-            $table->string('purpose');
+            $table->double('amount_in_numbers')->nullable();
+            $table->string('purpose')->nullable();
             $table->string('other_purpose')->nullable();
             $table->text('installment_number')->nullable();
             $table->string('attachment')->nullable();
@@ -50,6 +50,8 @@ return new class extends Migration
             $table->string('dealer_ap_account')->nullable();
             $table->string('vendor_ap_amount')->nullable();
             $table->string('vendor_ap_account')->nullable();
+            $table->string('investor_ap_amount')->nullable();
+            $table->string('investor_ap_account')->nullable();
             $table->bigInteger('user_id')->nullable();
             $table->timestamp('checked_date')->nullable();
             $table->bigInteger('checked_by')->nullable();

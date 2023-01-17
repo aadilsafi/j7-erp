@@ -58,6 +58,7 @@ use App\Http\Controllers\{
     StakeholderContactsImportControler,
     StakeholderImportController,
     StakeholderInvestorController,
+    InvsetorDealsReceiptController,
 };
 use App\Models\PaymentVocuher;
 use App\Models\Type;
@@ -1023,7 +1024,7 @@ Route::group([
                     });
                 });
 
-                // Stakeholder Investors
+                // Stakeholder Investors Deals
                 Route::group(['prefix' => 'investors-deals', 'as' => 'investors-deals.'], function () {
                     Route::get('/', [StakeholderInvestorController::class, 'index'])->name('index');
                     Route::get('create', [StakeholderInvestorController::class, 'create'])->name('create');
@@ -1044,6 +1045,36 @@ Route::group([
                         Route::post('get-units-data', [StakeholderInvestorController::class, 'getUnitsData'])->name('get-units-data');
                     });
                 });
+
+                // Invstor Deals Receipts
+                Route::group(['prefix' => 'investor-deals-receipts', 'as' => 'investor-deals-receipts.'], function () {
+                    Route::get('/', [InvsetorDealsReceiptController::class, 'index'])->name('index');
+
+                    Route::get('create', [InvsetorDealsReceiptController::class, 'create'])->name('create');
+                    Route::post('store', [InvsetorDealsReceiptController::class, 'store'])->name('store');
+
+                    Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {
+                        Route::post('get-investor-deals-data', [InvsetorDealsReceiptController::class, 'getInvestorDealsData'])->name('get-investor-deals-data');
+                    });
+
+                    Route::group(['prefix' => '/{receipts_id}'], function () {
+                        Route::group(['prefix' => 'templates', 'as' => 'templates.'], function () {
+                            Route::group(['prefix' => '/{id}'], function () {
+                                Route::get('/print', [InvsetorDealsReceiptController::class, 'printReceipt'])->name('print');
+                            });
+                        });
+                    });
+
+                    Route::get('destroy-draft', [InvsetorDealsReceiptController::class, 'destroyDraft'])->name('destroy-draft');
+                    Route::get('delete-selected', [InvsetorDealsReceiptController::class, 'destroySelected'])->name('destroy-selected');
+                    Route::get('make-active-selected', [InvsetorDealsReceiptController::class, 'makeActiveSelected'])->name('make-active-selected');
+                    Route::get('revert-payment/{ids}', [InvsetorDealsReceiptController::class, 'revertPayment'])->name('revert-payment');
+
+                    Route::group(['prefix' => '/{id}'], function () {
+                        Route::get('show', [InvsetorDealsReceiptController::class, 'show'])->name('show');
+                    });
+                });
+
                 Route::get('import/sample-download/{order}', [AdditionalCostController::class, 'downloadSample'])->name('import.sample-download');
             });
         });

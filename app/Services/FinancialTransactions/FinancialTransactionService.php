@@ -1874,12 +1874,14 @@ class FinancialTransactionService implements FinancialTransactionInterface
                 // Bank Transaction
                 $bank = Bank::find($deal_receipt->bank_id);
                 $bankAccount = $bank->account_head_code;
+                dd($bank);
                 $this->makeFinancialTransaction($deal_receipt->site_id, $origin_number, $bankAccount, 39, null, 'debit', $deal_receipt->total_received_amount, NatureOfAccountsEnum::INVESTOR_DEAL_RECEIPT, $deal_receipt->id);
             }
 
             if ($deal_receipt->payment_mode == "Cheque") {
                 // Cheuqe Clearance Transaction
                 $clearanceAccout = AccountHead::where('name', 'Cheques Clearing Account')->first()->code;
+                dd($clearanceAccout);
                 $this->makeFinancialTransaction($deal_receipt->site_id, $origin_number, $clearanceAccout, 39, null, 'debit', $deal_receipt->total_received_amount, NatureOfAccountsEnum::INVESTOR_DEAL_RECEIPT, $deal_receipt->id);
             }
 

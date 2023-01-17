@@ -4,7 +4,7 @@
     {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.receipts.create', encryptParams($site_id)) }}
 @endsection
 
-@section('page-title', 'Create File Transfer Receipt')
+@section('page-title', 'Create  Receipt')
 
 @section('page-vendor')
 @endsection

@@ -300,7 +300,7 @@ Breadcrumbs::for('sites.receipts.index', function (BreadcrumbTrail $trail, $site
     $trail->parent('dashboard');
     $trail->push('File Management');
     $trail->push('Step 1');
-    $trail->push('Receipts');
+    $trail->push('Receipts', route('sites.receipts.index', ['site_id' => $site_id]));
 });
 
 Breadcrumbs::for('sites.receipts.create', function (BreadcrumbTrail $trail, $site_id) {
@@ -309,11 +309,7 @@ Breadcrumbs::for('sites.receipts.create', function (BreadcrumbTrail $trail, $sit
 });
 
 Breadcrumbs::for('sites.receipts.show', function (BreadcrumbTrail $trail, $site_id) {
-    // $trail->parent('sites.receipts.index', $site_id);
-    $trail->parent('dashboard');
-     $trail->push('File Management');
-    $trail->push(' Step 1');
-    $trail->push(' Receipts ');
+    $trail->parent('sites.receipts.index', $site_id);
     $trail->push('Preview Receipts');
 });
 

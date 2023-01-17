@@ -1711,8 +1711,8 @@ class FinancialTransactionService implements FinancialTransactionInterface
 
     public function makeInvestorDealReceivableTransaction($id)
     {
-        try {
-            DB::beginTransaction();
+        // try {
+        //     DB::beginTransaction();
 
             $investor_deal = StakeholderInvestor::find($id);
             $investor_type = StakeholderType::where(['stakeholder_id' => $investor_deal->investor_id, 'type' => 'I'])->first();
@@ -1758,12 +1758,12 @@ class FinancialTransactionService implements FinancialTransactionInterface
             $investor_deal->approved_by = Auth::user()->id;
             $investor_deal->approved_date = now();
             $investor_deal->update();
-            DB::commit();
-            return 'transaction_completed';
-        } catch (GeneralException | Exception $ex) {
-            DB::rollBack();
-            return $ex;
-        }
+        //     DB::commit();
+        //     return 'transaction_completed';
+        // } catch (GeneralException | Exception $ex) {
+        //     DB::rollBack();
+        //     return $ex;
+        // }
     }
 
     public function makeInvsetorReceivableAccounts($investor_deal)

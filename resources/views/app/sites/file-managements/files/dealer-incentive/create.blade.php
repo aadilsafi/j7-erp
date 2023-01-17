@@ -61,6 +61,19 @@
                     style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0; z-index:10;">
                     <div class="card-body g-1">
 
+                        <div class="d-block mb-1">
+                            <label class="form-label" style="font-size: 15px" for="floor">
+                                 Document Number
+                                <span class="text-danger">*</span>
+                            </label>
+                            <input name="doc_number" type="text"
+                                class="form-control  @error('doc_number') is-invalid @enderror" id="doc_number"
+                                placeholder=" Document Number " />
+                            @error('doc_number')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
                         <a id="saveButton" href="#"
                             class="btn text-nowrap w-100 btn-relief-outline-success waves-effect waves-float waves-light me-1 mb-1">
                             <i data-feather='save'></i>
@@ -214,6 +227,9 @@
                 'total_dealer_incentive': {
                     required: true
                 },
+                'doc_number':{
+                    required: true
+                }
             },
             errorClass: 'is-invalid text-danger',
             errorElement: "span",

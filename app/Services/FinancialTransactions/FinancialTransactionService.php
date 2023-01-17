@@ -1806,7 +1806,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
 
     public function makeInvsetorPayableAccounts($investor_deal)
     {
-        $stakeholderAllType = StakeholderType::where('type', 'I')->where('payable_account', '!=', null)->get();
+        $stakeholderAllType = StakeholderType::where('type', 'I')->where('payable_account', '!=', null)->orderBy('id','desc')->get();
         dd($stakeholderAllType);
         if (count($stakeholderAllType) > 0) {
             $stakeholderTypeLastCode = collect($stakeholderAllType)->last();

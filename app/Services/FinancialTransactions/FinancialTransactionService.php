@@ -1809,6 +1809,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
         $stakeholderAllType = StakeholderType::where('type', 'I')->where('payable_account', '!=', null)->get();
         if (count($stakeholderAllType) > 0) {
             $stakeholderTypeLastCode = collect($stakeholderAllType)->last();
+            dd(isset($stakeholderTypeLastCode->payable_account) ,$stakeholderTypeLastCode->payable_account)
             if (isset($stakeholderTypeLastCode->payable_account)) {
                 $investor_payable_account_code = (float)$stakeholderTypeLastCode->payable_account + 1;
             } else {

@@ -123,9 +123,9 @@ class ReceiptController extends Controller
     {
         $site = (new Site())->find(decryptParams($site_id));
         $receipt = (new Receipt())->find(decryptParams($id));
-        dd($receipt);
         $images = $receipt->getMedia('receipt_attachments');
         $installmentNumbersArray = json_decode($receipt->installment_number);
+        dd($installmentNumbersArray);
 
         $lastInstallment = array_pop($installmentNumbersArray);
         $unit_data =  $receipt->unit;

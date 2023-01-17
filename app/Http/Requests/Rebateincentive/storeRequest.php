@@ -29,7 +29,7 @@ class storeRequest extends FormRequest
             'unit_id' => 'required',
             'rebate_percentage' => 'required',
             'rebate_total' => 'required',
-            'individual.mobile_contact' =>'required|unique:stakeholders,mobile_contact,'. $this->input('stackholder.stackholder_id'),
+            // 'individual.mobile_contact' =>'required|unique:stakeholders,mobile_contact,'. $this->input('stackholder.stackholder_id'),
             'doc_number' => 'required|unique:rebate_incentive_models,doc_no',
         ];
 

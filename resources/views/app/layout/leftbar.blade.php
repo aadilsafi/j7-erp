@@ -413,7 +413,7 @@
                                                         <a class="d-flex align-items-center"
                                                             href="{{ route('sites.file-managements.importFilesContacts', ['site_id' => encryptParams($site_id)]) }}">
                                                             <i class="bi bi-folder2" style="margin-bottom: 10px;"></i>
-                                                            <span class="menu-title" data-i18n="Types">Files Conatcts
+                                                            <span class="menu-title" data-i18n="Types">Files Contacts
                                                             </span>
                                                         </a>
                                                     </li>

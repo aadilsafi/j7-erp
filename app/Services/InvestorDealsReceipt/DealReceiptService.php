@@ -123,8 +123,8 @@ class DealReceiptService implements DealReceiptInterface
             }
 
             $transaction = $this->financialTransactionInterface->makeInvestorDealReceivableReceiptTransaction($receipt->id);
-            $deal->paid_status = 1;
-            $deal->update();
+            // $deal->paid_status = 1;
+            // $deal->update();
         // });
         return true;
     }

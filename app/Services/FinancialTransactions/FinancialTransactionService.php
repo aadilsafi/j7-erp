@@ -1835,8 +1835,8 @@ class FinancialTransactionService implements FinancialTransactionInterface
 
     public function makeInvestorDealReceivableReceiptTransaction($id)
     {
-        try {
-            DB::beginTransaction();
+        // try {
+        //     DB::beginTransaction();
 
             $deal_receipt = InvsetorDealsReceipt::find($id);
 
@@ -1882,12 +1882,12 @@ class FinancialTransactionService implements FinancialTransactionInterface
                 $this->makeFinancialTransaction($deal_receipt->site_id, $origin_number, $clearanceAccout, 39, null, 'debit', $deal_receipt->total_received_amount, NatureOfAccountsEnum::INVESTOR_DEAL_RECEIPT, $deal_receipt->id);
             }
 
-            DB::commit();
-            return 'transaction_completed';
-        } catch (GeneralException | Exception $ex) {
-            DB::rollBack();
-            return $ex;
-        }
+        //     DB::commit();
+        //     return 'transaction_completed';
+        // } catch (GeneralException | Exception $ex) {
+        //     DB::rollBack();
+        //     return $ex;
+        // }
     }
 
     public function makeInvestorReceiptActive($id)

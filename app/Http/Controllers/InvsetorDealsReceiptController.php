@@ -70,7 +70,7 @@ class InvsetorDealsReceiptController extends Controller
     public function store(Request $request,$site_id)
     {
         //
-        try {
+        // try {
             if (!request()->ajax()) {
 
                 $inputs = $request->all();
@@ -82,9 +82,9 @@ class InvsetorDealsReceiptController extends Controller
             } else {
                 abort(403);
             }
-        } catch (Exception $ex) {
-            return redirect()->route('sites.investor-deals-receipts.create', ['site_id' => encryptParams($site_id)])->withDanger(__('lang.commons.something_went_wrong'));
-        }
+        // } catch (Exception $ex) {
+        //     return redirect()->route('sites.investor-deals-receipts.create', ['site_id' => encryptParams($site_id)])->withDanger(__('lang.commons.something_went_wrong'));
+        // }
     }
 
     /**

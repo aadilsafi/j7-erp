@@ -38,7 +38,7 @@
     <div class="">
         <a href="{{ route('sites.settings.import.images.create', ['site_id' => $site_id]) }}"
             class="btn btn-primary waves-effect">
-            <span>Upload Images</span>
+            <span>Import Images</span>
         </a>
     </div>
 

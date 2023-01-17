@@ -80,7 +80,7 @@
 </style> @endsection @section('breadcrumbs') <div class="content-header-left col-md-9 col-12 mb-2">
   <div class="row breadcrumbs-top">
     <div class="col-12">
-      <h2 class="content-header-title float-start mb-0">Timeline</h2>
+      <h2 class="content-header-title float-start mb-0">Activity Logs</h2>
       <div class="breadcrumb-wrapper">
         {{ Breadcrumbs::render('sites.settings.activity-logs.index', $site_id) }}
       </div>
@@ -135,7 +135,7 @@
               <ul class="timeline">
                 <li class="timeline-item"></li>
                 <li class="timeline-item">
-                  <span class="timeline-point timeline-point-secondary">
+                  <span class="timeline-point -point-secondary">
                     <i data-feather="user"></i>
                   </span>
                   <div class="timeline-event">

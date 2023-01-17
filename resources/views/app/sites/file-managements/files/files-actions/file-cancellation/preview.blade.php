@@ -1,7 +1,7 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.file-managements.file-cancellation.preview', encryptParams($site_id)) }}
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.file-managements.files.file-cancellation.preview', encryptParams($site_id)) }}
 @endsection
 
 @section('page-title', 'Preview File Cancellation')
@@ -40,7 +40,7 @@
             <div class="col-12">
                 <h2 class="content-header-title float-start mb-0">Preview File Cancellation</h2>
                 <div class="breadcrumb-wrapper">
-                    {{ Breadcrumbs::render('sites.file-managements.file-cancellation.preview', encryptParams($site_id)) }}
+                    {{ Breadcrumbs::render('sites.file-managements.files.file-cancellation.preview', encryptParams($site_id)) }}
                 </div>
             </div>
         </div>

@@ -4,7 +4,7 @@
     {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.receipts.create', encryptParams($site_id)) }}
 @endsection
 
-@section('page-title', 'Create Receipts')
+@section('page-title', 'Create File Transfer Receipt')
 
 @section('page-vendor')
 @endsection
@@ -79,7 +79,7 @@
     <div class="content-header-left col-md-9 col-12 mb-2">
         <div class="row breadcrumbs-top">
             <div class="col-12">
-                <h2 class="content-header-title float-start mb-0">Create Receipts</h2>
+                <h2 class="content-header-title float-start mb-0">Create File Transfer Receipt</h2>
                 <div class="breadcrumb-wrapper">
                     {{ Breadcrumbs::render('sites.receipts.create', encryptParams($site_id)) }}
                 </div>

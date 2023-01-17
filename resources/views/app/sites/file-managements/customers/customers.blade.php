@@ -3,7 +3,7 @@
 {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.file-managements.customers', encryptParams($site_id)) }}
 @endsection
 
-@section('page-title', 'Customer\'s List')
+@section('page-title', 'File Management (Customer's List)')
 
 @section('page-vendor')
 <link rel="stylesheet" type="text/css"
@@ -30,7 +30,7 @@
     <div class="content-header-left col-md-9 col-12 mb-2">
         <div class="row breadcrumbs-top">
             <div class="col-12">
-                <h2 class="content-header-title float-start mb-0">File Management (Customers List)</h2>
+                <h2 class="content-header-title float-start mb-0">File Management (Customer's List)</h2>
                 <div class="breadcrumb-wrapper">
                     {{ Breadcrumbs::render('sites.file-managements.customers', encryptParams($site_id)) }}
                 </div>

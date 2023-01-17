@@ -1,7 +1,7 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'dashboard') }}
+     {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.accounts.recovery.dashboard') }}
 @endsection
 
 @section('page-title', 'Dashboard')
@@ -45,15 +45,14 @@
     </style>
 @endsection
 
-@section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'dashboard') }}
-@endsection
-
 @section('breadcrumbs')
     <div class="content-header-left col-md-9 col-12 mb-2">
         <div class="row breadcrumbs-top">
             <div class="col-12">
-                <h2 class="float-start mb-0">Dashboard</h2>
+                <h2 class="content-header-title float-start mb-0">Dashboard </h2>
+                <div class="breadcrumb-wrapper">
+                     {{ Breadcrumbs::render('sites.accounts.recovery.dashboard') }}
+                </div>
             </div>
         </div>
     </div>

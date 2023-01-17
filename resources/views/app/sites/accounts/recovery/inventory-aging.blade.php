@@ -1,7 +1,8 @@
 @extends('app.layout.layout')
 
-
-
+@section('seo-breadcrumb')
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sitesaccounts.recovery.sites.accounts.recovery.inventory-aging') }}
+@endsection
 
 @section('page-title', 'Aging Report')
 
@@ -50,7 +51,10 @@
     <div class="content-header-left col-md-9 col-12 mb-2">
         <div class="row breadcrumbs-top">
             <div class="col-12">
-                <h2 class="content-header-title float-start mb-0"> Aging Report</h2>
+                <h2 class="content-header-title float-start mb-0">Aging Report</h2>
+                <div class="breadcrumb-wrapper">
+                    {{ Breadcrumbs::render('sitesaccounts.recovery.sites.accounts.recovery.inventory-aging') }}
+                </div>
             </div>
         </div>
     </div>
@@ -90,7 +94,7 @@
                                     @endphp
                                     @foreach ($salesPlans as $salesPlan)
                                         @php
-                                            
+
                                             array_push($installment_large_number, $salesPlan->installments->pluck('details')->count());
                                         @endphp
                                         <option value="{{ $salesPlan->id }}">{{ $salesPlan->stakeholder->full_name }}

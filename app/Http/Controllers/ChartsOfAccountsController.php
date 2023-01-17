@@ -182,8 +182,7 @@ class ChartsOfAccountsController extends Controller
         foreach ($fifth_level_accounts  as $key => $fifth_level_account) {
             $fifth_level_accounts[$key]['formated_code'] = account_number_format($fifth_level_account->code);
             $fifth_level_accounts[$key]['account_type'] = ucfirst($fifth_level_account->account_type);
-            if ($fifth_level_account->account_type == 'Debit') {
-
+            if ($fifth_level_account->account_type == 'debit') {
                 $debit = 0.0;
                 $credit = 0.0;
                 $ledger = AccountLedger::where('account_head_code', $fifth_level_account->code)->get();
@@ -200,7 +199,6 @@ class ChartsOfAccountsController extends Controller
 
                 }
             } else {
-
                 $debit = 0.0;
                 $credit = 0.0;
                 $ledger = AccountLedger::where('account_head_code', $fifth_level_account->code)->get();
@@ -211,8 +209,8 @@ class ChartsOfAccountsController extends Controller
                     if (isset($ledger->credit)) {
                         $credit = $ledger->credit;
                     }
-                    $fourth_level_balance = (float)$fourth_level_balance + ((float)$credit - (float)$debit);
-                    $fifth_level_accounts[$key]['balance'] = $fifth_level_accounts[$key]['balance'] + (float)$credit - (float)$debit;
+                    $fourth_level_balance = (float)$fourth_level_balance + ((float)$debit - (float)$credit);
+                    $fifth_level_accounts[$key]['balance'] = $fifth_level_accounts[$key]['balance'] + (float)$debit - (float)$credit;
                 }
             }
         }

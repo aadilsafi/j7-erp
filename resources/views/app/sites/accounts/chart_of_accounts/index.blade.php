@@ -1,3 +1,4 @@
+
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
@@ -633,7 +634,7 @@
                                                                 <td class="custom_td">' + account_data.level + ' </td>\
                                                                 <td class="custom_td">' + account_data.formated_code + ' </td>\
                                                                 <td class="custom_td">' + account_data.account_type + ' </td>\
-                                                                <td class="custom_td">' + account_data.balance + '</td>\
+                                                                <td class="custom_td">' + account_data.balance+ '</td>\
                                                             </tr>');
                     }
 

@@ -144,9 +144,10 @@
 
 
         @if (!is_null(old('mobileContactCountryDetails')))
-            var mbCountry = {!! old('mobileContactCountryDetails') !!}
-            $('#mobileContactCountryDetails').val({!! old('mobileContactCountryDetails') !!})
-            intlMobileContact.setCountry(mbCountry['iso2']);
+        intlMobileContact.setCountry('pk');
+            // var mbCountry = {!! old('mobileContactCountryDetails') !!}
+            // $('#mobileContactCountryDetails').val({!! old('mobileContactCountryDetails') !!})
+            // intlMobileContact.setCountry(mbCountry['iso2']);
         @endif
         @if (!is_null(old('OfficeContactCountryDetails')))
             // var officeCountry = {!! old('OfficeContactCountryDetails') !!}

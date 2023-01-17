@@ -30,7 +30,7 @@ class storeRequest extends FormRequest
             'rebate_percentage' => 'required',
             'rebate_total' => 'required',
             'individual.mobile_contact' =>'required|unique:stakeholders,mobile_contact,'. $this->input('stackholder.stackholder_id'),
-
+            'doc_number' => 'required|unique:rebate_incentive_models,doc_no',
         ];
 
         $rules['dealer.cnic'] = ['sometimes', 'required', 'numeric', Rule::unique('stakeholders', 'cnic')->ignore($this->input('stackholder.stackholder_id'))];
@@ -86,6 +86,8 @@ class storeRequest extends FormRequest
     {
         return [
             'dealer.cnic.unique' => " CNIC Must Be Unique",
+            "doc_number.required" => "Document number is  Required.",
+            "doc_number.unique" => "Document number is already taken.",
         ];
     }
 }

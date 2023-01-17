@@ -69,8 +69,8 @@
         }
 
         /* .filepond--item {
-                width: calc(50% - 0.5em);
-            }                                                                                                         } */
+                    width: calc(50% - 0.5em);
+                }                                                                                                         } */
         */
     </style>
 @endsection
@@ -129,7 +129,18 @@
                 <div class="card sticky-md-top top-lg-100px top-md-100px top-sm-0px"
                     style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0; z-index:10;">
                     <div class="card-body g-1">
-
+                        <div class="d-block mb-1">
+                            <label class="form-label" style="font-size: 15px" for="doc_number">
+                                Document Number
+                                <span class="text-danger">*</span>
+                            </label>
+                            <input name="doc_number" type="text"
+                                class="form-control  @error('doc_number') is-invalid @enderror" id="doc_number"
+                                placeholder="Document Number" />
+                            @error('doc_number')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
                         <div class="d-block mb-1">
                             <label class="form-label" style="font-size: 15px" for="floor">
                                 Amount Received <span class="text-danger">*</span>
@@ -630,7 +641,7 @@
                         $("#created_date").flatpickr({
                             defaultDate: "today",
                             maxDate: 'today',
-                            minDate:response.salesPlan.approved_date,
+                            minDate: response.salesPlan.approved_date,
                             altInput: !0,
                             altFormat: "F j, Y",
                             dateFormat: "Y-m-d",

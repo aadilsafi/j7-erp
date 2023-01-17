@@ -34,6 +34,7 @@ class storeRequest extends FormRequest
             'attachments.*.attachment_label' => 'required_if:checkAttachment,1',
             'attachments.*.image' => 'required_if:checkAttachment,1',
             'individual.mobile_contact' =>'required|unique:stakeholders,mobile_contact,'. $this->input('stackholder.stackholder_id'),
+            'doc_number' => 'required|unique:file_title_transfers,doc_no',
             // 'stackholder.stackholder_id' => 'required',
             // 'stackholder.full_name' => 'required_if:stackholder.stackholder_id,0',
             // 'stackholder.father_name' => 'required_if:stackholder.stackholder_id,0',
@@ -73,6 +74,8 @@ class storeRequest extends FormRequest
             'attachments' => 'Attachments Required if you check Attachments Attached.',
             'attachments.*.attachment_label' => "Attachments Label Required if you check Attachments Attached.",
             'attachments.*.image' => "Attachments Image Required if you check Attachments Attached.",
+            "doc_number.required" => "Document number is  Required.",
+            "doc_number.unique" => "Document number is already taken.",
         ];
     }
 }

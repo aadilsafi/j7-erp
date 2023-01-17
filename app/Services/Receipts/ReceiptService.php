@@ -49,6 +49,7 @@ class ReceiptService implements ReceiptInterface
     public function store($site_id, $requested_data)
     {
         DB::transaction(function () use ($site_id, $requested_data) {
+
             $data = $requested_data['receipts'];
             for ($i = 0; $i < count($data); $i++) {
                 $amount_in_numbers = str_replace(',', '', $data[$i]['amount_in_numbers']);
@@ -120,6 +121,7 @@ class ReceiptService implements ReceiptInterface
                     'user_id' => Auth::user()->id,
                     'site_id' => decryptParams($site_id),
                     'unit_id'  => $data[$i]['unit_id'],
+                    'doc_no'  => $requested_data['doc_number'],
                     'sales_plan_id'  => $sales_plan[0]['id'],
                     'name'  => $stakeholder->full_name,
                     'cnic'  => $stakeholder->cnic,
@@ -178,6 +180,7 @@ class ReceiptService implements ReceiptInterface
                                 'user_id' => $draftReceiptData->user_id,
                                 'site_id' => $draftReceiptData->site_id,
                                 'unit_id'  => $draftReceiptData->unit_id,
+                                'doc_no'  => $draftReceiptData->doc_number,
                                 'sales_plan_id'  => $draftReceiptData->sales_plan_id,
                                 'name'  => $draftReceiptData->name,
                                 'cnic'  => $draftReceiptData->cnic,
@@ -680,7 +683,7 @@ class ReceiptService implements ReceiptInterface
                     if ($isFileExists) {
                         $tempPath = (public_path('app-assets/images/temporaryfiles/Receipts/'));
                         $destinationPath = public_path('app-assets/images/Import/');
-        
+
                         $newfile = File::copy(public_path('app-assets/images/Import/' . $url), $destinationPath . $url);
                         $receipt->addMedia($newfile)->toMediaCollection('receipt_attachments');
                         changeImageDirectoryPermission();

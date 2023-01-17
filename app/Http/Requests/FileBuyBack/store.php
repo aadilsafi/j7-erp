@@ -31,6 +31,8 @@ class store extends FormRequest
             'attachments' => 'bail|required_if:checkAttachment,on',
             'attachments.*.attachment_label' => 'required_if:checkAttachment,on',
             'attachments.*.image' => 'required_if:checkAttachment,on',
+            'doc_number' => 'required|unique:file_buy_backs,doc_no',
+
         ];
     }
 
@@ -44,6 +46,8 @@ class store extends FormRequest
             'attachments' => 'Attachments Required if you check Attachments Attached.',
             'attachments.*.attachment_label' => "Attachments Label Required if you check Attachments Attached.",
             'attachments.*.image' => "Attachments Image Required if you check Attachments Attached.",
+            "doc_number.required" => "Document number is  Required.",
+            "doc_number.unique" => "Document number is already taken.",
         ];
     }
 }

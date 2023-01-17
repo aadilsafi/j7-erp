@@ -29,8 +29,8 @@
         }
 
         /* .filepond--item {
-                                                                        width: calc(20% - 0.5em);
-                                                                    } */
+                                                                            width: calc(20% - 0.5em);
+                                                                        } */
     </style>
 @endsection
 
@@ -77,7 +77,18 @@
                     style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0; z-index:10;">
                     <div class="card-body g-1">
                         <input type="hidden" name="file_id" value="{{ $file->id }}">
-
+                        <div class="d-block mb-1">
+                            <label class="form-label" style="font-size: 15px" for="doc_number">
+                                Document Number
+                                <span class="text-danger">*</span>
+                            </label>
+                            <input name="doc_number" type="text"
+                                class="form-control  @error('doc_number') is-invalid @enderror" id="doc_number"
+                                placeholder="Document Number" />
+                            @error('doc_number')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
                         <div class="d-block mb-1">
                             <label class="form-label fs-5" for="created_date">Resale Request Date</label>
                             <input id="created_date" type="date" required placeholder="YYYY-MM-DD" name="created_date"

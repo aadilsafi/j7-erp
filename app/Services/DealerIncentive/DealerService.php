@@ -44,6 +44,7 @@ class DealerService implements DealerInterface
                 'user_id' => Auth::user()->id,
                 'site_id' => decryptParams($site_id),
                 'dealer_id' => $inputs['dealer_id'],
+                'doc_no' => $inputs['doc_number'],
                 'dealer_data' => json_encode(Stakeholder::find($inputs['dealer_id'])),
                 'dealer_incentive' => str_replace(',', '', $inputs['dealer_incentive']),
                 'total_unit_area' => str_replace(',', '', $inputs['total_unit_area']),

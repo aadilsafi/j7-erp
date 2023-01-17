@@ -116,6 +116,7 @@ class TransferFileReceiptService implements TransferFileReceiptInterface
                 'status' => ($data['mode_of_payment'] != 'Cheque') ? 1 : 0,
                 'bank_details' => $data['bank_name'],
                 'bank_id' => $data['bank_id'],
+                'doc_no' => $requested_data['doc_number'],
                 'created_date' => $requested_data['created_date'] . date(' H:i:s'),
                 'customer_ap_amount' => $data['customer_ap_amount'],
                 'dealer_ap_amount' => $data['dealer_ap_amount'],

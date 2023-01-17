@@ -202,6 +202,7 @@ class RebateIncentiveService implements RebateIncentiveInterface
                 'user_id'=> Auth::user()->id,
                 'site_id' => $site_id,
                 'unit_id' => $inputs['unit_id'],
+                'doc_no' => $inputs['doc_number'],
                 'stakeholder_id' => $inputs['stakeholder_id'],
                 'stakeholder_data' => json_encode(Stakeholder::find($inputs['stakeholder_id'])),
                 'unit_data' => json_encode(Unit::find($inputs['unit_id'])),

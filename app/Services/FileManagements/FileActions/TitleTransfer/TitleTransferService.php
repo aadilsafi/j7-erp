@@ -205,6 +205,7 @@ class TitleTransferService implements TitleTransferInterface
                 'site_id' => decryptParams($site_id),
                 'file_id' => $inputs['file_id'],
                 'unit_id' => $inputs['unit_id'],
+                'doc_no' => $inputs['doc_number'],
                 'stakeholder_id' => $inputs['customer_id'],
                 'transfer_person_id' => $stakeholder->id,
                 'sales_plan_id' => $file->sales_plan_id,

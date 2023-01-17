@@ -25,6 +25,8 @@ class store extends FormRequest
      */
     public function rules()
     {
+        $rules['doc_number'] = ['required','unique:payment_vocuhers,doc_no,'];
+
         $rules['mode_of_payment'] =  ['required'];
         if ($this->input('mode_of_payment') == "Cheque") {
             $rules['bank_name'] = ['required'];
@@ -83,6 +85,8 @@ class store extends FormRequest
             "bank_contact_number" => "Bank Contact Number is Required if mode of payment is Cheque or Online.",
             "bank_branch_code" => "Bank Branch Code is Uniquely Required if mode of payment is Cheque or Online.",
             "bank_address" => "Bank Address is Required if mode of payment is Cheque or Online.",
+            "doc_number.required" => "Document number is  Required.",
+            "doc_number.unique" => "Document number is already taken.",
         ];
     }
 

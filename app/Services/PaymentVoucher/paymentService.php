@@ -84,6 +84,7 @@ class paymentService implements paymentInterface
                 "identity_number" => $inputs['identity_number'],
                 "buiness_address" => $inputs['buiness_address'],
                 "ntn" => $inputs['ntn'],
+                'doc_no'  => $inputs['doc_number'],
                 "tax_status" => $inputs['tax_status'],
                 "representative" => $inputs['representative'],
                 "business_type" => $inputs['business_type'],

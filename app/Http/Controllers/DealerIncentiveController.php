@@ -15,6 +15,8 @@ use App\Services\CustomFields\CustomFieldInterface;
 use App\Services\FinancialTransactions\FinancialTransactionInterface;
 use Auth;
 use DB;
+use Redirect;
+use Validator;
 
 class DealerIncentiveController extends Controller
 {
@@ -85,6 +87,18 @@ class DealerIncentiveController extends Controller
     public function store(Request $request, $site_id)
     {
         try {
+
+            $validator = Validator::make($request->all(), [
+                'doc_number' => ['required', 'unique:dealer_incentive_models,doc_no'],
+
+            ], [
+                "doc_number.required" => "Document number is  Required.",
+                "doc_number.unique" => "Document number is already taken.",
+            ]);
+
+            if ($validator->fails()) {
+                return Redirect::back()->withErrors($validator);
+            }
 
             if (!request()->ajax()) {
                 $inputs = $request->all();

@@ -272,6 +272,7 @@ class SalesPlanService implements SalesPlanInterface
                 'lead_source_id' => ($leadSource['lead_source'] == 0) ? $leadSource->id : $leadSource['lead_source'],
                 'validity' => $inputs['sales_plan_validity'],
                 'comments' => $inputs['sale_plan_comments'],
+                'doc_no' => $inputs['doc_number'],
                 'status' => false,
                 'created_date' => $inputs['created_date'] . date(' H:i:s'),
                 'serial_no' => 'SI-' . $serail_no,

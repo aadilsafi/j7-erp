@@ -100,6 +100,18 @@
                         <div class="card-body">
                             <div class="row g-1">
                                 <div class="d-block">
+                                    <div class="d-block mb-1">
+                                        <label class="form-label" style="font-size: 15px" for="doc_number">
+                                            Document Number
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <input name="doc_number" type="text"
+                                            class="form-control  @error('doc_number') is-invalid @enderror" id="doc_number"
+                                            placeholder="Document Number" />
+                                        @error('doc_number')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
                                     <label class="form-label fs-5" for="created_date">Creation Date<span
                                             class="text-danger">*</span></label>
                                     <input id="created_date" type="date" required placeholder="YYYY-MM-DD"
@@ -118,6 +130,7 @@
                                     <input readonly id="total_credit" type="text" required placeholder="Total Credit"
                                         name="total_credit" class="form-control form-control-md" />
                                 </div> --}}
+
                                 <div class="d-block mb-1">
                                     <label class="form-label fs-5" for="type_name">Attachment</label>
                                     <input id="attachment" type="file"

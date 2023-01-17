@@ -29,6 +29,7 @@ class store extends FormRequest
             'transfer_file_id' => 'required|numeric|gt:0',
             'mode_of_payment' => 'required',
             'comments' => 'sometimes',
+            'doc_number' => 'required|unique:file_title_transfers,doc_no',
         ];
 
         if ($this->input('mode_of_payment') == "Cheque") {
@@ -84,6 +85,8 @@ class store extends FormRequest
             "bank_contact_number" => "Bank Contact Number is Required if mode of payment is Cheque or Online.",
             "bank_branch_code" => "Bank Branch Code is Uniquely Required if mode of payment is Cheque or Online.",
             "bank_address" => "Bank Address is Required if mode of payment is Cheque or Online.",
+            "doc_number.required" => "Document number is  Required.",
+            "doc_number.unique" => "Document number is already taken.",
         ];
     }
 
@@ -96,7 +99,7 @@ class store extends FormRequest
 
     public function withValidator($validator)
     {
-     
+
         if (!$validator->fails()) {
             $validator->after(function ($validator) {
                 $modeOfPayment = $this->input('mode_of_payment');

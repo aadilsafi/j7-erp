@@ -159,6 +159,19 @@ class SalesPlanController extends Controller
             if ($validator->fails()) {
                 return Redirect::back()->withErrors($validator);
             }
+
+            $validator = Validator::make($request->all(), [
+                'doc_number' => ['required', 'unique:sales_plans,doc_no'],
+
+            ], [
+                "doc_number.required" => "Document number is  Required.",
+                "doc_number.unique" => "Document number is already taken.",
+            ]);
+
+            if ($validator->fails()) {
+                return Redirect::back()->withErrors($validator);
+            }
+            
             $inputs = $request->input();
             $floor_id = encryptParams($inputs['floor_id']);
             $unit_id = encryptParams($inputs['unit_id']);

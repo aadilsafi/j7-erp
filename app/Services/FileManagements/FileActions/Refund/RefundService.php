@@ -49,6 +49,7 @@ class RefundService implements RefundServiceRefundInterface
                 'file_id' => $file->id,
                 'sales_plan_id' => $file->sales_plan_id,
                 'unit_id' => $inputs['unit_id'],
+                'doc_no' => $inputs['doc_number'],
                 'stakeholder_id' => $inputs['customer_id'],
                 'unit_data' => json_encode(Unit::find($inputs['unit_id'])),
                 'stakeholder_data' => json_encode(Stakeholder::find($inputs['customer_id'])),
